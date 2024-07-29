@@ -158,3 +158,40 @@ To run the sense_Temp1.py code on a Raspberry Pi Zero 2 W, which is designed to 
      ```
      ./sense_Temp1.py
      ```
+## Payload Script for Water Monitoring Device
+
+This script (`Payload.py`) is designed to upload photos taken by water monitoring devices to a specified server. The script ensures the data consistency required for analysis by uploading photos with specific hardware and configuration settings.
+
+### Requirements
+
+- Python 3
+- Necessary Python Packages: `requests`, `requests-toolbelt`
+
+
+
+1. **Update the System:** Open a terminal and run the following commands to update the system:
+  ```
+   sudo apt-get update
+   sudo apt-get upgrade
+ ```
+2. **Install Required Python Packages:** 
+  ```
+  sudo apt-get install python3 python3-pip
+  pip3 install requests requests-toolbelt
+  ```
+3. **Create a Virtual Environment: (optional but recommended):** 
+  ```
+ python3 -m venv myenv
+ source myenv/bin/activate
+  ```
+4. **Run the Script:** 
+  ```
+python3 Payload.py
+  ```
+### Troubleshooting
+- **Upload Failures**: If uploads fail (500 Internal Server Error), check the server logs for any errors. You can view the logs by using the Heroku CLI:
+ ```
+heroku logs --tail --app your-heroku-app-name
+  ```
+
+
