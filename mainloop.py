@@ -14,8 +14,8 @@ def sampleTask():
     # Example task 1
     logging.info("in sampleTask()")
     # Rename this function, add your task implementation here
-    # e.g., capture image, read sensor data
-    # make a function / file for each sensor. Assume a variable number of sensors where some won't be present.
+    # e.g., capture image, read sensor data make a function / file for each sensor. 
+    # Assume a variable number of sensors where some won't be present.
     pass
 
 def capturePhoto():
