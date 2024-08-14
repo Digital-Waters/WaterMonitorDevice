@@ -1,0 +1,2017 @@
+[
+    {
+        "time": "2024-08-13 08:06:22",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "57.83489227294922 GB"
+    },
+    {
+        "time": "2024-08-13 08:06:27",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "57.83454132080078 GB"
+    },
+    {
+        "time": "2024-08-13 08:06:32",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "57.834197998046875 GB"
+    },
+    {
+        "time": "2024-08-13 08:06:37",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "57.834197998046875 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:29",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.977115631103516 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:39",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976802825927734 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976802825927734 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976802825927734 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976802825927734 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976802825927734 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679901123047 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679901123047 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679901123047 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679901123047 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679901123047 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679901123047 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679901123047 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679901123047 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679901123047 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679901123047 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.9767951965332 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.9767951965332 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.9767951965332 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.9767951965332 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.9767951965332 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.9767951965332 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.9767951965332 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.9767951965332 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.9767951965332 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.9767951965332 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679138183594 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679138183594 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679138183594 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679138183594 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679138183594 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679138183594 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679138183594 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679138183594 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679138183594 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97679138183594 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97678756713867 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97678756713867 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97678756713867 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97678756713867 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97678756713867 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97678756713867 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97678756713867 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97678756713867 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97678756713867 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97678756713867 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976783752441406 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976783752441406 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976783752441406 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976783752441406 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976783752441406 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976783752441406 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976783752441406 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976783752441406 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976783752441406 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976783752441406 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677993774414 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677993774414 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677993774414 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677993774414 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677993774414 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677993774414 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677993774414 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677993774414 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677993774414 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677993774414 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976776123046875 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976776123046875 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976776123046875 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976776123046875 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976776123046875 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976776123046875 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976776123046875 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976776123046875 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976776123046875 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976776123046875 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677230834961 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677230834961 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677230834961 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677230834961 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677230834961 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677230834961 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677230834961 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677230834961 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677230834961 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97677230834961 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976768493652344 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976768493652344 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976768493652344 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976768493652344 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976768493652344 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976768493652344 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976768493652344 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976768493652344 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976768493652344 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976768493652344 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676467895508 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676467895508 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:40",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676467895508 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676467895508 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676467895508 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676467895508 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676467895508 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676467895508 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676467895508 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676467895508 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676086425781 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676086425781 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676086425781 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676086425781 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676086425781 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676086425781 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676086425781 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676086425781 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676086425781 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97676086425781 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675704956055 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675704956055 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675704956055 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675704956055 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675704956055 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675704956055 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675704956055 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675704956055 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675704956055 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675704956055 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675323486328 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675323486328 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675323486328 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675323486328 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675323486328 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675323486328 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675323486328 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675323486328 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675323486328 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97675323486328 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976749420166016 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976749420166016 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976749420166016 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976749420166016 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976749420166016 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976749420166016 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976749420166016 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976749420166016 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976749420166016 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.976749420166016 GB"
+    },
+    {
+        "time": "2024-08-13 09:36:41",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.97674560546875 GB"
+    },
+    {
+        "time": "2024-08-13 09:57:09",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.95610427856445 GB"
+    },
+    {
+        "time": "2024-08-13 09:57:09",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.95610427856445 GB"
+    },
+    {
+        "time": "2024-08-13 09:57:14",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.95598220825195 GB"
+    },
+    {
+        "time": "2024-08-13 09:57:14",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "10.0.22631",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "55.95598220825195 GB"
+    }
+]
