@@ -2,7 +2,7 @@ from picamera2 import Picamera2
 from datetime import datetime
 from time import sleep
 import os
-import logging
+import logger
 
 
 image_dir = "Image"
@@ -22,11 +22,11 @@ def capture_image_with_timestamp():
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         image_path = os.path.join(image_folder, f"image_{timestamp}.jpg")
         picam2.capture_file(image_path)
-        logging.writeFile("Picture", "Picture was successfully taken!")
+        logger.writeFile("Picture", "Picture was successfully taken!")
         print(f"Image saved to {image_path}")
 
     except (OSError, ValueError, RuntimeError) as error:
-        logging.writeFile("Picture", "error taking picture: " + error)
+        logger.writeFile("Picture", "error taking picture: " + error)
         print(f"Error: {error}")
 
     picam2.stop()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os
-import logging
+import logger
 
 def sensor():
     for i in os.listdir('/sys/bus/w1/devices'):
@@ -18,7 +18,7 @@ def read(ds18b20):
     temperature = float(temperaturedata[2:])
     #celsius = temperature / 1000
     farenheit = (celsius * 1.8) + 32
-    logging.writeFile("Temperature", "Temperature sensed successfully!")
+    logger.writeFile("Temperature", "Temperature sensed successfully!")
     celsius = 5
     return celsius
 

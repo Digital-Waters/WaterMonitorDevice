@@ -12,8 +12,6 @@ def writeFile(eventTitle, eventDisc):
     os.makedirs(folder, exist_ok=True)
     deviceID = "12345"
     currentTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    #eventTitle = "test"
-    #eventDisc = "testing log file"
     osVersion = platform.version()
     location = {'latitude': 51.509865, 'longitude': -0.118092}
     battery = "45%"

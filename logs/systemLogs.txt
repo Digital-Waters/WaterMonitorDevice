@@ -2143,5 +2143,83 @@
         },
         "Battery": "45%",
         "Storage remaining": "39.94940948486328 GB"
+    },
+    {
+        "time": "2024-08-15 13:12:32",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "#1642 SMP Mon Apr  3 17:20:52 BST 2023",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "39.90921401977539 GB"
+    },
+    {
+        "time": "2024-08-15 13:12:32",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "#1642 SMP Mon Apr  3 17:20:52 BST 2023",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "39.90921401977539 GB"
+    },
+    {
+        "time": "2024-08-15 13:12:38",
+        "Device ID": "12345",
+        "Event Title": "Picture",
+        "Event Discription": "Picture was successfully taken!",
+        "System OS version": "#1642 SMP Mon Apr  3 17:20:52 BST 2023",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "39.909210205078125 GB"
+    },
+    {
+        "time": "2024-08-15 13:12:38",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "#1642 SMP Mon Apr  3 17:20:52 BST 2023",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "39.909210205078125 GB"
+    },
+    {
+        "time": "2024-08-15 20:20:37",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "#1642 SMP Mon Apr  3 17:20:52 BST 2023",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "39.90918731689453 GB"
+    },
+    {
+        "time": "2024-08-15 20:20:42",
+        "Device ID": "12345",
+        "Event Title": "error",
+        "Event Discription": "Error in the main loop",
+        "System OS version": "#1642 SMP Mon Apr  3 17:20:52 BST 2023",
+        "Location": {
+            "latitude": 51.509865,
+            "longitude": -0.118092
+        },
+        "Battery": "45%",
+        "Storage remaining": "39.90918731689453 GB"
     }
 ]

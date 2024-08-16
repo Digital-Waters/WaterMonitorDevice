@@ -1,7 +1,7 @@
 import time
-import logging
+import logger
 #import Payload
-#import cameraSensor
+import cameraSensor
 import temperatureSensor
 
 
@@ -19,7 +19,7 @@ def sampleTask():
 
 def capturePhoto():
     #cameraSensor.capture_image_with_timestamp()
-    logging.writeFile("Picture", "Picture was successfully taken!")
+    cameraSensor.capture_image_with_timestamp()
 
 
 def captureTemperature():
@@ -55,7 +55,7 @@ def main():
             break
 
         except Exception as e:
-            logging.writeFile("error", "Error in the main loop")
+            logger.writeFile("error", "Error in the main loop")
             time.sleep(interval)
             print(e)
 
