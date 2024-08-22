@@ -1,27 +1,39 @@
-#!/usr/bin/env python
 import os
+import logging
 
-def sensor():
-    for i in os.listdir('/sys/bus/w1/devices'):
-        if i != 'w1_bus_master1':
-            ds18b20 = i
-            read(ds18b20)
+sysDevicesPath = '/sys/bus/w1/devices/'
+notDeviceName = 'w1_bus_master1'
+temperatureDeviceName = '/w1_slave'
+log = logging.getLogger('DWLogger')
 
-def read(ds18b20):
-    location = '/sys/bus/w1/devices/' + ds18b20 + '/w1_slave'
-    tfile = open(location)
-    text = tfile.read()
-    tfile.close()
-    secondline = text.split("\n")[1]
-    temperaturedata = secondline.split(" ")[9]
-    temperature = float(temperaturedata[2:])
-    celsius = temperature / 1000
-    farenheit = (celsius * 1.8) + 32
-    return celsius, farenheit
 
-def loop(ds18b20):
-    while True:
-        if read(ds18b20) != None:
-            #print "Current temperature : <temp here>"" %0.2f C" % read(ds18b20)[0]
-            print(f"Get temp here")
+def captureTemperature():
+    
+    log.info(f"In captureTemperature()")
 
+    try:
+        for i in os.listdir(sysDevicesPath):
+            if i != notDeviceName:
+                ds18b20 = i
+                readTemperatureFile(ds18b20)
+
+    except (OSError, ValueError, RuntimeError) as error:
+        log.error(f"In captureTemperature(). Error loading devices: {error}")
+
+
+def readTemperatureFile(ds18b20):
+    try:        
+        location = sysDevicesPath + ds18b20 + temperatureDeviceName
+        tfile = open(location)
+        text = tfile.read()
+        tfile.close()
+        secondline = text.split("\n")[1]
+        temperaturedata = secondline.split(" ")[9]
+        temperature = float(temperaturedata[2:])
+        celsius = temperature / 1000
+        #farenheit = (celsius * 1.8) + 32
+
+    except (OSError, ValueError, RuntimeError) as error:
+        log.error(f"In readTemperatureFile(). Error loading temperature data: {error}")
+
+    return celsius
