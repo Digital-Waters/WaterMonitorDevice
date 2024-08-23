@@ -1,12 +1,12 @@
 import time
 import logging
-
+import gpsSensor
 import cameraSensor
 import temperatureSensor
 
 
 interval = 5  # Set interval in seconds
-
+payloadData = {}
 
 def main():
     # Main loop. Put all individual sensor code here. 
@@ -19,11 +19,11 @@ def main():
     while True:
         try:
             sampleTask()
-            capturePhoto()
-            captureTemperature()
+            #capturePhoto()
+            #captureTemperature()
             #captureOxygen()
             #capturepH()
-            #captureLongLat()
+            captureLongLat()
             #captureConductivity()
             #captureTerpidity()
 
@@ -91,6 +91,10 @@ def capturePhoto():
 def captureTemperature():
     temperatureSensor.captureTemperature()
     
+def captureLongLat():
+    loc = gpsSensor.getLoc()
+    payloadData.update(loc)
+    print(payloadData)
 
 
 if __name__ == "__main__":
