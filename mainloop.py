@@ -8,12 +8,12 @@ import temperatureSensor
 interval = 5  # Set interval in seconds
 payloadData = {}
 
+
 def main():
     # Main loop. Put all individual sensor code here. 
     # The idea is to loop over every sensor at every interval, gather all 
     # the sensor data into a .json file, and upload it asap. 
 
-    log = initlog()
     log.info("Starting main loop...")
 
     while True:
@@ -75,6 +75,8 @@ def initlog():
 
     return log
 
+log = initlog()
+
 def sampleTask():
     # Example task 1
     logging.info("in sampleTask()")
@@ -92,10 +94,10 @@ def captureTemperature():
     temperatureSensor.captureTemperature()
     
 def captureLongLat():
-    loc = gpsSensor.getLoc()
-    payloadData.update(loc)
-    print(payloadData)
-
+    if (gpsSensor.getLoc()):
+        loc = gpsSensor.getLoc()
+        payloadData.update(loc)
+        log.info(f"In location Task {loc}")
 
 if __name__ == "__main__":
     main()

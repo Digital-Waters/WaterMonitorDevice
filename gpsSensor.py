@@ -36,11 +36,14 @@ def getLoc():
 
                 except pynmea2.ParseError as e:
                     print(f"Could not parse line: {line}. Error: {e}")
+                    return False
 
     except KeyboardInterrupt:
         gps_serial.close()
         print("Program interrupted by user")
+        return False
         quit
+
     finally:
         gps_serial.close()
         return location
