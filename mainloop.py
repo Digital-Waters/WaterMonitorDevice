@@ -3,10 +3,15 @@ import logging
 import gpsSensor
 import cameraSensor
 import temperatureSensor
+import platform
 
 
 interval = 5  # Set interval in seconds
 payloadData = {}
+LOG_FILE = 'waterDeviceLog.txt'
+MAX_FILE_SIZE_MB = 50
+TRIM_PERCENTAGE = 0.10
+
 
 
 def main():
@@ -45,6 +50,9 @@ def initlog():
     # Create a custom log
     log = logging.getLogger('DWLogger')
 
+    osVersion = platform.version()
+    deviceID = "1234"
+
     # Clear existing handlers to prevent duplicate logs
     if log.hasHandlers():
         log.handlers.clear()
@@ -63,8 +71,8 @@ def initlog():
     file_handler.setLevel(logging.DEBUG)
 
     # Create formatters and add them to the handlers
-    console_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    console_formatter = logging.Formatter(f'%(asctime)s - {deviceID} - {osVersion} - %(name)s - %(levelname)s - %(message)s')
+    file_formatter = logging.Formatter(f'%(asctime)s - {deviceID} - {osVersion} - %(name)s - %(levelname)s - %(message)s')
 
     console_handler.setFormatter(console_formatter)
     file_handler.setFormatter(file_formatter)
@@ -76,6 +84,30 @@ def initlog():
     return log
 
 log = initlog()
+
+def trim_log_file():
+    with open(LOG_FILE, 'r') as file:
+        lines = file.readlines()
+
+    # Calculate the number of lines to remove
+    num_lines = len(lines)
+    lines_to_remove = int(num_lines * TRIM_PERCENTAGE)
+
+    if lines_to_remove > 0:
+        # Remove the oldest lines
+        remaining_lines = lines[lines_to_remove:]
+
+        # Write the remaining lines back to the file
+        with open(LOG_FILE, 'w') as file:
+            file.writelines(remaining_lines)
+
+def manage_log_file():
+    # Check file size
+    file_size_mb = os.path.getsize(LOG_FILE) / (1024 * 1024)  # Convert to MB
+
+    if file_size_mb > MAX_FILE_SIZE_MB:
+        log.info(f"Log file exceeds {MAX_FILE_SIZE_MB} MB. Trimming the file.")
+        trim_log_file()
 
 def sampleTask():
     # Example task 1
