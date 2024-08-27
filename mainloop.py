@@ -8,7 +8,7 @@ import platform
 
 interval = 5  # Set interval in seconds
 payloadData = {}
-LOG_FILE = 'waterDeviceLog.txt'
+logFile = 'waterDeviceLog.txt'
 MAX_FILE_SIZE_MB = 50
 TRIM_PERCENTAGE = 0.10
 
@@ -38,8 +38,8 @@ def main():
             log.info("Shutting down...")
             break
 
-        except Exception as e:
-            log.error(f"In main(). An error occurred: {e}")
+        #except Exception as e:
+         #   log.error(f"In main(). An error occurred: {e}")
 
         finally:
             log.info(f"*** In main(). Sleeping for {interval} seconds...")
@@ -86,7 +86,7 @@ def initlog():
 log = initlog()
 
 def trim_log_file():
-    with open(LOG_FILE, 'r') as file:
+    with open(logFile, 'r') as file:
         lines = file.readlines()
 
     # Calculate the number of lines to remove
@@ -98,7 +98,7 @@ def trim_log_file():
         remaining_lines = lines[lines_to_remove:]
 
         # Write the remaining lines back to the file
-        with open(LOG_FILE, 'w') as file:
+        with open(logFile, 'w') as file:
             file.writelines(remaining_lines)
 
 def manage_log_file():
@@ -126,10 +126,15 @@ def captureTemperature():
     temperatureSensor.captureTemperature()
     
 def captureLongLat():
-    if (gpsSensor.getLoc()):
-        loc = gpsSensor.getLoc()
+    loc = gpsSensor.getLoc()
+
+    if isinstance(loc, dict) and "error" in loc:
+        log.error(f"GPS Error: {loc['error']}")
+    elif loc:
         payloadData.update(loc)
-        log.info(f"In location Task {loc}")
+        log.info(f"In location Task: {loc}")
+    else:
+        log.error("Unknown error or failed to retrieve location.")
 
 if __name__ == "__main__":
     main()
