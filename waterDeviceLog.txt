@@ -541,3 +541,24 @@
 2024-08-27 12:30:28,119 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - ERROR - In captureCameraImage(). Error initializing or using the camera: Camera __init__ sequence did not complete.
 2024-08-27 12:30:29,107 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - In location Task: {'longitude': -78.90612466666667, 'latitude': 43.95628383333333}
 2024-08-27 12:30:29,108 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - *** In main(). Sleeping for 5 seconds...
+2024-08-27 12:33:17,403 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - Starting main loop...
+2024-08-27 12:33:17,404 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - In captureCameraImage().
+2024-08-27 12:33:20,925 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - In captureCameraImage(). Image saved to Image/2024-08-27/image_2024-08-27_12-33-20.jpg
+2024-08-27 12:33:21,090 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - In location Task: {'longitude': -78.90606, 'latitude': 43.95630033333333}
+2024-08-27 12:33:21,091 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - *** In main(). Sleeping for 5 seconds...
+2024-08-27 12:33:26,098 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - In captureCameraImage().
+2024-08-27 12:33:26,103 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - ERROR - In captureCameraImage(). Error initializing or using the camera: Camera __init__ sequence did not complete.
+2024-08-27 12:33:27,101 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - In location Task: {'longitude': -78.90606416666667, 'latitude': 43.956301833333335}
+2024-08-27 12:33:27,102 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - *** In main(). Sleeping for 5 seconds...
+2024-08-27 12:33:32,108 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - In captureCameraImage().
+2024-08-27 12:33:32,114 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - ERROR - In captureCameraImage(). Error initializing or using the camera: Camera __init__ sequence did not complete.
+2024-08-27 12:33:33,104 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - In location Task: {'longitude': -78.906063, 'latitude': 43.95629816666667}
+2024-08-27 12:33:33,105 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - *** In main(). Sleeping for 5 seconds...
+2024-08-27 12:33:38,111 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - In captureCameraImage().
+2024-08-27 12:33:38,116 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - ERROR - In captureCameraImage(). Error initializing or using the camera: Camera __init__ sequence did not complete.
+2024-08-27 12:33:39,104 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - In location Task: {'longitude': -78.906063, 'latitude': 43.95629266666667}
+2024-08-27 12:33:39,105 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - *** In main(). Sleeping for 5 seconds...
+2024-08-27 12:33:44,111 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - In captureCameraImage().
+2024-08-27 12:33:44,114 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - ERROR - In captureCameraImage(). Error initializing or using the camera: Camera __init__ sequence did not complete.
+2024-08-27 12:33:45,103 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - In location Task: {'longitude': -78.90606383333333, 'latitude': 43.95629666666667}
+2024-08-27 12:33:45,104 - 1234 - #1642 SMP Mon Apr  3 17:20:52 BST 2023 - DWLogger - INFO - *** In main(). Sleeping for 5 seconds...
