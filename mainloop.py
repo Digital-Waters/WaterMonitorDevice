@@ -24,7 +24,7 @@ def main():
     while True:
         try:
             sampleTask()
-            #capturePhoto()
+            capturePhoto()
             #captureTemperature()
             #captureOxygen()
             #capturepH()

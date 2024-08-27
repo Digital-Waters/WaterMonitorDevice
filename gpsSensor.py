@@ -6,7 +6,7 @@ def getLoc():
     try: 
         gps_serial = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=1)
     except Exception as e:
-        return {"error": f"GPS error: {str(e)}"}
+        return {"error": f"{str(e)}"}
 
     # Initialize location with None or a default value
     location = None
@@ -42,7 +42,7 @@ def getLoc():
                 except pynmea2.ParseError as e:
                     return {"error": f"ParseError: {str(e)}"}
     except Exception as e:
-        return {"error": f"GPS error: {str(e)}"}
+        return {"error": f"{str(e)}"}
 
     except KeyboardInterrupt:
         gps_serial.close()
