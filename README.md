@@ -12,6 +12,10 @@ As such, ensure that any work you do is done in the spirit of making their lives
 # Contribution Guidelines
 There are plenty of issues that are open that represent work that needs to be done. You can choose something there to get started or create your own issues. 
 There is nothing too small. If you see any spelling or grammar errors, or no documentation at all, please feel free to create an issues and submit a pull request. 
+All contributions / pull requests will need to be approved by Digital Waters engineering. 
+
+Please introduce yourself in our repo Discussions board! 
+We'd love to connect and collaborate with like-minded people. Don't be a stranger :D
 
 ## Testing the Camera Code on Raspberry Pi Zero 2 W
 Before uploading the cam_code make sure the pi is tested for the camera module and working
@@ -32,7 +36,11 @@ Before uploading the cam_code make sure the pi is tested for the camera module a
    - Ensure the blue side of the cable is facing away from the Raspberry Pi board and insert the cable into the camera connector (CSI port) on the Raspberry Pi. Secure the connector by gently pressing the tabs on either side.
 3. Insert the MicroSD Card: Make sure the MicroSD card with the Raspberry Pi OS installed is inserted into the Raspberry Pi.
 
-#### 2. Software Installation
+#### 2. Connecting to your Raspberry Pi
+We use SSH to connect to our RPi. 
+On Windows: WinSCP, Putty. Visual Studio also has plugins that enable this.
+
+#### 3. Software Installation
 1. Power On the Raspberry Pi: Connect the power supply to the Raspberry Pi Zero 2 W and wait for it to boot up.
 2. Update the System: Open a terminal and run the following commands to update the system:
    ```
@@ -54,7 +62,7 @@ Before uploading the cam_code make sure the pi is tested for the camera module a
    sudo apt-get install libcamera-apps
    ```
 
-#### 3. Testing the Camera Module
+#### 4. Testing the Camera Module
 1. Check Camera Connection: After rebooting, verify that the camera module is detected by running:
    ```
    vcgencmd get_camera
