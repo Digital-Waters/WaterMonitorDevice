@@ -23,12 +23,11 @@ def main():
 
     while True:
         try:
-            sampleTask()
+            captureLongLat()
             capturePhoto()
             #captureTemperature()
             #captureOxygen()
             #capturepH()
-            captureLongLat()
             #captureConductivity()
             #captureTerpidity()
 
@@ -38,12 +37,10 @@ def main():
             log.info("Shutting down...")
             break
 
-        #except Exception as e:
-         #   log.error(f"In main(). An error occurred: {e}")
-
         finally:
             log.info(f"*** In main(). Sleeping for {interval} seconds...")
             time.sleep(interval)
+
 
 
 def initlog():
@@ -83,7 +80,6 @@ def initlog():
 
     return log
 
-log = initlog()
 
 def trim_log_file():
     with open(logFile, 'r') as file:
@@ -109,21 +105,14 @@ def manage_log_file():
         log.info(f"Log file exceeds {MAX_FILE_SIZE_MB} MB. Trimming the file.")
         trim_log_file()
 
-def sampleTask():
-    # Example task 1
-    logging.info("in sampleTask()")
-    # Rename this function, add your task implementation here
-    # e.g., capture image, read sensor data make a function / file for each sensor. 
-    # Assume a variable number of sensors where some won't be present.
-    pass
-
 
 def capturePhoto():
-    cameraSensor.captureCameraImage()
+    cameraSensor.captureCameraImage(log)
     
 
 def captureTemperature():
     temperatureSensor.captureTemperature()
+
     
 def captureLongLat():
     loc = gpsSensor.getLoc()
@@ -137,4 +126,5 @@ def captureLongLat():
         log.error("Unknown error or failed to retrieve location.")
 
 if __name__ == "__main__":
+    log = initlog()
     main()
