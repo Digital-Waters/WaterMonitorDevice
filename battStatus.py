@@ -1,4 +1,5 @@
 # pip install psutil
+# code not tested on board yet
 
 import psutil
 import time
