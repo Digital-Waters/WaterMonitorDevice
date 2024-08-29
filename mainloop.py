@@ -107,23 +107,19 @@ def manage_log_file():
 
 
 def capturePhoto():
-    cameraSensor.captureCameraImage(log)
-    
+    imagePath = cameraSensor.captureCameraImage(log)
+    if imagePath:
+        payloadData.update({"image": imagePath})
 
 def captureTemperature():
     temperatureSensor.captureTemperature()
 
     
 def captureLongLat():
-    loc = gpsSensor.getLoc()
+    loc = gpsSensor.getLoc(log)
 
-    if isinstance(loc, dict) and "error" in loc:
-        log.error(f"GPS Error: {loc['error']}")
-    elif loc:
+    if loc:
         payloadData.update(loc)
-        log.info(f"In location Task: {loc}")
-    else:
-        log.error("Unknown error or failed to retrieve location.")
 
 if __name__ == "__main__":
     log = initlog()
