@@ -16,12 +16,15 @@ picam2 = Picamera2()
 imageDir = "Image"
 picam2.configure(picam2.create_still_configuration()) #capture full resolution photo
 
+config = picam2.create_still_configuration(main={"size": (1024, 1024)})
+picam2.configure(config)
 
 def setLED(state):
     try:
         GPIO.output(RED_PIN, state)
     except (OSError, ValueError, RuntimeError) as error:
         log.error(f"In setLED(). GPIO Error: {error}")
+        return False
 
     
 def captureCameraImage(log):
