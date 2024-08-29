@@ -10,7 +10,7 @@ RED_PIN = 17
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(RED_PIN, GPIO.OUT)
 picam2 = Picamera2()
-image_dir = "Image"
+imageDir = "Image"
 config = picam2.create_still_configuration(main={"size": (1024, 1024)})
 picam2.configure(config)
 
@@ -19,6 +19,7 @@ def setLED(state):
         GPIO.output(RED_PIN, state)
     except (OSError, ValueError, RuntimeError) as error:
         log.error(f"In setLED(). GPIO Error: {error}")
+        return False
 
     
 def captureCameraImage(log):
@@ -29,8 +30,8 @@ def captureCameraImage(log):
         sleep(3)
 
         today = datetime.now().strftime("%Y-%m-%d")
-        image_folder = os.path.join(image_dir, today)
-        os.makedirs(image_folder, exist_ok=True)  # Create the folder if it doesn't exist
+        imageFolder = os.path.join(imageDir, today)
+        os.makedirs(imageFolder, exist_ok=True)  # Create the folder if it doesn't exist
 
         try:
             # Turn on the Red LED for illumination
@@ -38,18 +39,23 @@ def captureCameraImage(log):
             sleep(1)  # Give some time for the LED to illuminate the scene
 
             timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            image_path = os.path.join(image_folder, f"image_{timestamp}.jpg")
-            picam2.capture_file(image_path)
-            log.info(f"In captureCameraImage(). Image saved to {image_path}")
-
+            imagePath = os.path.join(imageFolder, f"image_{timestamp}.jpg")
+            picam2.capture_file(imagePath)
+            log.info(f"In captureCameraImage(). Image saved to {imagePath}")
+            
+            
             # Turn off the Red LED after capturing the image
             setLED(GPIO.LOW)
 
         except (OSError, ValueError, RuntimeError) as error:
             log.error(f"In captureCameraImage(). Error saving image: {error}")
+            return False
+
 
         finally:
             picam2.stop()
+            return str(imagePath) 
 
     except (RuntimeError, Exception) as error:
         log.error(f"In captureCameraImage(). Error initializing or using the camera: {error}")
+        return False

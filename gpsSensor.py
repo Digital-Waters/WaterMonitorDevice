@@ -1,12 +1,13 @@
 import serial
 import pynmea2
 
-def getLoc():
+def getLoc(log):
     # This serial endpoint is for USB connection on my Pi; would be different on the RX pins
     try: 
-        gps_serial = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=1)
+        gpsSerial = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=1)
     except Exception as e:
-        return {"error": f"{str(e)}"}
+        log.error(f"in GPS, error getting device: {e}")
+        return False
 
     # Initialize location with None or a default value
     location = None
@@ -16,7 +17,7 @@ def getLoc():
         
         while True:
             
-            line = gps_serial.readline().decode('ascii', errors='replace').strip()
+            line = gpsSerial.readline().decode('ascii', errors='replace').strip()
             
             # Debugging: print the line read from the GPS
 
@@ -37,20 +38,20 @@ def getLoc():
                     }
 
                     # Break the loop if location is successfully retrieved
+                    log.info(f"In GPS, successfully recieved data: {location}")
                     break
 
                 except pynmea2.ParseError as e:
-                    return {"error": f"ParseError: {str(e)}"}
+                    log.error(f"In GPS, Error parsing data: {e}")
+                    return False
     except Exception as e:
-        return {"error": f"{str(e)}"}
+        log.error(f"In GPS error getting data: {e}")
+        return False
 
     except KeyboardInterrupt:
-        gps_serial.close()
-        print("Program interrupted by user")
-        return False
+        gpsSerial.close()
         quit
 
     finally:
-        gps_serial.close()
+        gpsSerial.close()
         return location
-
