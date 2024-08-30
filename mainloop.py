@@ -25,6 +25,7 @@ def main():
         try:
             captureLongLat()
             capturePhoto()
+            captureDateTime()
             #captureTemperature()
             #captureOxygen()
             #capturepH()
@@ -117,9 +118,15 @@ def captureTemperature():
     
 def captureLongLat():
     loc = gpsSensor.getLoc(log)
-
     if loc:
         payloadData.update(loc)
+
+def captureDateTime():
+    dateTime = gpsSensor.getGPSTime(log)
+    if dateTime:
+        payloadData.update({"dateTime": dateTime})
+    
+    print(payloadData)
 
 if __name__ == "__main__":
     log = initlog()
