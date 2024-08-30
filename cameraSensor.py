@@ -14,8 +14,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(RED_PIN, GPIO.OUT)
 picam2 = Picamera2()
 imageDir = "Image"
-#picam2.configure(picam2.create_still_configuration(main={"size": (1200, 1200)}))
-picam2.configure(picam2.create_still_configuration())
+picam2.configure(picam2.create_still_configuration()) #capture full resolution photo
 
 
 def setLED(state):
@@ -31,6 +30,9 @@ def captureCameraImage(log):
         picam2.start()
         sleep(3)
 
+        # Uncomment for cameras with motorized lenses (not fixed-focus).
+        #setFocus(log) 
+
         today = datetime.now().strftime("%Y-%m-%d")
         imageFolder = os.path.join(imageDir, today)
         os.makedirs(imageFolder, exist_ok=True)  # Create the folder if it doesn't exist
@@ -45,6 +47,7 @@ def captureCameraImage(log):
             picam2.capture_file(imagePath)
             log.info(f"In captureCameraImage(). Image saved to {imagePath}")
             
+            # Uncomment for fixed-focus lenses 
             cropImage(imagePath)
             
             # Turn off the Red LED after capturing the image
@@ -64,6 +67,17 @@ def captureCameraImage(log):
         return False
 
 
+# Set the focus position. Not used with fixed-focus lens (here in case we change cameras)
+def setFocus(log):
+    try:
+        focus_position = 0.5  # Adjust this value based on experimentation
+        picam2.set_controls({"AfMode": controls.AfModeEnum.Manual, "LensPosition": focus_position})
+
+    except (OSError, ValueError, RuntimeError) as error:
+        log.error(f"In setFocus(): {error}")
+
+
+# Crop image, best used for fixed-focus lenses, to give a 'digital zoom'
 def cropImage(imgPath):
     image = Image.open(imgPath)
 
