@@ -17,7 +17,6 @@ imageDir = "Image"
 picam2.configure(picam2.create_still_configuration()) #capture full resolution photo
 
 
-
 def setLED(state):
     try:
         GPIO.output(RED_PIN, state)
