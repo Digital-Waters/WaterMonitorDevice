@@ -54,8 +54,7 @@ def upload_photo(location, device_id, file_path, device_datetime):
 
 # Example usage
 location = {'latitude': 51.509865, 'longitude': -0.118092}
-photos_directory = "/home/anjana/DIgitalWaterWarden/Image/2024-07-17"
-
+photos_directory = "/home/anjana/WaterWarden/Image/2024-07-17"
 if __name__ == "__main__":
     # Load the actual device ID
     try:
