@@ -27,7 +27,7 @@ def main():
             captureLongLat()
             capturePhoto()
             captureDateTime()
-            #captureTemperature()
+            captureTemperature()
             #captureOxygen()
             #capturepH()
             #captureConductivity()
