@@ -3,6 +3,7 @@ import logging
 import gpsSensor
 import cameraSensor
 import temperatureSensor
+import Payload
 import platform
 
 
@@ -24,6 +25,7 @@ def main():
     while True:
         try:
             captureLongLat()
+            captureDateTime()
             capturePhoto()
             captureTemperature()
             #captureOxygen()
@@ -31,7 +33,7 @@ def main():
             #captureConductivity()
             #captureTerpidity()
 
-            #sendDataPayload()
+            sendDataPayload()
             
         except KeyboardInterrupt:
             log.info("Shutting down...")
@@ -117,9 +119,17 @@ def captureTemperature():
     
 def captureLongLat():
     loc = gpsSensor.getLoc(log)
-
     if loc:
         payloadData.update(loc)
+
+def captureDateTime():
+    dateTime = gpsSensor.getGPSTime(log)
+    if dateTime:
+        payloadData.update({"dateTime": dateTime})
+    
+    
+def sendDataPayload():
+    Payload.uploadPayload(payloadData, log)
 
 if __name__ == "__main__":
     log = initlog()
