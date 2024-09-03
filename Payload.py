@@ -3,19 +3,24 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 import os
 from datetime import datetime, timezone
 
-def upload_photo(payloadData, log):
+def uploadPayload(payloadData, log):
     url = "https://water-watch-58265eebffd9.herokuapp.com/upload/"
     boundary = "*****"
     deviceId = "12345"
+
+    latitude = str(payloadData.get('latitude', "999"))
+    longitude = str(payloadData.get('longitude', "999"))
+    dateTime = payloadData.get('dateTime', datetime.now().strftime("%Y-%m-%d"))
     
     # Preparing the data to be sent
     fields = {
-        'latitude': str(payloadData['latitude']),
-        'longitude': str(payloadData['longitude']),
+        'latitude': latitude,
+        'longitude': longitude,
         'deviceID': deviceId,
-        'device_datetime': payloadData["dateTime"],
+        'device_datetime': dateTime,
         'weather': "cloudy with chance of eclipse"
     }
+
 
     currDirectory = os.path.dirname(os.path.abspath(__file__))
 

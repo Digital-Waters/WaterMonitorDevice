@@ -25,8 +25,8 @@ def main():
     while True:
         try:
             captureLongLat()
-            capturePhoto()
             captureDateTime()
+            capturePhoto()
             captureTemperature()
             #captureOxygen()
             #capturepH()
@@ -129,7 +129,7 @@ def captureDateTime():
     
     
 def sendDataPayload():
-    Payload.upload_photo(payloadData, log)
+    Payload.uploadPayload(payloadData, log)
 
 if __name__ == "__main__":
     log = initlog()
