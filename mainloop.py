@@ -3,6 +3,7 @@ import logging
 import gpsSensor
 import cameraSensor
 import temperatureSensor
+import Payload
 import platform
 
 
@@ -32,7 +33,7 @@ def main():
             #captureConductivity()
             #captureTerpidity()
 
-            #sendDataPayload()
+            sendDataPayload()
             
         except KeyboardInterrupt:
             log.info("Shutting down...")
@@ -113,7 +114,8 @@ def capturePhoto():
         payloadData.update({"image": imagePath})
 
 def captureTemperature():
-    temperatureSensor.captureTemperature()
+    #temperatureSensor.captureTemperature()
+    pass
 
     
 def captureLongLat():
@@ -126,7 +128,9 @@ def captureDateTime():
     if dateTime:
         payloadData.update({"dateTime": dateTime})
     
-    print(payloadData)
+    
+def sendDataPayload():
+    Payload.upload_photo(payloadData, log)
 
 if __name__ == "__main__":
     log = initlog()
