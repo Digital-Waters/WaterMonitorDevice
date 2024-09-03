@@ -127,7 +127,9 @@ def captureDateTime():
     if dateTime:
         payloadData.update({"dateTime": dateTime})
     
-    print(payloadData)
+    
+def sendDataPayload():
+    Payload.upload_photo(payloadData, log)
 
 if __name__ == "__main__":
     log = initlog()
