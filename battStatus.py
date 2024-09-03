@@ -30,7 +30,7 @@ def getBatteryStatus():
     # Return a formatted string with the battery information
     return f"Battery Status: {percent}% | {status} | Time Left: {time_left_str}"
 
-def monitorBattery(interval=120):   # interval can be changed to suit our desired intent
+def monitorBattery(interval=60):   # interval can be changed to suit our desired intent
     try:
         while True:
             status = getBatteryStatus()
@@ -38,6 +38,6 @@ def monitorBattery(interval=120):   # interval can be changed to suit our desire
             time.sleep(interval)  # Wait for the specified interval before checking again
     except KeyboardInterrupt:
         print("Battery monitoring stopped.")
-
-# Uncomment the following line to run the monitoring function:
-# monitorBattery()
+        
+        
+#monitorBattery()
