@@ -25,7 +25,7 @@ def main():
         try:
             captureLongLat()
             capturePhoto()
-            #captureTemperature()
+            captureTemperature()
             #captureOxygen()
             #capturepH()
             #captureConductivity()
@@ -112,7 +112,7 @@ def capturePhoto():
         payloadData.update({"image": imagePath})
 
 def captureTemperature():
-    temperatureSensor.captureTemperature()
+    return temperatureSensor.captureTemperature(log)
 
     
 def captureLongLat():
