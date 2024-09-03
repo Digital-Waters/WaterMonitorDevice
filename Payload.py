@@ -3,6 +3,18 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 import os
 from datetime import datetime, timezone
 
+# Function to load the device ID
+def load_device_id():
+    try:
+        with open('/proc/cpuinfo', 'r') as file:
+            for line in file:
+                if line.startswith('Serial'):
+                    device_id = line.split(':')[1].strip()
+                    return device_id
+        raise RuntimeError("Serial number not found in /proc/cpuinfo")
+    except Exception as e:
+        raise RuntimeError("Failed to load device ID") from e
+
 def upload_photo(location, device_id, file_path, device_datetime):
     url = "https://water-watch-58265eebffd9.herokuapp.com/upload/"
     boundary = "*****"
@@ -42,10 +54,16 @@ def upload_photo(location, device_id, file_path, device_datetime):
 
 # Example usage
 location = {'latitude': 51.509865, 'longitude': -0.118092}
-device_id = "12345"
 photos_directory = "/home/anjana/DIgitalWaterWarden/Image/2024-07-17"
 
 if __name__ == "__main__":
+    # Load the actual device ID
+    try:
+        device_id = load_device_id()
+    except RuntimeError as e:
+        device_id = "UNKNOWN"
+        print(f"Error loading device ID: {e}")
+
     files = os.listdir(photos_directory)
     
     for file_name in files:
