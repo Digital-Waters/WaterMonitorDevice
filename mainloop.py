@@ -1,8 +1,8 @@
 import time
 import logging
-import gpsSensor
-import cameraSensor
-import temperatureSensor
+#import gpsSensor
+#mport cameraSensor
+#import temperatureSensor
 import platform
 import os
 
@@ -31,8 +31,8 @@ def main():
 
     while True:
         try:
-            captureLongLat()
-            capturePhoto()
+            #captureLongLat()
+            #capturePhoto()
             #captureTemperature()
             #captureOxygen()
             #capturepH()
@@ -40,7 +40,7 @@ def main():
             #captureTerpidity()
 
             #sendDataPayload()
-            
+            pass
         except KeyboardInterrupt:
             log.info("Shutting down...")
             break
@@ -58,6 +58,7 @@ def initlog():
     # Load the actual device ID using the load_device_id function
     try:
         deviceID = load_device_id()
+        print(f"Device id :{deviceID}")
     except RuntimeError as e:
         deviceID = "UNKNOWN"
         print(f"Error loading device ID: {e}")
