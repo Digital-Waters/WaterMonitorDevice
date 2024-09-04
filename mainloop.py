@@ -3,15 +3,17 @@ import logging
 
 import cameraSensor
 import temperatureSensor
+import battStatus
+import sdCardStatus
 
 
 interval = 5  # Set interval in seconds
 
 
 def main():
-    # Main loop. Put all individual sensor code here. 
-    # The idea is to loop over every sensor at every interval, gather all 
-    # the sensor data into a .json file, and upload it asap. 
+    # Main loop. Put all individual sensor code here.
+    # The idea is to loop over every sensor at every interval, gather all
+    # the sensor data into a .json file, and upload it asap.
 
     log = initlog()
     log.info("Starting main loop...")
@@ -21,6 +23,8 @@ def main():
             sampleTask()
             capturePhoto()
             captureTemperature()
+            monitorBattery()
+            sdCardStorageStatus()
             #captureOxygen()
             #capturepH()
             #captureLongLat()
@@ -28,7 +32,7 @@ def main():
             #captureTerpidity()
 
             #sendDataPayload()
-            
+
         except KeyboardInterrupt:
             log.info("Shutting down...")
             break
@@ -79,18 +83,24 @@ def sampleTask():
     # Example task 1
     logging.info("in sampleTask()")
     # Rename this function, add your task implementation here
-    # e.g., capture image, read sensor data make a function / file for each sensor. 
+    # e.g., capture image, read sensor data make a function / file for each sensor.
     # Assume a variable number of sensors where some won't be present.
     pass
 
 
 def capturePhoto():
     cameraSensor.captureCameraImage()
-    
+
 
 def captureTemperature():
     temperatureSensor.captureTemperature()
-    
+
+def monitorBattery():
+    battStatus.monitorBattery()
+
+def sdCardStorageStatus():
+    sdCardStatus.sdCardStorageStatus()
+
 
 
 if __name__ == "__main__":
