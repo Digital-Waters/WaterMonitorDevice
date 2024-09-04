@@ -6,12 +6,14 @@ import temperatureSensor
 import Payload
 import platform
 import os
+from configparser import ConfigParser
+
 
 interval = 5  # Set interval in seconds
+MaxFileSize = 50
+TrimPercent = 0.10
 payloadData = {}
 logFile = 'waterDeviceLog.txt'
-MAX_FILE_SIZE_MB = 50
-TRIM_PERCENTAGE = 0.10
 
 # Function to get device ID dynamically from /proc/cpuinfo
 def load_device_id():
@@ -24,6 +26,20 @@ def load_device_id():
         raise RuntimeError("Serial number not found in /proc/cpuinfo")
     except Exception as e:
         raise RuntimeError("Failed to load device ID") from e
+def getConfig(): 
+    global interval, MaxFileSize, TrimPercent, sensors
+    config = ConfigParser()
+
+    try:
+        config.read("waterMonitor.ini")
+        interval = int(config["GENERAL"]["sleepInterval"])
+        MaxFileSize = int(config["GENERAL"]["MaxFileSize"])
+        TrimPercent = float(config["GENERAL"]["TrimPercent"])
+        sensors = config["SENSORS"]
+        log.info("successfully parsed the config file!")
+    except:
+        log.error("error parsing config file, will use default values!")
+
 
 def main():
     # Load the device ID
@@ -95,29 +111,31 @@ def initlog():
     return log
 
 
-def trim_log_file():
+
+
+def trimLogFile():
     with open(logFile, 'r') as file:
         lines = file.readlines()
 
     # Calculate the number of lines to remove
-    num_lines = len(lines)
-    lines_to_remove = int(num_lines * TRIM_PERCENTAGE)
+    numLines = len(lines)
+    linesToRemove = int(numLines * TrimPercent)
 
-    if lines_to_remove > 0:
+    if linesToRemove > 0:
         # Remove the oldest lines
-        remaining_lines = lines[lines_to_remove:]
+        remainingLines = lines[linesToRemove:]
 
         # Write the remaining lines back to the file
         with open(logFile, 'w') as file:
-            file.writelines(remaining_lines)
+            file.writelines(remainingLines)
 
-def manage_log_file():
+def manageLogFile():
     # Check file size
-    file_size_mb = os.path.getsize(logFile) / (1024 * 1024)  # Convert to MB
+    fileSize = os.path.getsize(logFile) / (1024 * 1024)  # Convert to MB
 
-    if file_size_mb > MAX_FILE_SIZE_MB:
-        log.info(f"Log file exceeds {MAX_FILE_SIZE_MB} MB. Trimming the file.")
-        trim_log_file()
+    if fileSize > MaxFileSize:
+        log.info(f"Log file exceeds {MaxFileSize} MB. Trimming the file.")
+        trimLogFile()
 
 def capturePhoto():
     imagePath = cameraSensor.captureCameraImage(log)
@@ -142,4 +160,5 @@ def sendDataPayload():
 
 if __name__ == "__main__":
     log = initlog()
+    getConfig()
     main()

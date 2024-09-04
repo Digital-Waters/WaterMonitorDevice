@@ -12,7 +12,7 @@ def uploadPayload(payloadData, log):
 
     latitude = str(payloadData.get('latitude', "999"))
     longitude = str(payloadData.get('longitude', "999"))
-    dateTime = payloadData.get('dateTime', datetime.now().strftime("%Y-%m-%d"))
+    dateTime = payloadData.get('dateTime', datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
     
     # Preparing the data to be sent
     fields = {
