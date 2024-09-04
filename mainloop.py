@@ -1,19 +1,19 @@
 import time
 import logging
-#import gpsSensor
-#mport cameraSensor
-#import temperatureSensor
+import gpsSensor
+import cameraSensor
+import temperatureSensor
+import Payload
 import platform
 import os
 
-# Constants
 interval = 5  # Set interval in seconds
 payloadData = {}
 logFile = 'waterDeviceLog.txt'
 MAX_FILE_SIZE_MB = 50
 TRIM_PERCENTAGE = 0.10
 
-# Load device ID function
+# Function to get device ID dynamically from /proc/cpuinfo
 def load_device_id():
     try:
         with open('/proc/cpuinfo', 'r') as file:
@@ -26,21 +26,27 @@ def load_device_id():
         raise RuntimeError("Failed to load device ID") from e
 
 def main():
-    # Main loop
+    # Load the device ID
+    device_id = load_device_id()
+
+    # Main loop. Gather all sensor data and upload
+    log.info(f"Device ID loaded: {device_id}")
     log.info("Starting main loop...")
 
     while True:
         try:
-            #captureLongLat()
-            #capturePhoto()
-            #captureTemperature()
-            #captureOxygen()
-            #capturepH()
-            #captureConductivity()
-            #captureTerpidity()
+            # Capture sensor data
+            captureLongLat()
+            captureDateTime()
+            capturePhoto()
+            captureTemperature()
 
-            #sendDataPayload()
-            pass
+            # Add device ID to payload data
+            payloadData['deviceID'] = device_id
+
+            # Upload the payload
+            sendDataPayload()
+            
         except KeyboardInterrupt:
             log.info("Shutting down...")
             break
@@ -54,14 +60,7 @@ def initlog():
     log = logging.getLogger('DWLogger')
 
     osVersion = platform.version()
-    
-    # Load the actual device ID using the load_device_id function
-    try:
-        deviceID = load_device_id()
-        print(f"Device id :{deviceID}")
-    except RuntimeError as e:
-        deviceID = "UNKNOWN"
-        print(f"Error loading device ID: {e}")
+    deviceID = load_device_id()  # Dynamically retrieve device ID
 
     # Clear existing handlers to prevent duplicate logs
     if log.hasHandlers():
@@ -72,7 +71,7 @@ def initlog():
 
     # Create handlers
     console_handler = logging.StreamHandler()  # Outputs to the CLI
-    file_handler = logging.FileHandler(logFile)  # Outputs to a file
+    file_handler = logging.FileHandler('waterDeviceLog.txt')  # Outputs to a file
 
     # Set logging levels for each handler
     console_handler.setLevel(logging.INFO)
@@ -90,6 +89,7 @@ def initlog():
     log.addHandler(file_handler)
 
     return log
+
 
 def trim_log_file():
     with open(logFile, 'r') as file:
@@ -121,13 +121,20 @@ def capturePhoto():
         payloadData.update({"image": imagePath})
 
 def captureTemperature():
-    temperatureSensor.captureTemperature()
+    return temperatureSensor.captureTemperature(log)
 
 def captureLongLat():
     loc = gpsSensor.getLoc(log)
-
     if loc:
         payloadData.update(loc)
+
+def captureDateTime():
+    dateTime = gpsSensor.getGPSTime(log)
+    if dateTime:
+        payloadData.update({"dateTime": dateTime})
+
+def sendDataPayload():
+    Payload.uploadPayload(payloadData, log)
 
 if __name__ == "__main__":
     log = initlog()
