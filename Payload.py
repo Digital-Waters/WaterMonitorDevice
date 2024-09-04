@@ -3,11 +3,12 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 import os
 from datetime import datetime, timezone
 
-def uploadPayload(payloadData, log,deviceId):
+def uploadPayload(payloadData, log):
     url = "https://water-watch-58265eebffd9.herokuapp.com/upload/"
     boundary = "*****"
-    #deviceId = "12345"
-    deviceId = payloadData.get('deviceID', "UNKNOWN")  # Get device ID from payload data
+
+    # Get the device ID from the payload data
+    deviceId = payloadData.get('deviceID', "UNKNOWN")  # Use UNKNOWN if deviceID not found
 
     latitude = str(payloadData.get('latitude', "999"))
     longitude = str(payloadData.get('longitude', "999"))
@@ -17,11 +18,10 @@ def uploadPayload(payloadData, log,deviceId):
     fields = {
         'latitude': latitude,
         'longitude': longitude,
-        'deviceID': deviceId,
+        'deviceID': deviceId,  # Include the dynamic device ID here
         'device_datetime': dateTime,
         'weather': "cloudy with chance of eclipse"
     }
-
 
     currDirectory = os.path.dirname(os.path.abspath(__file__))
 
