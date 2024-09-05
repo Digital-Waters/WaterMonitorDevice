@@ -27,7 +27,7 @@ def load_device_id():
     except Exception as e:
         raise RuntimeError("Failed to load device ID") from e
 def getConfig(): 
-    global interval, MaxFileSize, TrimPercent, sensors
+    global interval, MaxFileSize, TrimPercent, sensors, secrets
     config = ConfigParser()
 
     try:
@@ -36,6 +36,7 @@ def getConfig():
         MaxFileSize = int(config["GENERAL"]["MaxFileSize"])
         TrimPercent = float(config["GENERAL"]["TrimPercent"])
         sensors = config["SENSORS"]
+        secrets = config["SECRETS"]
         log.info("successfully parsed the config file!")
     except:
         log.error("error parsing config file, will use default values!")
@@ -52,20 +53,29 @@ def main():
     while True:
         try:
             # Capture sensor data
-            captureLongLat()
-            captureDateTime()
-            capturePhoto()
-            captureTemperature()
-            #captureOxygen()
-            #capturepH()
-            #captureConductivity()
-            #captureTerpidity()
+            if sensors["GPS"] == "on":
+                captureLongLat()
+                captureDateTime()
+            if sensors["camera"] == "on":
+                capturePhoto()
+            if sensors["temp"] == "on":
+                captureTemperature()
+            if sensors["O2"] == "on":
+                captureOxygen()
+            if sensors["PH"] == "on":
+                capturepH()
+            if sensors["conductivity"] == "on":
+                captureConductivity()
+            if sensors["terpidity"] == "on":
+                captureTerpidity()
 
             # Add device ID to payload data
             payloadData['deviceID'] = device_id
 
             # Upload the payload
             sendDataPayload()
+
+            manageLogFile()
             
         except KeyboardInterrupt:
             log.info("Shutting down...")
@@ -110,9 +120,6 @@ def initlog():
 
     return log
 
-
-
-
 def trimLogFile():
     with open(logFile, 'r') as file:
         lines = file.readlines()
@@ -136,6 +143,8 @@ def manageLogFile():
     if fileSize > MaxFileSize:
         log.info(f"Log file exceeds {MaxFileSize} MB. Trimming the file.")
         trimLogFile()
+    else: 
+        log.info(f"Log file size is under {MaxFileSize} MB")
 
 def capturePhoto():
     imagePath = cameraSensor.captureCameraImage(log)
@@ -156,7 +165,7 @@ def captureDateTime():
         payloadData.update({"dateTime": dateTime})
 
 def sendDataPayload():
-    Payload.uploadPayload(payloadData, log)
+    Payload.uploadPayload(payloadData, log, secrets)
 
 if __name__ == "__main__":
     log = initlog()

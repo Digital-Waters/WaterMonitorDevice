@@ -18,11 +18,11 @@ config["GENERAL"] = {
 config["SENSORS"] = {
     "camera": "on",
     "GPS": "on",
-    "Temp": "on",
-    "PH": "on",
-    "O2": "on",
-    "Conductivity": "on",
-    "Trupidity": "on"
+    "temp": "on",
+    "PH": "off",
+    "O2": "off",
+    "conductivity": "off",
+    "terpidity": "off"
 }
 
 with open("waterMonitor.ini", "w") as f:

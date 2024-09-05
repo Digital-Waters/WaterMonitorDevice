@@ -166,6 +166,61 @@ To run the sense_Temp1.py code on a Raspberry Pi Zero 2 W, which is designed to 
      ```
      ./sense_Temp1.py
      ```
+
+# Prototyping the GPS Code on Raspberry Pi Zero 2 W
+To run the gpsSensor.py code on a Raspberry Pi Zero 2 W, which is designed to read GPS location and time data from a GT-U7 GPS module, you need to follow pre-requisite steps for both hardware and software setup:
+
+### Hardware Setup
+1. GT-U7 module: Ensure you have a GT-U7 module.
+2. Micro USB
+2. Wiring:
+    - For now the sensor can be connected using a microUSB.
+
+### Software Setup
+1. Edit config.txt file: 
+    ```
+    sudo nano /boot/config.txt
+    ```
+    insert the following lines at the bottom of the file: 
+
+    ```
+    droverlay=w1-gpio
+    dtoverlay=w1-gpio
+    ```
+
+2. Install Required Packages:
+   - Ensure you have the necessary packages installed:
+     ```
+     sudo apt-get update
+     pip install pynmea2
+     pip install pytz 
+     ```
+
+
+3. Check for the Sensor:
+   - Verify the sensor is detected and sending data through the USB:
+     ```
+     sudo apt install minicom
+     sudo minicom -b 9600 -o -D /dev/ttyACM0
+     ```
+
+### Running the Script
+1. Create the Script File:
+   - Download the Python script file (`gpsSensor.py'`).
+
+2. Run the Script:
+   - Run the code in an IDE such as Thonny, Geany, etc.
+
+   				OR
+
+   - Make the script executable:
+     ```
+     chmod +x gpsSensor.py
+     ```
+   - Run the script using Python 3:
+     ```
+     ./gpsSensor.py
+     ```
 ## Payload Script for Water Monitoring Device
 
 This script (`Payload.py`) is designed to upload photos taken by water monitoring devices to a specified server. The script ensures the data consistency required for analysis by uploading photos with specific hardware and configuration settings.
