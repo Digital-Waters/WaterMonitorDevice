@@ -40,6 +40,10 @@ def main():
             captureDateTime()
             capturePhoto()
             captureTemperature()
+            #captureOxygen()
+            #capturepH()
+            #captureConductivity()
+            #captureTerpidity()
 
             # Add device ID to payload data
             payloadData['deviceID'] = device_id

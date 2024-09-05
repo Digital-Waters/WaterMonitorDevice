@@ -24,7 +24,6 @@ def uploadPayload(payloadData, log):
     }
 
     currDirectory = os.path.dirname(os.path.abspath(__file__))
-
     filePath = os.path.join(currDirectory, payloadData["image"])
     # Adding the image file to the fields
     with open(filePath, 'rb') as file:
