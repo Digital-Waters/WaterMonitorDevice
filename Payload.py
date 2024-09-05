@@ -24,9 +24,17 @@ def uploadPayload(payloadData, log):
     }
 
     currDirectory = os.path.dirname(os.path.abspath(__file__))
+    if "image" in payloadData:
     filePath = os.path.join(currDirectory, payloadData["image"])
+    else:
+    log.error("No image key found in payloadData")
+    return
     # Adding the image file to the fields
+    try:
     with open(filePath, 'rb') as file:
+    except FileNotFoundError:
+    log.error(f"Image file not found: {filePath}")
+    return
         fields['image'] = (os.path.basename(filePath), file, 'image/jpeg')
         
         # Creating a MultipartEncoder

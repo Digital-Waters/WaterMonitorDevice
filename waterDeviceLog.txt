@@ -1,0 +1,56 @@
+2024-09-05 19:16:07,895 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - Device ID loaded: 00000000cf5551df
+2024-09-05 19:16:07,896 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - Starting main loop...
+2024-09-05 19:16:07,897 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - in GPS, error getting device: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+2024-09-05 19:16:07,897 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - in GPS, error getting device: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+2024-09-05 19:16:07,898 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - In captureCameraImage().
+2024-09-05 19:16:07,920 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - In captureCameraImage(). Error initializing or using the camera: Failed to start camera: Cannot allocate memory
+2024-09-05 19:16:07,922 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - No temperature sensor connected.
+2024-09-05 19:16:07,923 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - *** In main(). Sleeping for 5 seconds...
+2024-09-05 19:25:54,803 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - Device ID loaded: 00000000cf5551df
+2024-09-05 19:25:54,804 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - Starting main loop...
+2024-09-05 19:25:54,805 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - in GPS, error getting device: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+2024-09-05 19:25:54,806 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - in GPS, error getting device: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+2024-09-05 19:25:54,806 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - In captureCameraImage().
+2024-09-05 19:25:54,829 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - In captureCameraImage(). Error initializing or using the camera: Failed to start camera: Cannot allocate memory
+2024-09-05 19:25:54,831 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - No temperature sensor connected.
+2024-09-05 19:25:54,831 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - *** In main(). Sleeping for 5 seconds...
+2024-09-05 19:50:38,829 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - Device ID loaded: 00000000cf5551df
+2024-09-05 19:50:38,971 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - Starting main loop...
+2024-09-05 19:50:38,973 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - in GPS, error getting device: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+2024-09-05 19:50:38,974 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - in GPS, error getting device: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+2024-09-05 19:50:38,974 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - In captureCameraImage().
+2024-09-05 19:50:39,008 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - In captureCameraImage(). Error initializing or using the camera: Failed to start camera: Cannot allocate memory
+2024-09-05 19:50:39,011 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - No temperature sensor connected.
+2024-09-05 19:50:39,013 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - *** In main(). Sleeping for 5 seconds...
+2024-09-05 19:52:07,451 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - Device ID loaded: 00000000cf5551df
+2024-09-05 19:52:07,452 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - Starting main loop...
+2024-09-05 19:52:07,452 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - in GPS, error getting device: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+2024-09-05 19:52:07,453 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - in GPS, error getting device: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+2024-09-05 19:52:07,453 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - In captureCameraImage().
+2024-09-05 19:52:07,476 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - In captureCameraImage(). Error initializing or using the camera: Failed to start camera: Cannot allocate memory
+2024-09-05 19:52:07,477 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - No temperature sensor connected.
+2024-09-05 19:52:07,478 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - *** In main(). Sleeping for 5 seconds...
+2024-09-05 23:00:56,069 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - Device ID loaded: 00000000cf5551df
+2024-09-05 23:00:56,171 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - Starting main loop...
+2024-09-05 23:00:56,423 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - in GPS, error getting device: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+2024-09-05 23:00:56,425 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - in GPS, error getting device: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+2024-09-05 23:00:56,460 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - In captureCameraImage().
+2024-09-05 23:00:56,490 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - In captureCameraImage(). Error initializing or using the camera: Failed to start camera: Cannot allocate memory
+2024-09-05 23:00:56,941 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - No temperature sensor connected.
+2024-09-05 23:00:57,019 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - *** In main(). Sleeping for 5 seconds...
+2024-09-05 23:31:03,264 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - Device ID loaded: 00000000cf5551df
+2024-09-05 23:31:03,736 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - Starting main loop...
+2024-09-05 23:31:03,738 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - in GPS, error getting device: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+2024-09-05 23:31:03,739 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - in GPS, error getting device: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+2024-09-05 23:31:03,740 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - In captureCameraImage().
+2024-09-05 23:31:05,264 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - In captureCameraImage(). Error initializing or using the camera: Failed to start camera: Cannot allocate memory
+2024-09-05 23:31:05,266 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - No temperature sensor connected.
+2024-09-05 23:31:05,267 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - *** In main(). Sleeping for 5 seconds...
+2024-09-05 23:49:21,974 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - Device ID loaded: 00000000cf5551df
+2024-09-05 23:49:22,010 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - Starting main loop...
+2024-09-05 23:49:22,011 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - in GPS, error getting device: [Errno 2] could not open port /dev/ttyACM1: [Errno 2] No such file or directory: '/dev/ttyACM1'
+2024-09-05 23:49:22,012 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - in GPS, error getting device: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+2024-09-05 23:49:22,013 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - In captureCameraImage().
+2024-09-05 23:49:22,093 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - ERROR - In captureCameraImage(). Error initializing or using the camera: Failed to start camera: Cannot allocate memory
+2024-09-05 23:49:22,095 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - No temperature sensor connected.
+2024-09-05 23:49:22,096 - 00000000cf5551df - #1794 SMP Thu Aug 29 16:27:25 BST 2024 - DWLogger - INFO - *** In main(). Sleeping for 5 seconds...
