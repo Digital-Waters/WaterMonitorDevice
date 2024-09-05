@@ -12,6 +12,7 @@ from configparser import ConfigParser
 interval = 5  # Set interval in seconds
 MaxFileSize = 50
 TrimPercent = 0.10
+timeZone = "America/Toronto"
 payloadData = {}
 logFile = 'waterDeviceLog.txt'
 
@@ -26,8 +27,9 @@ def load_device_id():
         raise RuntimeError("Serial number not found in /proc/cpuinfo")
     except Exception as e:
         raise RuntimeError("Failed to load device ID") from e
+
 def getConfig(): 
-    global interval, MaxFileSize, TrimPercent, sensors, secrets
+    global interval, MaxFileSize, TrimPercent, sensors, secrets, timeZone
     config = ConfigParser()
 
     try:
@@ -35,6 +37,7 @@ def getConfig():
         interval = int(config["GENERAL"]["sleepInterval"])
         MaxFileSize = int(config["GENERAL"]["MaxFileSize"])
         TrimPercent = float(config["GENERAL"]["TrimPercent"])
+        timeZone = config["GENERAL"]["timeZone"]
         sensors = config["SENSORS"]
         secrets = config["SECRETS"]
         log.info("successfully parsed the config file!")
@@ -160,7 +163,7 @@ def captureLongLat():
         payloadData.update(loc)
 
 def captureDateTime():
-    dateTime = gpsSensor.getGPSTime(log)
+    dateTime = gpsSensor.getGPSTime(log, timeZone)
     if dateTime:
         payloadData.update({"dateTime": dateTime})
 

@@ -52,7 +52,7 @@ def getLoc(log):
         gpsSerial.close()
         return location
 
-def getGPSTime(log):
+def getGPSTime(log, timeZone):
     try: 
         gpsSerial = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=1)
     except Exception as e:
@@ -74,7 +74,7 @@ def getGPSTime(log):
                     utcTime = datetime.combine(gpsDate, gpsTime)
 
                     # Convert UTC to EST/EDT based on current rules
-                    timezone = pytz.timezone('America/Toronto')
+                    timezone = pytz.timezone(timeZone)
                     localTime = utcTime.replace(tzinfo=pytz.utc).astimezone(timezone)
 
                     log.info(f"In GPS DateTime, successfully recieved data: {localTime}")
