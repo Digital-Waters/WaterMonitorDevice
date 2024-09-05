@@ -6,7 +6,9 @@ from datetime import datetime, timezone
 def uploadPayload(payloadData, log):
     url = "https://water-watch-58265eebffd9.herokuapp.com/upload/"
     boundary = "*****"
-    deviceId = "12345"
+
+    # Get the device ID from the payload data
+    deviceId = payloadData.get('deviceID', "UNKNOWN")  # Use UNKNOWN if deviceID not found
 
     latitude = str(payloadData.get('latitude', "999"))
     longitude = str(payloadData.get('longitude', "999"))
@@ -16,14 +18,12 @@ def uploadPayload(payloadData, log):
     fields = {
         'latitude': latitude,
         'longitude': longitude,
-        'deviceID': deviceId,
+        'deviceID': deviceId,  # Include the dynamic device ID here
         'device_datetime': dateTime,
         'weather': "cloudy with chance of eclipse"
     }
 
-
     currDirectory = os.path.dirname(os.path.abspath(__file__))
-
     filePath = os.path.join(currDirectory, payloadData["image"])
     # Adding the image file to the fields
     with open(filePath, 'rb') as file:
@@ -48,4 +48,3 @@ def uploadPayload(payloadData, log):
                 response.raise_for_status()  # Raise an error for bad status codes
         except Exception as e:
             log.error(f"Upload Exception: {e}")
-
