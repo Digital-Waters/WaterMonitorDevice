@@ -95,4 +95,3 @@ def getGPSTime(log):
     finally:
         gpsSerial.close()
         return str(localTime)
-
