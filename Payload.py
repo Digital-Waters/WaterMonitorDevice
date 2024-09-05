@@ -25,34 +25,35 @@ def uploadPayload(payloadData, log):
 
     currDirectory = os.path.dirname(os.path.abspath(__file__))
     if "image" in payloadData:
-    filePath = os.path.join(currDirectory, payloadData["image"])
+     filePath = os.path.join(currDirectory, payloadData["image"])
     else:
-    log.error("No image key found in payloadData")
-    return
+     log.error("No image key found in payloadData")
+     return
     # Adding the image file to the fields
     try:
-    with open(filePath, 'rb') as file:
+     with open(filePath, 'rb') as file:
+         fields['image'] = (os.path.basename(filePath), file, 'image/jpeg')
     except FileNotFoundError:
-    log.error(f"Image file not found: {filePath}")
+     log.error(f"Image file not found: {filePath}")
     return
-        fields['image'] = (os.path.basename(filePath), file, 'image/jpeg')
+    
         
-        # Creating a MultipartEncoder
-        m = MultipartEncoder(fields=fields, boundary=boundary)
+    # Creating a MultipartEncoder
+    m = MultipartEncoder(fields=fields, boundary=boundary)
 
-        # Debugging information
-        log.info(f"Uploading file: {filePath}")
-        log.info(f"Data being sent: {fields}")
+    # Debugging information
+    log.info(f"Uploading file: {filePath}")
+    log.info(f"Data being sent: {fields}")
 
-        # Sending the request
-        try:
-            response = requests.post(url, data=m, headers={'Content-Type': m.content_type})
-            if response.status_code == 200:
-                log.info("Successfully uploaded payload to DB")
-            else:
+    # Sending the request
+    try:
+        response = requests.post(url, data=m, headers={'Content-Type': m.content_type})
+        if response.status_code == 200:
+            log.info("Successfully uploaded payload to DB")
+        else:
                 log.error(f"Upload Failed: {response.status_code} - {response.reason}")
                 log.error(f"Response Text: {response.text}")
                 log.error(f"Response Headers: {response.headers}")
                 response.raise_for_status()  # Raise an error for bad status codes
-        except Exception as e:
-            log.error(f"Upload Exception: {e}")
+    except Exception as e:
+        log.error(f"Upload Exception: {e}")
