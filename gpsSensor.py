@@ -74,7 +74,7 @@ def getGPSTime(log, timeZone):
                     utcTime = datetime.combine(gpsDate, gpsTime)
 
                     # Convert UTC to EST/EDT based on current rules
-                    timezone = pytz.timezone(timeZone)
+                    timezone = pytz.timezone('America/Toronto')
                     localTime = utcTime.replace(tzinfo=pytz.utc).astimezone(timezone)
 
                     log.info(f"In GPS DateTime, successfully recieved data: {localTime}")

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import time
 import logging
 import gpsSensor
@@ -7,6 +9,7 @@ import Payload
 import platform
 import os
 from configparser import ConfigParser
+import configWriter
 
 
 interval = 5  # Set interval in seconds
@@ -37,11 +40,11 @@ def getConfig():
         interval = int(config["GENERAL"]["sleepInterval"])
         MaxFileSize = int(config["GENERAL"]["MaxFileSize"])
         TrimPercent = float(config["GENERAL"]["TrimPercent"])
-        timeZone = config["GENERAL"]["timeZone"]
-        sensors = config["SENSORS"]
         secrets = config["SECRETS"]
         log.info("successfully parsed the config file!")
     except:
+        configWriter.createConfig()
+        getConfig()
         log.error("error parsing config file, will use default values!")
 
 
@@ -56,21 +59,14 @@ def main():
     while True:
         try:
             # Capture sensor data
-            if sensors["GPS"] == "on":
-                captureLongLat()
-                captureDateTime()
-            if sensors["camera"] == "on":
-                capturePhoto()
-            if sensors["temp"] == "on":
-                captureTemperature()
-            if sensors["O2"] == "on":
-                captureOxygen()
-            if sensors["PH"] == "on":
-                capturepH()
-            if sensors["conductivity"] == "on":
-                captureConductivity()
-            if sensors["terpidity"] == "on":
-                captureTerpidity()
+            captureLongLat()
+            captureGPSDateTime()
+            capturePhoto()
+            captureTemperature()
+            #captureOxygen()
+            #capturepH()
+            #captureConductivity()
+            #captureTerpidity()
 
             # Add device ID to payload data
             payloadData['deviceID'] = device_id
@@ -162,7 +158,7 @@ def captureLongLat():
     if loc:
         payloadData.update(loc)
 
-def captureDateTime():
+def captureGPSDateTime():
     dateTime = gpsSensor.getGPSTime(log, timeZone)
     if dateTime:
         payloadData.update({"dateTime": dateTime})
