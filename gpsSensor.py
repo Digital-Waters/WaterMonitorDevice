@@ -6,7 +6,7 @@ import pytz
 def getLoc(log):
     # This serial endpoint is for USB connection on my Pi; would be different on the RX pins
     try: 
-        gpsSerial = serial.Serial('/dev/ttyACM1', baudrate=9600, timeout=1)
+        gpsSerial = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=1)
     except Exception as e:
         log.error(f"in GPS, error getting device: {e}")
         return False
