@@ -52,7 +52,7 @@ def getLoc(log):
         gpsSerial.close()
         return location
 
-def getGPSTime(log):
+def getGPSTime(log, timeZone):
     try: 
         gpsSerial = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=1)
     except Exception as e:

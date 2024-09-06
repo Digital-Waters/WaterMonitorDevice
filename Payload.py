@@ -3,8 +3,9 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 import os
 from datetime import datetime, timezone
 
-def uploadPayload(payloadData, log):
-    url = "https://water-watch-58265eebffd9.herokuapp.com/upload/"
+def uploadPayload(payloadData, log, secrets):
+    url = secrets["apiURL"]
+    apiKey = secrets["apiKey"]
     boundary = "*****"
 
     # Get the device ID from the payload data
@@ -12,7 +13,7 @@ def uploadPayload(payloadData, log):
 
     latitude = str(payloadData.get('latitude', "999"))
     longitude = str(payloadData.get('longitude', "999"))
-    dateTime = payloadData.get('dateTime', datetime.now().strftime("%Y-%m-%d"))
+    dateTime = payloadData.get('dateTime', datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
     
     # Preparing the data to be sent
     fields = {
