@@ -26,8 +26,8 @@ def testCameraSettings():
     os.makedirs(imageFolder, exist_ok=True)
 
     # Define ranges and intervals for settings
-    exposure_times = [200000,500000,800000,1000000]
-    analogue_gains = [3.0,4.0,5.0,6.0,8.0,10.0] 
+    exposure_times = [500000,800000]
+    analogue_gains = [6.0,8.0,10.0] 
     mode_values = [1]#[0,1,2,3,4,5,6,7]
 
     picam2.start()
@@ -38,7 +38,8 @@ def testCameraSettings():
         	for mode_value in mode_values:
 	            # Set camera controls for this combination
 	            picam2.set_controls({
-	                "AwbEnable": True,
+	                "AwbEnable": False,
+	                "ColourGains": (2.0, 1.0),
 	                "AwbMode": mode_value,
 	                "ExposureTime": exposure_time,
 	                "AnalogueGain": analogue_gain
@@ -103,5 +104,5 @@ def getCamControlsList():
 	    print(f"{control}: {details}")
 
 if __name__ == "__main__":
-    #getCamControlsList()
+    getCamControlsList()
     testCameraSettings()
