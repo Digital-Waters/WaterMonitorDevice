@@ -278,7 +278,7 @@ The following instructions allow the mainloop to start at the start-up of the ra
 sudo nano /etc/systemd/system/myscript.service
 ```
 
-2. write the following configuration details to the service file: 
+2. write the following configuration details to the service file. This requires the path of the mainloop.py file, this can be obtained by typing `readlink -f mainloop.py` in the working directory: 
 
 ```
 [Unit]
@@ -300,11 +300,7 @@ WantedBy=multi-user.target
 
 next `ctrl-s` to save and `ctrl-x` to exit
 
-To get the correct path of the mainloop.py, in your working directory type: 
 
-```
-readlink -f mainloop.py
-```
 
 3. Enable the service file by typing the following commands: 
 
