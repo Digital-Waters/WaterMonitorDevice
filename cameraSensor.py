@@ -85,10 +85,12 @@ def cropImage(imgPath):
 
 # Set exposure, gain, and other controls. See cameraTester.py for testing image outputs
 def configureLowLightSettings():
-    
+
     # Longer exposure time, higher gain for low-light
     picam2.set_controls({
-        "AwbEnable": True,
-        "ExposureTime": 500000, 
-        "AnalogueGain": 4.0  
+        "AwbEnable": False,
+        "AwbMode": 1,
+        "ColourGains": (2.0, 1.0),
+        "ExposureTime": 1000000, 
+        "AnalogueGain": 8.0  
     })
