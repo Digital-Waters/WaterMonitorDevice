@@ -1,17 +1,18 @@
 from picamera2 import Picamera2
 from datetime import datetime
 from time import sleep
+from libcamera import controls
+from PIL import Image
 import os
 import logging
 import RPi.GPIO as GPIO
-from libcamera import controls
-from PIL import Image
 
 
-# Setup GPIO for Red LED
-RED_PIN = 17
+
+# Setup GPIO for LED activation
+PIN17 = 17
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(RED_PIN, GPIO.OUT)
+GPIO.setup(PIN17, GPIO.OUT)
 picam2 = Picamera2()
 imageDir = "Image"
 picam2.configure(picam2.create_still_configuration()) #capture full resolution photo
@@ -19,7 +20,7 @@ picam2.configure(picam2.create_still_configuration()) #capture full resolution p
 
 def setLED(state):
     try:
-        GPIO.output(RED_PIN, state)
+        GPIO.output(PIN17, state)
     except (OSError, ValueError, RuntimeError) as error:
         log.error(f"In setLED(). GPIO Error: {error}")
 
@@ -28,10 +29,7 @@ def captureCameraImage(log):
     try:
         log.info(f"In captureCameraImage().")
         picam2.start()
-        sleep(3)
-
-        # Uncomment for cameras with motorized lenses (not fixed-focus).
-        #setFocus(log) 
+        configureLowLightSettings()
 
         today = datetime.now().strftime("%Y-%m-%d")
         imageFolder = os.path.join(imageDir, today)
@@ -40,7 +38,7 @@ def captureCameraImage(log):
         try:
             # Turn on the Red LED for illumination
             setLED(GPIO.HIGH)
-            sleep(1)  # Give some time for the LED to illuminate the scene
+            sleep(2)  # Give some time for the LED to illuminate the scene
 
             timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             imagePath = os.path.join(imageFolder, f"image_{timestamp}.jpg")
@@ -67,16 +65,6 @@ def captureCameraImage(log):
         return False
 
 
-# Set the focus position. Not used with fixed-focus lens (here in case we change cameras)
-def setFocus(log):
-    try:
-        focus_position = 0.5  # Adjust this value based on experimentation
-        picam2.set_controls({"AfMode": controls.AfModeEnum.Manual, "LensPosition": focus_position})
-
-    except (OSError, ValueError, RuntimeError) as error:
-        log.error(f"In setFocus(): {error}")
-
-
 # Crop image, best used for fixed-focus lenses, to give a 'digital zoom'
 def cropImage(imgPath):
     image = Image.open(imgPath)
@@ -93,3 +81,14 @@ def cropImage(imgPath):
 
     # Save the cropped image, overwritting original
     cropped_image.save(imgPath)
+
+
+# Set exposure, gain, and other controls. See cameraTester.py for testing image outputs
+def configureLowLightSettings():
+    
+    # Longer exposure time, higher gain for low-light
+    picam2.set_controls({
+        "AwbEnable": True,
+        "ExposureTime": 500000, 
+        "AnalogueGain": 4.0  
+    })
