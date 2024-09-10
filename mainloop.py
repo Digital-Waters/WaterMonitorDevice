@@ -72,7 +72,7 @@ def main():
             payloadData['deviceID'] = device_id
 
             # Upload the payload
-            sendDataPayload()
+            #sendDataPayload()
 
             manageLogFile()
             

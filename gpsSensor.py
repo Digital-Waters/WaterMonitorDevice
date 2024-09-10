@@ -6,7 +6,7 @@ import pytz
 def getLoc(log):
     # This serial endpoint is for USB connection on my Pi; would be different on the RX pins
     try: 
-        gpsSerial = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=1)
+        gpsSerial = serial.Serial('/dev/serial0', baudrate=9600, timeout=1)
     except Exception as e:
         log.error(f"in GPS, error getting device: {e}")
         return False
@@ -18,28 +18,22 @@ def getLoc(log):
             line = gpsSerial.readline().decode('ascii', errors='replace').strip()
 
             # Check if the line contains a GLL sentence (you can also use GGA, RMC, etc.)
-            if line.startswith('$GPGLL'):
+            if line.startswith('$GPRMC'):
                 try:
-                    # Parse the NMEA sentence
                     msg = pynmea2.parse(line)
-                    
-                    # Extract latitude and longitude
-                    latitude = msg.latitude
-                    longitude = msg.longitude
-
-                    # Store latitude and longitude in a dictionary
-                    location = {
-                        "longitude": longitude,
-                        "latitude": latitude
-                    }
-
-                    # Break the loop if location is successfully retrieved
-                    log.info(f"In GPS location, successfully recieved data: {location}")
-                    break
-
+                    if msg.status == 'A':  # A means valid, V means invalid
+                        latitude = msg.latitude
+                        longitude = msg.longitude
+                        location = {"longitude": longitude, "latitude": latitude}
+                        log.info(f"In GPS location, successfully received data: {location}")
+                        break
+                    else:
+                        log.info("GPS data is invalid.")
+                        break
                 except pynmea2.ParseError as e:
                     log.error(f"In GPS, Error parsing data: {e}")
                     return False
+
     except Exception as e:
         log.error(f"In GPS error getting data: {e}")
         return False
@@ -54,7 +48,7 @@ def getLoc(log):
 
 def getGPSTime(log, timeZone):
     try: 
-        gpsSerial = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=1)
+        gpsSerial = serial.Serial('/dev/serial0', baudrate=9600, timeout=1)
     except Exception as e:
         log.error(f"in GPS, error getting device: {e}")
         return False
