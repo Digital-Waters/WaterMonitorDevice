@@ -16,12 +16,11 @@ def getLoc(log):
     try:
         while True:    
             line = gpsSerial.readline().decode('ascii', errors='replace').strip()
-
             # Check if the line contains a GLL sentence (you can also use GGA, RMC, etc.)
             if line.startswith('$GPRMC'):
                 try:
                     msg = pynmea2.parse(line)
-                    if msg.status == 'A':  # A means valid, V means invalid
+                    if msg.status == 'A': 
                         latitude = msg.latitude
                         longitude = msg.longitude
                         location = {"longitude": longitude, "latitude": latitude}

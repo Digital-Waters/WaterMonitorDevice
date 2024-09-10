@@ -171,10 +171,11 @@ To run the sense_Temp1.py code on a Raspberry Pi Zero 2 W, which is designed to 
 To run the gpsSensor.py code on a Raspberry Pi Zero 2 W, which is designed to read GPS location and time data from a GT-U7 GPS module, you need to follow pre-requisite steps for both hardware and software setup:
 
 ### Hardware Setup
-1. GT-U7 module: Ensure you have a GT-U7 module.
-2. Micro USB
+1. GT-U7 module: Ensure you have a GT-U7 module and the antenna connected to it.
 2. Wiring:
-    - For now the sensor can be connected using a microUSB.
+    - VCC on the GPS ---> 5v (pin 2) on raspberryPI
+    - GRND on the GPS ---> GND (pin 6) on raspberryPI
+    - TXD on the GPS ---> RXD (pin 10) on raspberryPI
 
 ### Software Setup
 1. Edit config.txt file: 
@@ -186,9 +187,20 @@ To run the gpsSensor.py code on a Raspberry Pi Zero 2 W, which is designed to re
     ```
     droverlay=w1-gpio
     dtoverlay=w1-gpio
+    core_freq=250
+    enable_uart=1
+    force_turbo=1
     ```
+2. Edit raspberryPI config settings: 
+    - in the SSH terminal:
 
-2. Install Required Packages:
+    ```
+    sudo raspi-config
+    ```
+    - Navigate to `Interfacing Options` > `Serial`, disable serial login Shell and enable serial interface.
+
+
+3. Install Required Packages:
    - Ensure you have the necessary packages installed:
      ```
      sudo apt-get update
@@ -197,11 +209,11 @@ To run the gpsSensor.py code on a Raspberry Pi Zero 2 W, which is designed to re
      ```
 
 
-3. Check for the Sensor:
-   - Verify the sensor is detected and sending data through the USB:
+4. Test Sensor:
+   - Verify the sensor is detected and sending data through the RXD pin:
      ```
      sudo apt install minicom
-     sudo minicom -b 9600 -o -D /dev/ttyACM0
+     sudo minicom -b 9600 -o -D /dev/serial0
      ```
 
 ### Running the Script
