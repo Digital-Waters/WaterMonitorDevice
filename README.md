@@ -269,4 +269,76 @@ python3 Payload.py
 heroku logs --tail --app your-heroku-app-name
   ```
 
+## Automatic start of script on start-up
+The following instructions allow the mainloop to start at the start-up of the raspberryPI.
 
+1. create a service file using the following command: 
+
+```
+sudo nano /etc/systemd/system/myscript.service
+```
+
+2. write the following configuration details to the service file: 
+
+```
+[Unit]
+Description=My Python Script
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 [path to mainloop.py]
+WorkingDirectory=[path to the directory that main.py is in]
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
+
+```
+
+next `ctrl-s` to save and `ctrl-x` to exit
+
+To get the correct path of the mainloop.py, in your working directory type: 
+
+```
+readlink -f mainloop.py
+```
+
+3. Enable the service file by typing the following commands: 
+
+```
+sudo systemctl daemon-reload
+sudo systemctl enable myscript.service
+```
+
+4. test the service file by manually starting it:
+
+```
+sudo systemctl start myscript.service
+```
+
+5. monitoring the terminal of the file: 
+
+```
+sudo systemctl status myscript.service
+```
+
+6. stop service: 
+
+```
+sudo systemctl stop myscript.service
+```
+
+7. restart the service: 
+
+```
+sudo systemctl restart myscript.service
+```
+
+8. disable the service: 
+
+```
+sudo systemctl disable myscript.service
+```
