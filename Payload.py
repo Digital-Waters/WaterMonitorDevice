@@ -73,17 +73,6 @@ def savePayload(payload):
     except Exception as e:
         print(f"Error saving payload: {e}")  # Handle any file I/O exceptions
 
-def readSavedPayloads():
-    folder = "payload"
-    filename = os.path.join(folder, "payloadData.txt")
-    
-    if os.path.exists(filename):
-        with open(filename, 'r') as f:
-            # Read each line and parse it as a JSON object
-            logs = [json.loads(line.strip()) for line in f.readlines()]
-        return logs
-    else:
-        return []
 
 def uploadSavedPayloads(log, secrets):
     folder = "payload"
