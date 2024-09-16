@@ -50,7 +50,7 @@ def uploadPayload(payloadData, log, secrets, fromFile):
             else:
                 log.error(f"Upload Failed: {response.status_code} - {response.reason}")
                 log.error(f"Response Text: {response.text}")
-                log.error(f"Response Headers: {response.headers}")
+                #log.error(f"Response Headers: {response.headers}")
                 if fromFile == False:
                     savePayload(payloadData)
         except Exception as e:
@@ -65,58 +65,56 @@ def savePayload(payload):
     os.makedirs(folder, exist_ok=True)
 
     try:
-        logs = []
-        if os.path.exists(filename) and os.path.getsize(filename) > 0:
-            with open(filename, 'r') as f:
-                try:
-                    logs = json.load(f)
-                    if not isinstance(logs, list):
-                        logs = [logs]
-                except json.JSONDecodeError:
-                    logs = []
-        else:
-            logs = []
-
-        # Append new data to the logs
-        logs.append(payload)
-
-        # Save the updated logs back to the file
-        with open(filename, 'w') as f:
-            json.dump(logs, f, indent=4)
+        # Open file in append mode ('a') to add new payloads without reading the entire file
+        with open(filename, 'a') as f:
+            # Dump each payload as a JSON object on a new line
+            f.write(json.dumps(payload) + '\n')
 
     except Exception as e:
         print(f"Error saving payload: {e}")  # Handle any file I/O exceptions
 
+def readSavedPayloads():
+    folder = "payload"
+    filename = os.path.join(folder, "payloadData.txt")
+    
+    if os.path.exists(filename):
+        with open(filename, 'r') as f:
+            # Read each line and parse it as a JSON object
+            logs = [json.loads(line.strip()) for line in f.readlines()]
+        return logs
+    else:
+        return []
 
 def uploadSavedPayloads(log, secrets):
     folder = "payload"
     filename = os.path.join(folder, "payloadData.txt")
-
-    # Check if file exists and has data
-    if os.path.exists(filename) and os.path.getsize(filename) > 0:
+    
+    if os.path.exists(filename):
         with open(filename, 'r') as f:
+            logs = [json.loads(line.strip()) for line in f.readlines()]
+
+        # Iterate over logs and try to upload each one
+        for payload in logs[:]:
             try:
-                logs = json.load(f)
-            except json.JSONDecodeError:
-                logs = []
+                # Try to upload the payload
+                uploadPayload(payload, log, secrets, fromFile=True)
+                log.info(f"Payload uploaded successfully: {payload['deviceID']}")
 
-        # Upload each saved payload one by one
-        if logs:
-            updated_logs = []
-            for payload in logs:
-                try:
-                    # Try to re-upload saved payload
-                    uploadPayload(payload, log, secrets, fromFile=True)
-                except Exception as e:
-                    log.error(f"Failed to upload saved payload: {e}")
-                    # Add the payload back to the updated list if the upload fails
-                    updated_logs.append(payload)
+                # If upload is successful, remove it from the logs
+                logs.remove(payload)
 
-            # Write the remaining failed payloads back to the file
-            with open(filename, 'w') as f:
-                json.dump(updated_logs, f, indent=4)
+                # Overwrite the file with the remaining failed payloads after each success
+                with open(filename, 'w') as f:
+                    for remaining_payload in logs:
+                        f.write(json.dumps(remaining_payload) + '\n')
 
-            if not updated_logs:
-                log.info("All saved payloads successfully uploaded.")
+            except Exception as e:
+                log.error(f"Failed to upload saved payload: {e}")
+        
+        # Check if all payloads were uploaded
+        if not logs:
+            log.info("All saved payloads successfully uploaded.")
         else:
-            log.info("No saved payloads to upload.")
+            log.error("Some payloads could not be uploaded, saved in the file.")
+    else:
+        log.info("No saved payloads to upload.")
