@@ -53,11 +53,14 @@ def main():
     # Main loop. Gather all sensor data and upload
     log.info(f"Device ID loaded: {device_id}")
     log.info("Starting main loop...")
-
+    counter = 15
     while True:
         try:
+
             # Capture sensor data
-            captureLongLat()
+            if counter == 15:
+                captureLongLat()
+                counter = 0
             captureGPSDateTime()
             capturePhoto()
             captureTemperature()
@@ -80,6 +83,7 @@ def main():
 
         finally:
             log.info(f"*** In main(). Sleeping for {interval} seconds...")
+            counter += 1
             time.sleep(interval)
 
 def initlog():
@@ -147,6 +151,8 @@ def capturePhoto():
     imagePath = cameraSensor.captureCameraImage(log)
     if imagePath:
         payloadData.update({"image": imagePath})
+    print(payloadData)
+
 
 def captureTemperature():
     return temperatureSensor.captureTemperature(log)
@@ -162,7 +168,7 @@ def captureGPSDateTime():
         payloadData.update({"dateTime": dateTime})
 
 def sendDataPayload():
-    Payload.uploadPayload(payloadData, log, secrets)
+    Payload.uploadPayload(payloadData, log, secrets, fromFile=False)
 
 if __name__ == "__main__":
     log = initlog()
