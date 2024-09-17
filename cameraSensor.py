@@ -6,8 +6,6 @@ from PIL import Image
 import os
 import logging
 import RPi.GPIO as GPIO
-import imageToRGBA
-
 
 
 # Setup GPIO for LED activation
@@ -16,7 +14,6 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(PIN17, GPIO.OUT)
 picam2 = Picamera2()
 imageDir = "Image"
-referenceImage = "referenceImage.jpg"
 picam2.configure(picam2.create_still_configuration()) #capture full resolution photo
 
 
@@ -53,14 +50,9 @@ def captureCameraImage(log):
             # Turn off the Red LED after capturing the image
             setLED(GPIO.LOW)
 
-            # Get RGBA value of this photo
-            rgba = imageToRGBA.getRgbaFromImage(imagePath, referenceImage)
-            log.info(f"RGBA: {rgba}")
-
         except (OSError, ValueError, RuntimeError) as error:
             log.error(f"In captureCameraImage(). Error saving image: {error}")
             return False
-
 
         finally:
             picam2.stop()
