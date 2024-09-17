@@ -8,6 +8,7 @@ import platform
 import os
 from configparser import ConfigParser
 import configWriter
+import imageToRGBA
 
 
 interval = 5  # Set interval in seconds
@@ -16,6 +17,7 @@ TrimPercent = 0.10
 timeZone = "America/Toronto"
 payloadData = {}
 logFile = 'waterDeviceLog.txt'
+referenceImage = "referenceImage.jpg"
 
 # Function to get device ID dynamically from /proc/cpuinfo
 def load_device_id():
@@ -64,11 +66,9 @@ def main():
             captureGPSDateTime()
             capturePhoto()
             captureTemperature()
-            #captureOxygen()
-            #capturepH()
             #captureConductivity()
             #captureTerpidity()
-
+            
             # Add device ID to payload data
             payloadData['deviceID'] = device_id
 
@@ -153,6 +153,10 @@ def capturePhoto():
         payloadData.update({"image": imagePath})
     print(payloadData)
 
+
+        rgba = imageToRGBA.getRgbaFromImage(imagePath, referenceImage)
+        log.info(f"RGBA: {rgba}")
+        payloadData.update({"waterColor": rgba})
 
 def captureTemperature():
     return temperatureSensor.captureTemperature(log)

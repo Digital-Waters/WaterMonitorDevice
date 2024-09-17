@@ -15,13 +15,15 @@ def uploadPayload(payloadData, log, secrets, fromFile):
     latitude = str(payloadData.get('latitude', "999"))
     longitude = str(payloadData.get('longitude', "999"))
     dateTime = payloadData.get('dateTime', datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
-
+    waterColor = str(payloadData.get('waterColor', "n/a"))
+    
     # Preparing the data to be sent
     fields = {
         'latitude': latitude,
         'longitude': longitude,
         'deviceID': deviceId,  # Include the dynamic device ID here
         'device_datetime': dateTime,
+        'waterColor': waterColor,
         'weather': "cloudy with chance of eclipse"
     }
 

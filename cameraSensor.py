@@ -8,7 +8,6 @@ import logging
 import RPi.GPIO as GPIO
 
 
-
 # Setup GPIO for LED activation
 PIN17 = 17
 GPIO.setmode(GPIO.BCM)
@@ -55,7 +54,6 @@ def captureCameraImage(log):
             log.error(f"In captureCameraImage(). Error saving image: {error}")
             return False
 
-
         finally:
             picam2.stop()
             return str(imagePath) 
@@ -89,8 +87,8 @@ def configureLowLightSettings():
     # Longer exposure time, higher gain for low-light
     picam2.set_controls({
         "AwbEnable": False,
-        "AwbMode": 1,
+        #"AwbMode": 1,
         "ColourGains": (2.0, 1.0),
         "ExposureTime": 1000000, 
-        "AnalogueGain": 8.0  
+        "AnalogueGain": 5.0  
     })
