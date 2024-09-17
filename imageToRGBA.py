@@ -53,8 +53,11 @@ def calculateAlpha(waterColorDifference):
 # Main function to get RGBA value from the image comparison
 def getRgbaFromImage(waterPhotoPath, referencePhotoPath):
     # Load the reference and target images
-    imageReference = Image.open(referencePhotoPath)
-    imageColoredWater = Image.open(waterPhotoPath)
+    try:
+        imageReference = Image.open(referencePhotoPath)
+        imageColoredWater = Image.open(waterPhotoPath)
+    except Exception as e:
+        return "getRGBA Error: referenceImage.jpg doesn't exist"
 
     # Convert both images to RGB
     imageReferenceRgb = imageReference.convert("RGB")
