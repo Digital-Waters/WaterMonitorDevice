@@ -2,8 +2,8 @@ from PIL import Image
 import numpy as np
 
 # Paths to the reference and target images
-imageReferencePath = '/mnt/data/image_2024-09-14_15-55-42.jpg'
-imageBrownWaterPath = '/mnt/data/image_2024-09-14_16-04-59.jpg'
+#imageReferencePath = '/mnt/data/image_2024-09-14_15-55-42.jpg'
+#imageBrownWaterPath = '/mnt/data/image_2024-09-14_16-04-59.jpg'
 
 # Function to create a mask for disk detection
 def maskSecchiDisk(imageData, blackThreshold=60, whiteThreshold=180):
@@ -51,14 +51,14 @@ def calculateAlpha(waterColorDifference):
     return int(alpha)
 
 # Main function to get RGBA value from the image comparison
-def getRgbaFromImage(waterPhoto):
+def getRgbaFromImage(waterPhotoPath, referencePhotoPath):
     # Load the reference and target images
-    imageReference = Image.open(imageReferencePath)
-    imageBrownWater = Image.open(waterPhoto)
+    imageReference = Image.open(referencePhotoPath)
+    imageColoredWater = Image.open(waterPhotoPath)
 
     # Convert both images to RGB
     imageReferenceRgb = imageReference.convert("RGB")
-    imageColoredWaterRgb = imageBrownWater.convert("RGB")
+    imageColoredWaterRgb = imageColoredWater.convert("RGB")
 
     # Convert images to numpy arrays
     imageReferenceData = np.array(imageReferenceRgb)
@@ -81,7 +81,3 @@ def getRgbaFromImage(waterPhoto):
     rgbaWaterColor = np.append(actualWaterColor, alphaValue)
 
     return rgbaWaterColor
-
-# Example usage
-rgbaWaterColor = getRgbaFromImage('/mnt/data/image_2024-09-14_16-04-59.jpg')
-print(rgbaWaterColor)
