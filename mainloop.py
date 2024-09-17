@@ -151,9 +151,6 @@ def capturePhoto():
     imagePath = cameraSensor.captureCameraImage(log)
     if imagePath:
         payloadData.update({"image": imagePath})
-    print(payloadData)
-
-
         rgba = imageToRGBA.getRgbaFromImage(imagePath, referenceImage)
         log.info(f"RGBA: {rgba}")
         payloadData.update({"waterColor": rgba})
