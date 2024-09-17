@@ -89,8 +89,8 @@ def configureLowLightSettings():
     # Longer exposure time, higher gain for low-light
     picam2.set_controls({
         "AwbEnable": False,
-        "AwbMode": 1,
+        #"AwbMode": 1,
         "ColourGains": (2.0, 1.0),
         "ExposureTime": 1000000, 
-        "AnalogueGain": 8.0  
+        "AnalogueGain": 6.0  
     })

@@ -24,17 +24,17 @@ def getLoc(log):
                         latitude = msg.latitude
                         longitude = msg.longitude
                         location = {"longitude": longitude, "latitude": latitude}
-                        log.info(f"In GPS location, successfully received data: {location}")
+                        log.info(f"In getLoc, successfully received data: {location}")
                         break
                     else:
-                        log.info("GPS data is invalid.")
+                        log.info("In getLoc, GPS data is invalid.")
                         break
                 except pynmea2.ParseError as e:
-                    log.error(f"In GPS, Error parsing data: {e}")
+                    log.error(f"In getLoc, Error parsing data: {e}")
                     return False
 
     except Exception as e:
-        log.error(f"In GPS error getting data: {e}")
+        log.error(f"In getLoc error getting data: {e}")
         return False
 
     except KeyboardInterrupt:
@@ -49,7 +49,7 @@ def getGPSTime(log, timeZone):
     try: 
         gpsSerial = serial.Serial('/dev/serial0', baudrate=9600, timeout=1)
     except Exception as e:
-        log.error(f"in GPS, error getting device: {e}")
+        log.error(f"in getGPSTime, error getting device: {e}")
         return False
     
     localTime = None
@@ -70,15 +70,15 @@ def getGPSTime(log, timeZone):
                     timezone = pytz.timezone('America/Toronto')
                     localTime = utcTime.replace(tzinfo=pytz.utc).astimezone(timezone)
 
-                    log.info(f"In GPS DateTime, successfully recieved data: {localTime}")
+                    log.info(f"In getGPSTime DateTime, successfully recieved data: {localTime}")
                     break
 
                 except pynmea2.ParseError as e:
-                    log.error(f"In GPS DateTime, Error parsing data: {e}")
+                    log.error(f"In getGPSTime DateTime, Error parsing data: {e}")
                     return False
 
     except Exception as e:
-        log.error(f"In GPS DateTime error getting data: {e}")
+        log.error(f"In getGPSTime DateTime error getting data: {e}")
         return False
 
     except KeyboardInterrupt:
