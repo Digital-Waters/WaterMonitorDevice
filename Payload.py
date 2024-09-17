@@ -52,26 +52,24 @@ def uploadPayload(payloadData, log, secrets, fromFile):
                 log.error(f"Response Text: {response.text}")
                 #log.error(f"Response Headers: {response.headers}")
                 if fromFile == False:
-                    savePayload(payloadData)
+                    savePayload(payloadData, log)
         except Exception as e:
             log.error(f"Upload Exception: {e}")
             savePayload(payloadData)  # Save the payload in case of failure
 
 
-def savePayload(payload):
+def savePayload(payload, log):
     folder = "payload"
     filename = os.path.join(folder, "payloadData.txt")
 
     os.makedirs(folder, exist_ok=True)
 
     try:
-        # Open file in append mode ('a') to add new payloads without reading the entire file
         with open(filename, 'a') as f:
-            # Dump each payload as a JSON object on a new line
             f.write(json.dumps(payload) + '\n')
-
+        log.info("Payload data wrote to file")
     except Exception as e:
-        print(f"Error saving payload: {e}")  # Handle any file I/O exceptions
+        log.error(f"Error saving payload: {e}")  
 
 
 def uploadSavedPayloads(log, secrets):
