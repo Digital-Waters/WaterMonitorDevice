@@ -50,10 +50,10 @@ def getConfig():
 
 def main():
     # Load the device ID
-    device_id = load_device_id()
+    deviceID = load_device_id()
 
     # Main loop. Gather all sensor data and upload
-    log.info(f"Device ID loaded: {device_id}")
+    log.info(f"Device ID loaded: {deviceID}")
     log.info("Starting main loop...")
     counter = 15
     while True:
@@ -64,13 +64,13 @@ def main():
                 captureLongLat()
                 counter = 0
             captureGPSDateTime()
-            capturePhoto()
+            capturePhoto(deviceID)
             captureTemperature()
             #captureConductivity()
             #captureTerpidity()
             
             # Add device ID to payload data
-            payloadData['deviceID'] = device_id
+            payloadData['deviceID'] = deviceID
 
             # Upload the payload
             sendDataPayload()
@@ -147,8 +147,8 @@ def manageLogFile():
     else: 
         log.info(f"Log file size is under {MaxFileSize} MB")
 
-def capturePhoto():
-    imagePath = cameraSensor.captureCameraImage(log)
+def capturePhoto(deviceID):
+    imagePath = cameraSensor.captureCameraImage(log, deviceID)
     if imagePath:
         payloadData.update({"image": imagePath})
         rgba = imageToRGBA.getRgbaFromImage(imagePath, referenceImage)
