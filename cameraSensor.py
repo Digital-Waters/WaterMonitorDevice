@@ -24,7 +24,7 @@ def setLED(state):
         log.error(f"In setLED(). GPIO Error: {error}")
 
     
-def captureCameraImage(log):
+def captureCameraImage(log, deviceID):
     try:
         log.info(f"In captureCameraImage().")
         picam2.start()
@@ -40,7 +40,7 @@ def captureCameraImage(log):
             sleep(2)  # Give some time for the LED to illuminate the scene
 
             timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            imagePath = os.path.join(imageFolder, f"image_{timestamp}.jpg")
+            imagePath = os.path.join(imageFolder, f"{timestamp}__{deviceID}.jpg")
             picam2.capture_file(imagePath)
             log.info(f"In captureCameraImage(). Image saved to {imagePath}")
             
