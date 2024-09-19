@@ -14,8 +14,7 @@ There are plenty of issues that are open that represent work that needs to be do
 There is nothing too small. If you see any spelling or grammar errors, or no documentation at all, please feel free to create an issues and submit a pull request. 
 All contributions / pull requests will need to be approved by Digital Waters engineering. 
 
-Please introduce yourself in our repo Discussions board! 
-We'd love to connect and collaborate with like-minded people. Don't be a stranger :D
+Also, feel free to introduce yourself in a comment or in our repo Discussions board! We'd love to connect and collaborate with like-minded people. Don't be a stranger :D
 
 ## Testing the Camera Code on Raspberry Pi Zero 2 W
 Before uploading the cam_code make sure the pi is tested for the camera module and working
