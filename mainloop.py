@@ -3,12 +3,14 @@ import logging
 import gpsSensor
 import cameraSensor
 import temperatureSensor
+import turbidity
 import Payload
 import platform
 import os
 from configparser import ConfigParser
 import configWriter
 import imageToRGBA
+
 
 
 interval = 5  # Set interval in seconds
@@ -67,13 +69,13 @@ def main():
             capturePhoto(deviceID)
             captureTemperature()
             #captureConductivity()
-            #captureTerpidity()
+            captureTurbidity()
             
             # Add device ID to payload data
             payloadData['deviceID'] = deviceID
 
             # Upload the payload
-            sendDataPayload()
+            #sendDataPayload()
 
             manageLogFile()
             
@@ -156,12 +158,17 @@ def capturePhoto(deviceID):
         payloadData.update({"waterColor": rgba})
 
 def captureTemperature():
-    return temperatureSensor.captureTemperature(log)
-
+    temp = temperatureSensor.captureTemperature(log)
+    payloadData.update({"Temp": temp})
 def captureLongLat():
     loc = gpsSensor.getLoc(log)
     if loc:
         payloadData.update(loc)
+
+def captureTurbidity():
+    turbidityData = turbidity.getReading(log, payloadData["Temp"])
+    if turbidityData:
+        payloadData.update({"Turbidity": turbidityData})
 
 def captureGPSDateTime():
     dateTime = gpsSensor.getGPSTime(log, timeZone)
