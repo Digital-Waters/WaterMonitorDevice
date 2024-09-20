@@ -232,6 +232,61 @@ To run the gpsSensor.py code on a Raspberry Pi Zero 2 W, which is designed to re
      ```
      ./gpsSensor.py
      ```
+# Prototyping the Turbidity Code on Raspberry Pi Zero 2 W
+To run the turbidity.py code on a Raspberry Pi Zero 2 W, which is designed to read the turbidity of water and return the value in NTU (universal unit for turbidity), you need to follow pre-requisite steps for both hardware and software setup:
+
+### Hardware Setup
+1. Turbidity sensor: Ensure you have a trubidity sensor and LGZD sensor module.
+2. ADS1115: Ensure you have a ADS1115 (ADC convertor)
+3. Wiring:
+    - Sensor to LGZD module:
+      - Red wire on the Sensor ---> pin 1 on LGZD module
+      - Blue wire on sensor  ---> pin 2 on LGZD module
+      - Yellow wire on sensor ---> pin 4 on LGZD module
+    - LGZD module to ADS1115: 
+      - A (analog pin) pin on LGZD ---> A0 pin on ADS1115 module
+      - G (ground pin) pin on LGZD ---> grnd pin on ADS1115 module
+    - LGZD module to PI:
+      - V (VCC pin) pin on LGZD ---> 5V pin on the PI
+    - ADS1115 to PI:
+      - VCC pin on ADS1115 ---> 5V pin on the PI
+      - GND pin on the ADS1115 ---> GRND pin on the PI
+      - SCL pin on the ADS1115 ---> SCL pin on the PI
+      - SDA pin on the ADS1115 ---> SDA pin on the PI
+      - ADDR pin on the ADS1115 ---> GRND pin on the PI
+
+### Software Setup
+1. Set up I2C communication: 
+    ```
+    sudo raspi-config
+    ```
+    go to `interfacing option` --> `I2C` --> enable
+
+    Test I2C communication:
+    
+    ```
+    sudo i2cdetect -y 1
+    ```
+    you should see a 48 in the grid
+
+### Running the Script
+1. Create the Script File:
+   - Download the Python script file (`turbidity.py'`).
+
+2. Run the Script:
+   - Run the code in an IDE such as Thonny, Geany, etc.
+
+   				OR
+
+   - Make the script executable:
+     ```
+     chmod +x turbidity.py
+     ```
+   - Run the script using Python 3:
+     ```
+     ./turbidity.py
+     ```
+
 ## Payload Script for Water Monitoring Device
 
 This script (`Payload.py`) is designed to upload photos taken by water monitoring devices to a specified server. The script ensures the data consistency required for analysis by uploading photos with specific hardware and configuration settings.
