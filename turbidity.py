@@ -18,9 +18,6 @@ def getReading(log, temp):
         ads = ADS.ADS1115(i2c, gain=1)
         chan = AnalogIn(ads, ADS.P0)
 
-
-        ALERT_PIN = 23  # GPIO pin connected to ALERT pin of ADS1115
-
         num_samples = 200
         vol = 0
 
