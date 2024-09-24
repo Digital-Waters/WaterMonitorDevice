@@ -166,7 +166,7 @@ def captureLongLat():
         payloadData.update(loc)
 
 def captureTurbidity():
-    turbidityData = turbidity.getReading(log, payloadData["Temp"])
+    turbidityData = turbidity.getReading(log, payloadData["Temp"] if "Temp" in payloadData else 25)
     if turbidityData:
         payloadData.update({"Turbidity": turbidityData})
 
