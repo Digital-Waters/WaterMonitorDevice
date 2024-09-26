@@ -56,18 +56,19 @@ def uploadPayload(payloadData, log, secrets, fromFile):
                 #log.error(f"Response Headers: {response.headers}")
                 if fromFile == False:
                     savePayload(payloadData, log)
+
         except requests.ConnectionError:
             log.error(f"Upload connection error")
-            savePayload(payloadData) 
+            savePayload(payloadData, log) 
         except requests.Timeout:
             log.error(f"Upload timeout")
-            savePayload(payloadData) 
+            savePayload(payloadData, log) 
         except requests.RequestException as e:
             log.error(f"Upload request exception: {e}")
-            savePayload(payloadData) 
+            savePayload(payloadData, log) 
         except Exception as e:
             log.error(f"Upload Exception: {e}")
-            savePayload(payloadData)  # Save the payload in case of failure
+            savePayload(payloadData, log)
 
 
 def savePayload(payload, log):
