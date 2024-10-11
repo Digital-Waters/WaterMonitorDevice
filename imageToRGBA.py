@@ -71,11 +71,15 @@ def getRgbaFromImage(waterPhotoPath, referencePhotoPath):
     waterMaskReference = maskSecchiDisk(imageReferenceData)
     waterMaskColoredWater = maskSecchiDisk(imageColoredWaterData)
 
-    # Calculate the color difference between the reference image (clear water) and the brown water image
-    waterColorDifference = calculateWaterColorDifference(imageReferenceData, imageColoredWaterData, waterMaskColoredWater)
+    try: 
+        # Calculate the color difference between the reference image (clear water) and the brown water image
+        waterColorDifference = calculateWaterColorDifference(imageReferenceData, imageColoredWaterData, waterMaskColoredWater)
 
-    # Calculate the alpha value for the brown water based on the color difference
-    alphaValue = calculateAlpha(waterColorDifference)
+        # Calculate the alpha value for the brown water based on the color difference
+        alphaValue = calculateAlpha(waterColorDifference)
+
+    except Exception as e:
+        return "getRGBA Error: Couldn't calculate RGBA"
 
     # Calculate the actual water color by adjusting the reference water color with the color difference
     actualWaterColor = imageReferenceData[waterMaskColoredWater].mean(axis=0) + waterColorDifference
