@@ -10,22 +10,21 @@ def uploadPayload(payloadData, log, secrets, fromFile):
     apiKey = secrets["apiKey"]
     boundary = "*****"
 
-    # Get the device ID from the payload data
-    deviceId = payloadData.get('deviceID', "UNKNOWN")  # Use UNKNOWN if deviceID not found
-
+    deviceId = payloadData.get('deviceID', "UNKNOWN")
     latitude = str(payloadData.get('latitude', "999"))
     longitude = str(payloadData.get('longitude', "999"))
     dateTime = payloadData.get('dateTime', datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
     waterColor = str(payloadData.get('waterColor', "n/a"))
+    temperature = str(payloadData.get('temperature', "n/a"))
     
     # Preparing the data to be sent
     fields = {
         'latitude': latitude,
         'longitude': longitude,
-        'deviceID': deviceId,  # Include the dynamic device ID here
+        'deviceID': deviceId,
         'device_datetime': dateTime,
         'waterColor': waterColor,
-        'weather': "cloudy with chance of eclipse"
+        'temperature': temperature
     }
 
     currDirectory = os.path.dirname(os.path.abspath(__file__))
