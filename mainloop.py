@@ -156,7 +156,7 @@ def capturePhoto(deviceID):
         payloadData.update({"waterColor": rgba})
 
 def captureTemperature():
-    return temperatureSensor.captureTemperature(log)
+    payloadData.update({"temperature": temperatureSensor.captureTemperature(log)})
 
 def captureLongLat():
     loc = gpsSensor.getLoc(log)
