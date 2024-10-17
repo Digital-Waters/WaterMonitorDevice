@@ -40,7 +40,7 @@ def captureCameraImage(log, deviceID):
             sleep(2)  # Give some time for the LED to illuminate the scene
 
             timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            imagePath = os.path.join(imageFolder, f"{timestamp}__{deviceID}.jpg")
+            imagePath = os.path.join(imageFolder, f"{timestamp}_{deviceID}.jpg")
             picam2.capture_file(imagePath)
             log.info(f"In captureCameraImage(). Image saved to {imagePath}")
             
@@ -86,9 +86,10 @@ def configureLowLightSettings():
 
     # Longer exposure time, higher gain for low-light
     picam2.set_controls({
+        #"AwbEnable": True,
         "AwbEnable": False,
         #"AwbMode": 1,
-        "ColourGains": (2.0, 1.0),
-        "ExposureTime": 1000000, 
-        "AnalogueGain": 5.0  
+        #"ColourGains": (2.0, 1.0),
+        "ExposureTime": 75000
+        #"AnalogueGain": 5.0  
     })

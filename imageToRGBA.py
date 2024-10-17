@@ -1,10 +1,6 @@
 from PIL import Image
 import numpy as np
 
-# Paths to the reference and target images
-#imageReferencePath = '/mnt/data/image_2024-09-14_15-55-42.jpg'
-#imageBrownWaterPath = '/mnt/data/image_2024-09-14_16-04-59.jpg'
-
 # Function to create a mask for disk detection
 def maskSecchiDisk(imageData, blackThreshold=60, whiteThreshold=180):
     """
@@ -20,16 +16,12 @@ def maskSecchiDisk(imageData, blackThreshold=60, whiteThreshold=180):
 
     return ~diskMask  # Invert mask to get the water region
 
-# Function to calculate the water color difference between the reference image and the brown water image
-def calculateWaterColorDifference(referenceImageData, targetImageData, mask):
+# Function to calculate the water color difference between the reference image and the target image
+def calculateWaterColorDifference(referenceWaterRegion, targetWaterRegion):
     """
-    Calculate the water color difference by masking the disk and comparing the masked areas
+    Calculate the water color difference by comparing the masked areas
     between the reference image and the target image.
     """
-    # Apply the mask to both images (to exclude the black and white disk)
-    referenceWaterRegion = referenceImageData[mask]
-    targetWaterRegion = targetImageData[mask]
-    
     # Calculate the difference between the two regions
     waterColorDifference = targetWaterRegion.mean(axis=0) - referenceWaterRegion.mean(axis=0)
     
@@ -45,7 +37,7 @@ def calculateAlpha(waterColorDifference):
     differenceMagnitude = np.linalg.norm(waterColorDifference)
     
     # Normalize the magnitude to fit within a range (0-255) for alpha
-    maxDifferenceMagnitude = 400  # Assume a maximum possible color difference magnitude
+    maxDifferenceMagnitude = 442  # Maximum possible color difference magnitude in RGB space
     alpha = min(255, (differenceMagnitude / maxDifferenceMagnitude) * 255)
     
     return int(alpha)
@@ -57,7 +49,7 @@ def getRgbaFromImage(waterPhotoPath, referencePhotoPath):
         imageReference = Image.open(referencePhotoPath)
         imageColoredWater = Image.open(waterPhotoPath)
     except Exception as e:
-        return "getRGBA Error: referenceImage.jpg doesn't exist"
+        return {"error": f"Error loading images: {e}"}
 
     # Convert both images to RGB
     imageReferenceRgb = imageReference.convert("RGB")
@@ -71,16 +63,32 @@ def getRgbaFromImage(waterPhotoPath, referencePhotoPath):
     waterMaskReference = maskSecchiDisk(imageReferenceData)
     waterMaskColoredWater = maskSecchiDisk(imageColoredWaterData)
 
-    # Calculate the color difference between the reference image (clear water) and the brown water image
-    waterColorDifference = calculateWaterColorDifference(imageReferenceData, imageColoredWaterData, waterMaskColoredWater)
+    try: 
+        # Get the water regions for both images
+        referenceWaterRegion = imageReferenceData[waterMaskReference]
+        targetWaterRegion = imageColoredWaterData[waterMaskColoredWater]
 
-    # Calculate the alpha value for the brown water based on the color difference
-    alphaValue = calculateAlpha(waterColorDifference)
+        # Calculate the color difference between the reference image and the target image
+        waterColorDifference = calculateWaterColorDifference(referenceWaterRegion, targetWaterRegion)
 
-    # Calculate the actual water color by adjusting the reference water color with the color difference
-    actualWaterColor = imageReferenceData[waterMaskColoredWater].mean(axis=0) + waterColorDifference
+        # Calculate the alpha value based on the color difference
+        alphaValue = calculateAlpha(waterColorDifference)
+
+    except Exception as e:
+        return {"error": f"Error processing images: {e}"}
+
+    # Use the mean color of the target water region as the actual water color
+    actualWaterColor = targetWaterRegion.mean(axis=0)
+
+    # Ensure the RGB values are valid integers between 0 and 255
+    actualWaterColor = np.clip(actualWaterColor, 0, 255).astype(int)
 
     # Combine the RGB values with the alpha value to form RGBA
-    rgbaWaterColor = np.append(actualWaterColor, alphaValue)
+    rgbaWaterColor = {
+        'r': int(actualWaterColor[0]),
+        'g': int(actualWaterColor[1]),
+        'b': int(actualWaterColor[2]),
+        'a': alphaValue
+    }
 
     return rgbaWaterColor

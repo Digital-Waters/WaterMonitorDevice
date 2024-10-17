@@ -3,28 +3,28 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 import os
 from datetime import datetime, timezone
 import json
+import subprocess
 
 def uploadPayload(payloadData, log, secrets, fromFile):
     url = secrets["apiURL"]
     apiKey = secrets["apiKey"]
     boundary = "*****"
 
-    # Get the device ID from the payload data
-    deviceId = payloadData.get('deviceID', "UNKNOWN")  # Use UNKNOWN if deviceID not found
-
+    deviceId = payloadData.get('deviceID', "UNKNOWN")
     latitude = str(payloadData.get('latitude', "999"))
     longitude = str(payloadData.get('longitude', "999"))
     dateTime = payloadData.get('dateTime', datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
     waterColor = str(payloadData.get('waterColor', "n/a"))
+    temperature = str(payloadData.get('temperature', "n/a"))
     
     # Preparing the data to be sent
     fields = {
         'latitude': latitude,
         'longitude': longitude,
-        'deviceID': deviceId,  # Include the dynamic device ID here
+        'deviceID': deviceId,
         'device_datetime': dateTime,
         'waterColor': waterColor,
-        'weather': "cloudy with chance of eclipse"
+        'temperature': temperature
     }
 
     currDirectory = os.path.dirname(os.path.abspath(__file__))
@@ -55,9 +55,19 @@ def uploadPayload(payloadData, log, secrets, fromFile):
                 #log.error(f"Response Headers: {response.headers}")
                 if fromFile == False:
                     savePayload(payloadData, log)
+
+        except requests.ConnectionError:
+            log.error(f"Upload connection error")
+            savePayload(payloadData, log) 
+        except requests.Timeout:
+            log.error(f"Upload timeout")
+            savePayload(payloadData, log) 
+        except requests.RequestException as e:
+            log.error(f"Upload request exception: {e}")
+            savePayload(payloadData, log) 
         except Exception as e:
             log.error(f"Upload Exception: {e}")
-            savePayload(payloadData)  # Save the payload in case of failure
+            savePayload(payloadData, log)
 
 
 def savePayload(payload, log):
