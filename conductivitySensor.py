@@ -4,12 +4,12 @@ import Adafruit_ADS1x15
 # Initialize the ADC (Analog-to-Digital Converter)
 adc = Adafruit_ADS1x15.ADS1115()
 
-# Gain settings for the ADC (try adjusting the gain for proper readings)
-GAIN = 4  # Change this as needed: 1, 2, 4, 8, or 16
+# Gain settings for the ADC (adjust based on your sensor's range)
+GAIN = 1  # Use a lower gain for larger measurement range
 
 def read_conductivity():
     try:
-        num_samples = 10
+        num_samples = 20  # Averaging more samples for stability
         total_value = 0
 
         for _ in range(num_samples):
@@ -21,7 +21,7 @@ def read_conductivity():
         # Average the readings to reduce noise
         avg_value = total_value / num_samples
 
-        # Print the raw ADC value to observe baseline readings in air and water
+        # Print the raw ADC value to observe baseline readings in air and saline water
         print(f"Raw ADC Value: {avg_value}")
 
         # Convert the averaged raw ADC value to conductivity
@@ -35,8 +35,8 @@ def read_conductivity():
 
 def convert_to_conductivity(adc_value):
     # Adjust threshold based on baseline readings in air
-    threshold = 1200  # Adjust this based on actual air baseline readings
-    conversion_factor = 0.4  # Experiment with this value for accuracy
+    threshold = 1500  # Adjust threshold based on air baseline readings
+    conversion_factor = 0.5  # Adjust conversion factor for saline water
 
     if adc_value < threshold:
         return 0.0  # Consider it as no conductivity (air)
@@ -53,13 +53,13 @@ if __name__ == "__main__":
             if conductivity_air is not None:
                 print(f"Conductivity in air: {conductivity_air:.2f} μS/cm")
 
-            input("Now place the sensor in water and press Enter to continue...")
+            input("Now place the sensor in saline water and press Enter to continue...")
 
-            print("Reading in water:")
-            # Test with sensor in water to get water reading
-            conductivity_water = read_conductivity()
-            if conductivity_water is not None:
-                print(f"Conductivity in water: {conductivity_water:.2f} μS/cm")
+            print("Reading in saline water:")
+            # Test with sensor in saline water to get water reading
+            conductivity_saline = read_conductivity()
+            if conductivity_saline is not None:
+                print(f"Conductivity in saline water: {conductivity_saline:.2f} μS/cm")
 
             # Wait before reading again (adjust the delay as needed)
             time.sleep(2)
