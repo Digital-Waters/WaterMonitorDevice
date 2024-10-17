@@ -5,7 +5,7 @@ import Adafruit_ADS1x15
 adc = Adafruit_ADS1x15.ADS1115()
 
 # Gain settings for the ADC (try adjusting the gain for proper readings)
-GAIN = 2  # Change this as needed: 1, 2, 4, 8, or 16
+GAIN = 4  # Change this as needed: 1, 2, 4, 8, or 16
 
 def read_conductivity():
     try:
@@ -35,8 +35,8 @@ def read_conductivity():
 
 def convert_to_conductivity(adc_value):
     # Adjust threshold based on baseline readings in air
-    threshold = 1250  # Adjust this based on actual air baseline readings
-    conversion_factor = 0.5  # Experiment with this value for accuracy
+    threshold = 1200  # Adjust this based on actual air baseline readings
+    conversion_factor = 0.4  # Experiment with this value for accuracy
 
     if adc_value < threshold:
         return 0.0  # Consider it as no conductivity (air)
