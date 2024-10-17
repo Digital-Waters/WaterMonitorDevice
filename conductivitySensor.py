@@ -35,8 +35,8 @@ def read_conductivity():
 
 def convert_to_conductivity(adc_value):
     # Adjust threshold based on baseline readings in air
-    threshold = 960  # Adjust this based on actual air baseline readings
-    conversion_factor = 0.47  # Experiment with this value for accuracy
+    threshold = 1250  # Adjust this based on actual air baseline readings
+    conversion_factor = 0.5  # Experiment with this value for accuracy
 
     if adc_value < threshold:
         return 0.0  # Consider it as no conductivity (air)
