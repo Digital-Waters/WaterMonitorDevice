@@ -1,6 +1,6 @@
 import time
 import logging
-import gpsSensor
+#import gpsSensor
 import cameraSensor
 import temperatureSensor
 import Payload
@@ -55,15 +55,12 @@ def main():
     # Main loop. Gather all sensor data and upload
     log.info(f"Device ID loaded: {deviceID}")
     log.info("Starting main loop...")
-    counter = 15
+
     while True:
         try:
-
             # Capture sensor data
-            if counter == 15:
-                captureLongLat()
-                counter = 0
-            captureGPSDateTime()
+            #captureLongLat()
+            #captureGPSDateTime()
             capturePhoto(deviceID)
             captureTemperature()
             #captureConductivity()
@@ -83,7 +80,6 @@ def main():
 
         finally:
             log.info(f"*** In main(). Sleeping for {interval} seconds...")
-            counter += 1
             time.sleep(interval)
 
 def initlog():
