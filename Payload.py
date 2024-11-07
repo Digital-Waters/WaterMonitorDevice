@@ -1,7 +1,7 @@
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 import os
-from datetime import datetime, timezone
+from datetime import datetime
 import json
 import subprocess
 
@@ -13,9 +13,9 @@ def uploadPayload(payloadData, log, secrets, fromFile):
     deviceId = payloadData.get('deviceID', "UNKNOWN")
     latitude = str(payloadData.get('latitude', "999"))
     longitude = str(payloadData.get('longitude', "999"))
-    dateTime = payloadData.get('dateTime', datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
     waterColor = str(payloadData.get('waterColor', "n/a"))
     temperature = str(payloadData.get('temperature', "n/a"))
+    dateTime = payloadData.get('device_datetime', datetime.now()).isoformat()
     
     # Preparing the data to be sent
     fields = {
@@ -56,19 +56,29 @@ def uploadPayload(payloadData, log, secrets, fromFile):
                 if fromFile == False:
                     savePayload(payloadData, log)
 
+            return True
+
         except requests.ConnectionError:
             log.error(f"Upload connection error")
-            savePayload(payloadData, log) 
+            if fromFile == False:
+                savePayload(payloadData, log) 
+            return False
         except requests.Timeout:
             log.error(f"Upload timeout")
-            savePayload(payloadData, log) 
+            if fromFile == False:
+                savePayload(payloadData, log) 
+            return False
         except requests.RequestException as e:
             log.error(f"Upload request exception: {e}")
-            savePayload(payloadData, log) 
+            if fromFile == False:
+                savePayload(payloadData, log) 
+            return False
         except Exception as e:
             log.error(f"Upload Exception: {e}")
-            savePayload(payloadData, log)
-
+            if fromFile == False:
+                savePayload(payloadData, log) 
+            return False
+    
 
 def savePayload(payload, log):
     folder = "payload"
@@ -85,6 +95,7 @@ def savePayload(payload, log):
 
 
 def uploadSavedPayloads(log, secrets):
+    
     folder = "payload"
     filename = os.path.join(folder, "payloadData.txt")
     
@@ -94,9 +105,8 @@ def uploadSavedPayloads(log, secrets):
 
         # Iterate over logs and try to upload each one
         for payload in logs[:]:
-            try:
-                # Try to upload the payload
-                uploadPayload(payload, log, secrets, fromFile=True)
+            # Try to upload the payload
+            if uploadPayload(payload, log, secrets, fromFile=True) == True:
                 log.info(f"Payload uploaded successfully: {payload['deviceID']}")
 
                 # If upload is successful, remove it from the logs
@@ -106,10 +116,9 @@ def uploadSavedPayloads(log, secrets):
                 with open(filename, 'w') as f:
                     for remaining_payload in logs:
                         f.write(json.dumps(remaining_payload) + '\n')
+            else:
+                break
 
-            except Exception as e:
-                log.error(f"Failed to upload saved payload: {e}")
-        
         # Check if all payloads were uploaded
         if not logs:
             log.info("All saved payloads successfully uploaded.")
