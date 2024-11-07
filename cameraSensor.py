@@ -40,7 +40,7 @@ def captureCameraImage(log, deviceID):
             sleep(2)  # Give some time for the LED to illuminate the scene
 
             timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            imagePath = os.path.join(imageFolder, f"{timestamp}_{deviceID}.jpg")
+            imagePath = os.path.join(imageFolder, f"{deviceID}_{timestamp}.jpg")
             picam2.capture_file(imagePath)
             log.info(f"In captureCameraImage(). Image saved to {imagePath}")
             

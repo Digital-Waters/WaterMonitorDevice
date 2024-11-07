@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 import logging
 #import gpsSensor
 import cameraSensor
@@ -68,6 +69,7 @@ def main():
             
             # Add device ID to payload data
             payloadData['deviceID'] = deviceID
+            payloadData['device_datetime'] = datetime.now()
 
             # Upload the payload
             sendDataPayload()

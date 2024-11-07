@@ -13,9 +13,9 @@ def uploadPayload(payloadData, log, secrets, fromFile):
     deviceId = payloadData.get('deviceID', "UNKNOWN")
     latitude = str(payloadData.get('latitude', "999"))
     longitude = str(payloadData.get('longitude', "999"))
-    dateTime = payloadData.get('device_datetime', datetime.now().strftime("%Y-%m-%d_%H:%M:%S"))
     waterColor = str(payloadData.get('waterColor', "n/a"))
     temperature = str(payloadData.get('temperature', "n/a"))
+    dateTime = payloadData.get('device_datetime', datetime.now()).isoformat()
     
     # Preparing the data to be sent
     fields = {
@@ -84,9 +84,6 @@ def savePayload(payload, log):
     folder = "payload"
     filename = os.path.join(folder, "payloadData.txt")
 
-    if 'device_datetime' not in payload:
-        payload['device_datetime'] = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
-
     os.makedirs(folder, exist_ok=True)
 
     try:
@@ -98,6 +95,7 @@ def savePayload(payload, log):
 
 
 def uploadSavedPayloads(log, secrets):
+    
     folder = "payload"
     filename = os.path.join(folder, "payloadData.txt")
     
