@@ -69,7 +69,7 @@ def main():
             
             # Add device ID to payload data
             payloadData['deviceID'] = deviceID
-            payloadData['device_datetime'] = datetime.now()
+            payloadData['device_datetime'] = datetime.now().isoformat()
 
             # Upload the payload
             sendDataPayload()

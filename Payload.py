@@ -1,9 +1,10 @@
 import requests
-from requests_toolbelt.multipart.encoder import MultipartEncoder
 import os
-from datetime import datetime
 import json
 import subprocess
+from requests_toolbelt.multipart.encoder import MultipartEncoder
+from datetime import datetime
+
 
 def uploadPayload(payloadData, log, secrets, fromFile):
     url = secrets["apiURL"]
@@ -11,11 +12,11 @@ def uploadPayload(payloadData, log, secrets, fromFile):
     boundary = "*****"
 
     deviceId = payloadData.get('deviceID', "UNKNOWN")
-    latitude = str(payloadData.get('latitude', "999"))
-    longitude = str(payloadData.get('longitude', "999"))
+    latitude = str(payloadData.get('latitude', 999))
+    longitude = str(payloadData.get('longitude', 999))
     waterColor = str(payloadData.get('waterColor', "n/a"))
-    temperature = str(payloadData.get('temperature', "n/a"))
-    dateTime = payloadData.get('device_datetime', datetime.now()).isoformat()
+    temperature = str(payloadData.get('temperature'))
+    dateTime = payloadData.get('device_datetime', datetime.now().isoformat())
     
     # Preparing the data to be sent
     fields = {
@@ -26,22 +27,23 @@ def uploadPayload(payloadData, log, secrets, fromFile):
         'waterColor': waterColor,
         'temperature': temperature
     }
-
+    
     currDirectory = os.path.dirname(os.path.abspath(__file__))
     filePath = os.path.join(currDirectory, payloadData["image"])
+
     # Adding the image file to the fields
     with open(filePath, 'rb') as file:
-        fields['image'] = (os.path.basename(filePath), file, 'image/jpeg')
-
-        # Creating a MultipartEncoder
-        m = MultipartEncoder(fields=fields, boundary=boundary)
-
-        # Debugging information
-        log.info(f"Uploading file: {filePath}")
-        log.info(f"Data being sent: {fields}")
-
-        # Sending the request
         try:
+            fields['image'] = (os.path.basename(filePath), file, 'image/jpeg')
+
+            # Creating a MultipartEncoder
+            m = MultipartEncoder(fields=fields, boundary=boundary)
+
+            # Debugging information
+            log.info(f"Uploading file: {filePath}")
+            log.info(f"Data being sent: {fields}")
+
+            # Sending the request
             response = requests.post(url, data=m, headers={'Content-Type': m.content_type})
             if response.status_code == 200:
                 log.info("Successfully uploaded payload to DB")
@@ -91,7 +93,7 @@ def savePayload(payload, log):
             f.write(json.dumps(payload) + '\n')
         log.info("Payload data wrote to file")
     except Exception as e:
-        log.error(f"Error saving payload: {e}")  
+        log.error(f"Error saving payload: {e}")
 
 
 def uploadSavedPayloads(log, secrets):
