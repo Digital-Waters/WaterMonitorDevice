@@ -44,8 +44,8 @@ def captureCameraImage(log, deviceID):
             picam2.capture_file(imagePath)
             log.info(f"In captureCameraImage(). Image saved to {imagePath}")
             
-            # Uncomment for fixed-focus lenses 
-            cropImage(imagePath)
+            # Uncomment for smaller rez image focused on center.
+            #cropImage(imagePath)
             
             # Turn off the Red LED after capturing the image
             setLED(GPIO.LOW)
