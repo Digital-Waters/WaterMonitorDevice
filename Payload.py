@@ -11,6 +11,8 @@ def uploadPayload(payloadData, log, secrets, fromFile):
     apiKey = secrets["apiKey"]
     boundary = "*****"
 
+    log.info(f"Config file apiurl: {secrets}")
+
     deviceId = payloadData.get('deviceID', "UNKNOWN")
     latitude = str(payloadData.get('latitude', 999))
     longitude = str(payloadData.get('longitude', 999))
@@ -31,20 +33,24 @@ def uploadPayload(payloadData, log, secrets, fromFile):
     currDirectory = os.path.dirname(os.path.abspath(__file__))
     filePath = os.path.join(currDirectory, payloadData["image"])
 
+    log.info(f"Uploading file: {filePath}")
+    
     # Adding the image file to the fields
     with open(filePath, 'rb') as file:
         try:
             fields['image'] = (os.path.basename(filePath), file, 'image/jpeg')
+            log.info(f"Data being sent: {fields}")
 
             # Creating a MultipartEncoder
             m = MultipartEncoder(fields=fields, boundary=boundary)
-
-            # Debugging information
-            log.info(f"Uploading file: {filePath}")
-            log.info(f"Data being sent: {fields}")
-
+    
+            headers = {
+                'Content-Type': m.content_type,
+                'x-api-key': apiKey
+            }
+            
             # Sending the request
-            response = requests.post(url, data=m, headers={'Content-Type': m.content_type})
+            response = requests.post(url, data=m, headers=headers)
             if response.status_code == 200:
                 log.info("Successfully uploaded payload to DB")
 

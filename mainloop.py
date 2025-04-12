@@ -4,7 +4,7 @@ import logging
 #import gpsSensor
 import cameraSensor
 import temperatureSensor
-import Payload
+import payload
 import platform
 import os
 from configparser import ConfigParser
@@ -19,6 +19,7 @@ timeZone = "America/Toronto"
 payloadData = {}
 logFile = 'waterDeviceLog.txt'
 referenceImage = "referenceImage.jpg"
+apikey = ""
 
 # Function to get device ID dynamically from /proc/cpuinfo
 def load_device_id():
@@ -34,7 +35,7 @@ def load_device_id():
 
 def getConfig(): 
     global interval, MaxFileSize, TrimPercent, sensors, secrets, timeZone
-    config = ConfigParser()
+    config = ConfigParser(interpolation=None)
 
     try:
         config.read("waterMonitor.ini")
@@ -70,7 +71,9 @@ def main():
             # Add device ID to payload data
             payloadData['deviceID'] = deviceID
             payloadData['device_datetime'] = datetime.now().isoformat()
-
+            
+            log.info(f"Config file apiurl: {secrets}")
+    
             # Upload the payload
             sendDataPayload()
 
@@ -167,7 +170,7 @@ def captureGPSDateTime():
         payloadData.update({"dateTime": dateTime})
 
 def sendDataPayload():
-    Payload.uploadPayload(payloadData, log, secrets, fromFile=False)
+    payload.uploadPayload(payloadData, log, secrets, fromFile=False)
 
 if __name__ == "__main__":
     log = initlog()
