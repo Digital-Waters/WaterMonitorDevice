@@ -45,7 +45,7 @@ def captureCameraImage(log, deviceID):
             log.info(f"In captureCameraImage(). Image saved to {imagePath}")
             
             # Uncomment for smaller rez image focused on center.
-            #cropImage(imagePath)
+            cropImage(imagePath)
             
             # Turn off the Red LED after capturing the image
             setLED(GPIO.LOW)
@@ -67,12 +67,12 @@ def captureCameraImage(log, deviceID):
 def cropImage(imgPath):
     image = Image.open(imgPath)
 
-    # Calculate the cropping box (for ~45% of the central area)
+    # Make square image, trim sides.
     width, height = image.size
-    left = width * 0.3
-    top = height * 0.25
-    right = width * 0.7
-    bottom = height * 0.75
+    left = (width - height) * 0.5
+    top = 0
+    right = width - left
+    bottom = height
 
     # Crop the image
     cropped_image = image.crop((left, top, right, bottom))

@@ -11,8 +11,6 @@ def uploadPayload(payloadData, log, secrets, fromFile):
     apiKey = secrets["apiKey"]
     boundary = "*****"
 
-    log.info(f"Config file apiurl: {secrets}")
-
     deviceId = payloadData.get('deviceID', "UNKNOWN")
     latitude = str(payloadData.get('latitude', 999))
     longitude = str(payloadData.get('longitude', 999))
