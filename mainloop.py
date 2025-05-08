@@ -83,9 +83,9 @@ def main():
             log.info("Shutting down...")
             break
 
-        finally:
-            log.info(f"*** In main(). Sleeping for {interval} seconds...")
-            time.sleep(interval)
+        #finally:
+        log.info(f"*** In main(). Sleeping for {interval} seconds...")
+        time.sleep(interval)
 
 def initlog():
     # Create a custom log

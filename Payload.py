@@ -6,19 +6,20 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 from datetime import datetime
 
 
-def uploadPayload(payloadData, log, secrets, fromFile):
+def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
+    import time
+
     url = secrets["apiURL"]
     apiKey = secrets["apiKey"]
     boundary = "*****"
 
     deviceId = payloadData.get('deviceID', "UNKNOWN")
-    latitude = str(payloadData.get('latitude', 999))
-    longitude = str(payloadData.get('longitude', 999))
-    waterColor = str(payloadData.get('waterColor', "n/a"))
-    temperature = str(payloadData.get('temperature'))
+    latitude = str(payloadData.get('latitude', '999'))
+    longitude = str(payloadData.get('longitude', '999'))
+    waterColor = str(payloadData.get('waterColor', '999'))
+    temperature = str(payloadData.get('temperature', '999'))
     dateTime = payloadData.get('device_datetime', datetime.now().isoformat())
-    
-    # Preparing the data to be sent
+
     fields = {
         'latitude': latitude,
         'longitude': longitude,
@@ -27,63 +28,54 @@ def uploadPayload(payloadData, log, secrets, fromFile):
         'waterColor': waterColor,
         'temperature': temperature
     }
-    
+
     currDirectory = os.path.dirname(os.path.abspath(__file__))
     filePath = os.path.join(currDirectory, payloadData["image"])
-
     log.info(f"Uploading file: {filePath}")
-    
-    # Adding the image file to the fields
-    with open(filePath, 'rb') as file:
-        try:
-            fields['image'] = (os.path.basename(filePath), file, 'image/jpeg')
-            log.info(f"Data being sent: {fields}")
 
-            # Creating a MultipartEncoder
+    try:
+        with open(filePath, 'rb') as file:
+            fields['image'] = (os.path.basename(filePath), file, 'image/jpeg')
             m = MultipartEncoder(fields=fields, boundary=boundary)
-    
             headers = {
                 'Content-Type': m.content_type,
                 'x-api-key': apiKey
             }
-            
-            # Sending the request
-            response = requests.post(url, data=m, headers=headers)
-            if response.status_code == 200:
-                log.info("Successfully uploaded payload to DB")
 
-                # After success, attempt to upload saved payloads
-                if fromFile == False:
-                    uploadSavedPayloads(log, secrets)
-            else:
-                log.error(f"Upload Failed: {response.status_code} - {response.reason}")
-                log.error(f"Response Text: {response.text}")
-                #log.error(f"Response Headers: {response.headers}")
-                if fromFile == False:
-                    savePayload(payloadData, log)
+            for attempt in range(1, maxRetries + 1):
+                try:
+                    log.info(f"Attempt {attempt} of {maxRetries}")
+                    response = requests.post(url, data=m, headers=headers)
 
-            return True
+                    if response.status_code == 200:
+                        log.info("Successfully uploaded payload to DB")
+                        if not fromFile:
+                            uploadSavedPayloads(log, secrets)
+                        return True
+                    else:
+                        log.error(f"Upload failed: {response.status_code} - {response.reason}")
+                        log.error(f"Response Text: {response.text}")
+                        log.error(f"Response Headers: {response.headers}")
+                        break  # Don't retry if the server responded (likely not a connection error)
 
-        except requests.ConnectionError:
-            log.error(f"Upload connection error")
-            if fromFile == False:
-                savePayload(payloadData, log) 
-            return False
-        except requests.Timeout:
-            log.error(f"Upload timeout")
-            if fromFile == False:
-                savePayload(payloadData, log) 
-            return False
-        except requests.RequestException as e:
-            log.error(f"Upload request exception: {e}")
-            if fromFile == False:
-                savePayload(payloadData, log) 
-            return False
-        except Exception as e:
-            log.error(f"Upload Exception: {e}")
-            if fromFile == False:
-                savePayload(payloadData, log) 
-            return False
+                except (requests.ConnectionError, requests.Timeout, requests.RequestException) as e:
+                    log.warning(f"Upload attempt {attempt} failed: {e}")
+                    if attempt < maxRetries:
+                        time.sleep(2)  # small delay before retry
+                    else:
+                        log.error("Max retries reached. Giving up.")
+                except Exception as e:
+                    log.error(f"Unexpected exception: {e}")
+                    break
+
+    except Exception as fileError:
+        log.error(f"Error opening image file: {fileError}")
+
+    if not fromFile:
+        savePayload(payloadData, log)
+
+    return False
+
     
 
 def savePayload(payload, log):
