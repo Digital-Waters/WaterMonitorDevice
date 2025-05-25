@@ -337,3 +337,69 @@ sudo systemctl restart myscript.service
 ```
 sudo systemctl disable myscript.service
 ```
+
+# Prototyping SPI-based sensor interface boards 
+
+
+### Hardware Setup
+(See https://github.com/Digital-Waters/WaterMonitorDevice/wiki/MCP3208%E2%80%90Based-Analog-Sensor-Interface)
+1. You will need the sensor board version 0.0.1 - 0.0.X and at least one sensor probe or probe emulator.
+2. Wiring:
+
+| MCP 3208 | RPi Pin Name | RPi Header Pin|
+|:--------:|:------------:|:--------------:|
+| SPI_GND  |  GND         | 39,34,30,25,20 |
+| SPI_SCLK | SPI0_SCLK    | 23             |
+| SPI_MISO | SPI0_MISO    | 21             |
+| SPI_MOSI | SPI0_MOSI    | 19             |
+|  SPI_CS  | SPI0_CE0     | 24             |
+
+
+### Software Setup
+1. Enable the SPI Interface:
+   - Open the Raspberry Pi configuration tool:
+     ```
+     sudo raspi-config
+     ```
+   - Navigate to `Interfacing Options` > `SPI` and select `Enable`.
+   - Reboot the Raspberry Pi to apply the changes:
+     ```
+     sudo reboot
+     ```
+
+2. Install Required Packages:
+   - Ensure you have the necessary packages installed:
+     ```
+     sudo apt update
+     sudo apt install python3 python3-pip
+     sudo apt install python3-spidev
+     ```
+
+3. Verify SPI Kernel Modules:
+   - Check that the SPI drivers are loaded using:
+     ```
+     lsmod | grep spi 
+     ```
+   - You should see at least **spidev** listed
+
+### Running the Script
+1. Create the Script File:
+   - Download the Python script file (`spi_test.py`).
+
+2. Run the Script:
+   - Run the code in an IDE such as Thonny, Geany, Pycharm, etc.
+   
+   OR
+
+   - Run the script using Python 3:
+     ```
+     python3 spi_test.py
+     ```
+
+The script will display the raw and corrected values for Channel 1 at one second intervals.
+If using pH or ORP probes, you can test the values by alternating between calibration solutions or homemade solutions 
+(e.g. vinegar, water, and baking soda for pH; distilled water, dilute hydrogen peroxide, and dilute bleach solutions for 
+ORP).
+You can also simulate probe inputs by attaching an appropriate adjustable voltage supply to the probe input. 
+
+**CAUTION**: Do not exceed the voltage limits for the probe input you are simulating!
