@@ -52,8 +52,8 @@ for x in range(0,1000):
     rcvd = spi.xfer(ch0, 500000)
     val = ((rcvd[1] & 0x0F) << 8) + rcvd[2]
     # Correct val as code = (4096 * Vin) / Vref 
-    # Our Vref is 2.5V so... Vin = val * Vref / 4096
-    val = val * 2.5 / 4096
+    # Our Vref is 5V and we are offset by +2.5V so... Vin = val * Vref / 4096 - 2.5
+    val = val * 5 / 4096 - 2.5
 
     print(f"Received {rcvd} = {val:0.2f}")
     time.sleep(1)
