@@ -13,7 +13,7 @@ PIN17 = 17
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(PIN17, GPIO.OUT)
 picam2 = Picamera2()
-imageDir = "Image"
+imageDir = "images"
 picam2.configure(picam2.create_still_configuration()) #capture full resolution photo
 
 

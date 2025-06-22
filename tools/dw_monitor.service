@@ -1,0 +1,14 @@
+[Unit]
+Description=Digital Waters Water Monitoring Service
+After=network.target
+
+[Service]
+ExecStart=/home/rpi/dw/dw_startup.sh
+WorkingDirectory=/home/rpi/dw/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
