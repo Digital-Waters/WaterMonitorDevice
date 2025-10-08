@@ -1,14 +1,29 @@
 [Unit]
 Description=Digital Waters Water Monitoring Service
-After=network.target
+Wants=network-online.target
+After=network-online.target
 
 [Service]
-ExecStart=/home/rpi/dw/dw_startup.sh
-WorkingDirectory=/home/rpi/dw/
-StandardOutput=inherit
-StandardError=inherit
+Type=simple
+User=rpi
+Group=rpi
+WorkingDirectory=/home/rpi/dw
+# Clean, known PATH (systemd doesn’t load your shell rc files)
+Environment=PYTHONUNBUFFERED=1
+Environment=PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+# Log everything to journal
+StandardOutput=journal
+StandardError=journal
+
+PermissionsStartOnly=true
+UMask=0002
+ExecStartPre=/usr/bin/mkdir -p /home/rpi/dw/payload /home/rpi/dw/images
+ExecStartPre=/bin/chown -R rpi:rpi /home/rpi/dw/payload /home/rpi/dw/images
+ExecStartPre=/bin/chmod -R u+rwX,g+rwX /home/rpi/dw/payload /home/rpi/dw/images
+
+ExecStart=/usr/bin/bash /home/rpi/dw/dw_startup.sh
 Restart=always
-User=root
+RestartSec=3
 
 [Install]
 WantedBy=multi-user.target
