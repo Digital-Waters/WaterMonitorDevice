@@ -15,6 +15,12 @@ Environment=PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
 StandardOutput=journal
 StandardError=journal
 
+PermissionsStartOnly=true
+UMask=0002
+ExecStartPre=/usr/bin/mkdir -p /home/rpi/dw/payload /home/rpi/dw/images
+ExecStartPre=/bin/chown -R rpi:rpi /home/rpi/dw/payload /home/rpi/dw/images
+ExecStartPre=/bin/chmod -R u+rwX,g+rwX /home/rpi/dw/payload /home/rpi/dw/images
+
 ExecStart=/usr/bin/bash /home/rpi/dw/dw_startup.sh
 Restart=always
 RestartSec=3
