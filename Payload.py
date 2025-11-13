@@ -59,7 +59,7 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
     longitude = str(payloadData.get('longitude', '999'))
     waterColor = str(payloadData.get('waterColor', '999'))
     temperature = str(payloadData.get('temperature', '999'))
-    dateTime = payloadData.get('device_datetime', datetime.now().isoformat())
+    dateTime = payloadData.get('device_datetime', datetime.now().astimezone().isoformat())
 
     fieldsBase = {
         'latitude': latitude,

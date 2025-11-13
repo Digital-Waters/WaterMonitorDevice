@@ -70,7 +70,7 @@ def main():
             
             # Add device ID to payload data
             payloadData['deviceID'] = deviceID
-            payloadData['device_datetime'] = datetime.now().isoformat()
+            payloadData['device_datetime'] = datetime.now().astimezone().isoformat()
             
             log.info(f"Config file apiurl: {secrets}")
     
