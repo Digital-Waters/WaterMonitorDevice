@@ -2,7 +2,7 @@ import csv
 import sys
 import requests
 
-API_URL = "https://data.digitalwaters.org/deletedata/"
+API_URL = "https://data.digitalwaters.org/deleteData/"
 API_KEY = "6706Nyl7CXpyQ12l3fUt67gcWdWOIvA7q9Vpo8JVSzGBy7lQ8Tq4MnKdkJ34MafoafEdjSeEVjfxsD2mV90fkB8f4nb4i6kdEaYS6hZcOqACZrXcfFTbmwxPxpcMycmu"
 CHUNK_SIZE = 20
 
