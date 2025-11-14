@@ -3,7 +3,7 @@ import sys
 import requests
 
 API_URL = "https://data.digitalwaters.org/deleteData/"
-API_KEY = "6706Nyl7CXpyQ12l3fUt67gcWdWOIvA7q9Vpo8JVSzGBy7lQ8Tq4MnKdkJ34MafoafEdjSeEVjfxsD2mV90fkB8f4nb4i6kdEaYS6hZcOqACZrXcfFTbmwxPxpcMycmu"
+API_KEY = "ADMIN_API_KEY_ONLY"
 CHUNK_SIZE = 20
 
 
@@ -36,8 +36,6 @@ def deleteIds(idChunk):
     if API_KEY:
         headers["x-api-key"] = API_KEY
 
-    # If your endpoint is POST (FastAPI @app.post), keep POST.
-    # If it's actually GET-only, change to requests.get(...)
     response = requests.post(API_URL, params=params, headers=headers, timeout=30)
 
     print("=" * 60)
