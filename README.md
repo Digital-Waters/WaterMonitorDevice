@@ -1,7 +1,7 @@
 # WaterMonitorDevice
 All the code that runs on our water monitoring devices. 
 
-Our monitoring devices are the basis of our operation. They generate all the data that we use to find actionable insights. As such, it's extremely immportant that the data they create is consistent and the photo's of water are captured with specific hardware and configuration settings.
+Our monitoring devices are the basis of our operation. They generate all the data that we use to find actionable insights. As such, it's extremely important that the data they create is consistent and the photo's of water are captured with specific hardware and configuration settings.
 
 The big idea behind our system is to find patterns in lots of data. Taking a photo of water is relatively inexpensive. By taking the photo underwater, in a light-contained enclosure, we're removing all light as a variable in our data. 
 Because the only light all our devices will use is the same, we can take photos regardless of external conditions (like time of day, weather, shade, etc) and ensure our data is consistent. For this reason, we also insist all our devices use the same camera. Different camera manufacteurers will have small differences in the image and light quality that can impact our data. 
