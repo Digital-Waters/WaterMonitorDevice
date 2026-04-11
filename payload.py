@@ -17,7 +17,6 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
     latitude = str(payloadData.get('latitude', '999'))
     longitude = str(payloadData.get('longitude', '999'))
     waterColor = str(payloadData.get('water_rgba', '999'))
-    temperature = str(payloadData.get('water_temperature', '999'))
     dateTime = payloadData.get('capture_datetime', datetime.now().isoformat())
 
     fieldsBase = {
@@ -26,8 +25,11 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
         'deviceID': deviceId,
         'capture_datetime': dateTime,
         'water_rgba': waterColor,
-        'water_temperature': temperature
     }
+
+    temperature = payloadData.get('water_temperature')
+    if temperature is not None:
+        fieldsBase['water_temperature'] = str(temperature)
 
     currDirectory = os.path.dirname(os.path.abspath(__file__))
     filePath = os.path.join(currDirectory, payloadData["image"])
