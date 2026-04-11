@@ -1,49 +1,8 @@
 import requests
 import os
 import json
-import subprocess
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from datetime import datetime
-
-# --- Wi-Fi helpers (Bookworm + NetworkManager) ---
-WIFI_IFACE = "wlan0"
-
-def runCmd(cmd):
-    return subprocess.run(cmd, shell=True, capture_output=True, text=True)
-
-def wifiOff(log=None):
-    # Hard shut RF; don’t call nmcli
-    runCmd("rfkill block wifi")
-    # Optionally also bring link down (harmless if rfkill blocks it)
-    runCmd(f"ip link set {WIFI_IFACE} down")
-    if log: log.info("Wi-Fi powered down (rfkill).")
-
-def isWifiAssociated(log=None):
-    out = runCmd(f"iw dev {WIFI_IFACE} link").stdout.strip()
-    if not out or "Not connected" in out:
-        if log: log.debug("iw link: not connected")
-        return False
-    ssid = ""
-    for line in out.splitlines():
-        if line.strip().startswith("SSID:"):
-            ssid = line.split("SSID:", 1)[1].strip()
-            break
-    if log: log.debug(f"iw link: associated to SSID='{ssid or 'unknown'}'")
-    return True
-
-def isNetworkUsable(apiUrl, log=None):
-    # Only check L3 basics; no NetworkManager calls
-    ipLine = runCmd(f"ip -o -4 addr show dev {WIFI_IFACE}").stdout.strip()
-    routeLine = runCmd(f"ip route show default dev {WIFI_IFACE}").stdout.strip()
-    if not ipLine or not routeLine:
-        if log: log.debug(f"isNetworkUsable: hasIp={bool(ipLine)}, hasDefaultRoute={bool(routeLine)}")
-        return False
-    u = urlparse(apiUrl); host, port = u.hostname, (u.port or (443 if u.scheme=='https' else 80))
-    try:
-        with socket.create_connection((host, port), timeout=1.5):
-            return True
-    except OSError:
-        return False
 
 
 def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
@@ -57,30 +16,24 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
     deviceId = payloadData.get('deviceID', "UNKNOWN")
     latitude = str(payloadData.get('latitude', '999'))
     longitude = str(payloadData.get('longitude', '999'))
-    waterColor = str(payloadData.get('waterColor', '999'))
-    temperature = str(payloadData.get('temperature', '999'))
-    dateTime = payloadData.get('device_datetime', datetime.now().isoformat())
+    waterColor = str(payloadData.get('water_rgba', '999'))
+    dateTime = payloadData.get('capture_datetime', datetime.now().isoformat())
 
     fieldsBase = {
         'latitude': latitude,
         'longitude': longitude,
         'deviceID': deviceId,
-        'device_datetime': dateTime,
-        'waterColor': waterColor,
-        'temperature': temperature
+        'capture_datetime': dateTime,
+        'water_rgba': waterColor,
     }
+
+    temperature = payloadData.get('water_temperature')
+    if temperature is not None:
+        fieldsBase['water_temperature'] = str(temperature)
 
     currDirectory = os.path.dirname(os.path.abspath(__file__))
     filePath = os.path.join(currDirectory, payloadData["image"])
     log.info(f"Uploading file: {filePath}")
-
-    # If we already know we're not connected, save power immediately.
-    if not isWifiAssociated(log):
-        log.warning("No network connection detected before upload. Powering Wi-Fi down.")
-        wifiOff(log)
-        if not fromFile:
-            savePayload(payloadData, log)
-        return False
 
     try:
         with open(filePath, 'rb') as f:
@@ -109,19 +62,12 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
                         log.error(f"Upload failed: {response.status_code} - {response.reason}")
                         log.error(f"Response Text: {response.text}")
                         log.error(f"Response Headers: {response.headers}")
-                        # Server responded (likely reachable). No need to power down Wi-Fi here.
-                        break  # avoid retry storms on 4xx/5xx unless you specifically want to
+                        break  # avoid retry storms on 4xx/5xx
 
                 except (requests.ConnectionError, requests.Timeout) as e:
                     log.warning(f"Network error on attempt {attempt}: {e}")
-                    # If we lost association entirely, shut Wi-Fi off; otherwise keep it up for local app.
-                    if not isWifiAssociated(log):
-                        log.warning("Lost Wi-Fi association. Powering Wi-Fi down.")
-                        wifiOff(log)
-                        break
 
                 except requests.RequestException as e:
-                    # Other request-layer issues. Don't power Wi-Fi off automatically.
                     log.error(f"Request exception: {e}")
                     break
 

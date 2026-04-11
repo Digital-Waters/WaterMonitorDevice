@@ -70,7 +70,7 @@ def main():
             
             # Add device ID to payload data
             payloadData['deviceID'] = deviceID
-            payloadData['device_datetime'] = datetime.now().isoformat()
+            payloadData['capture_datetime'] = datetime.now().isoformat()
             
             log.info(f"Config file apiurl: {secrets}")
     
@@ -154,10 +154,10 @@ def capturePhoto(deviceID):
         payloadData.update({"image": imagePath})
         rgba = imageToRGBA.getRgbaFromImage(imagePath, referenceImage)
         log.info(f"RGBA: {rgba}")
-        payloadData.update({"waterColor": rgba})
+        payloadData.update({"water_rgba": rgba})
 
 def captureTemperature():
-    payloadData.update({"temperature": temperatureSensor.captureTemperature(log)})
+    payloadData.update({"water_temperature": temperatureSensor.captureTemperature(log)})
 
 def captureLongLat():
     loc = gpsSensor.getLoc(log)

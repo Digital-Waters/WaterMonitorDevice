@@ -30,7 +30,7 @@ def captureTemperature(log):
 
     except IndexError:
         log.info("No temperature sensor connected.")
-        return 999
+        return None
     except Exception as e:
         log.info(f"An error occurred: {e}")
-        return 999
+        return None
