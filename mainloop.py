@@ -15,6 +15,119 @@ from typing import Union
 import binascii
 
 
+# I think what we want is a dictionary with all the sensors in it so we can just call
+# the following commands using that data structure
+
+AS_SENSOR_INFO = [
+    {'addr':0x61, 'name':'sensor_do'},
+    {'addr':0x62, 'name':'sensor_orp'},
+    {'addr':0x63, 'name':'sensor_ph'},
+    {'addr':0x64, 'name':'sensor_conductivity'},
+    {'addr':0x66, 'name':'temperature'}
+]
+
+class EzoSensor:
+    """
+    Atlas Scientific EZO sensors can use this class to manage their instances.
+    """
+      
+    def i2c_send_cmd_get_resp(self, cmd:str) -> Union[bool, str]:
+        """
+        Uses subprocess.run to call i2ctransfer with the specified Atlas Scientific command. 
+        Note that cmd must be hexified first.
+        If the command fails or there is no device at the specified address False is returned.
+        Otherwise the data-only portion of the response string is returned.    
+        """
+        
+        try:
+            ret = subprocess.run(f'i2ctransfer -y 1 w1@{self.addr} {cmd}',
+                                 shell=True, capture_output=True)
+            
+            if ret.returncode != 0:
+                return False
+    
+            time.sleep(1.0)
+    
+            ret = subprocess.run(f'i2ctransfer -y 1 r40@{self.addr}',
+                                 shell=True, capture_output=True, encoding="utf-8")
+    
+            if ret.returncode != 0:
+                return False
+    
+            # Check that the first hex character is a 1 otherwise the command failed
+            if ret.stdout[:4] != '0x01':
+                # log.info(ret.stdout[0])
+                return False
+    
+           
+            # TODO: trim the first 4 hex digits off, it's the return value a comma and
+            # i for the i command:
+            # 1?i,<actual response string>
+            # A hex digit in this case is 0xXX_ where _ is a whitespace
+            s = ret.stdout[5*4:]
+            s = s.replace('0x00', '')
+            s = s.replace('0x', '')
+            s = s.replace(' ', '')
+            s = s.replace('\n', '') 
+            
+            return binascii.unhexlify(s)
+                
+                
+        except Exception as e:
+            log.error(e.with_traceback());
+            return False
+        
+    
+    def ping(self) -> bool:
+        """
+        Attempts to contact the ezo board using the info command. Returns True and sets
+        the self.present flag if the ezo board responded 
+        """
+        if self.get_info() != False:
+            self.present = True;
+        else:
+            # This isn't strictly necessary but we may want to use this as some kind of 
+            # heartbeat if we find sensors dropping off the bus
+            self.present = False;
+            
+        return self.present
+        
+    
+    def get_info(self) -> Union[bool, str]:
+        """
+        Attempts to read the info string from the EZO board
+        """        
+        info = self.i2c_send_cmd_get_resp(hex(ord('i')))
+        
+        if info != False:
+            self.info = info
+             
+        return info
+            
+            
+    def get_reading( self, timeout:float=1.0 ) -> bool:
+        """
+        Attempts to trigger a sensor reading and stores the value read into 
+        self.last_reading. 
+        Returns True if a value was read or False otherwise
+        """
+        if self.present:
+            ret = self.i2c_send_cmd_get_resp(hex(ord('R')))
+            if ret != False:
+                self.last_reading = ret  
+                return True 
+        return False
+        
+    def __init__(self, sensor_addr:int, sensor_name:str):
+        self.present: bool = False
+        self.addr:int = sensor_addr
+        self.name:str = sensor_name
+        self.info:str = ''
+        self.last_reading:str = ''
+
+# Instantiate all the ezo sensors listed in AS_SENSOR_INFO list      
+as_sensors=[EzoSensor(i['addr'], i['name']) for i in AS_SENSOR_INFO]
+
 interval = 5  # Set interval in seconds
 MaxFileSize = 50
 TrimPercent = 0.10
@@ -62,6 +175,11 @@ def main():
     log.info(f"Device ID loaded: {deviceID}")
     log.info("Starting main loop...")
 
+    # check each AS sensor to see if it is installed and responding
+    for sensor in as_sensors:
+        if sensor.ping():
+            log.info(f'Atlas Scientific {sensor.name} detected')
+
     while True:
         try:
             # Capture sensor data
@@ -69,9 +187,13 @@ def main():
             #captureGPSDateTime()
             capturePhoto(deviceID)
             captureTemperature()
-            captureTemperatureEZO()
             #captureConductivity()
             #captureTerpidity()
+            for sensor in as_sensors:
+                if sensor.get_reading():   
+                    payloadData.update({sensor.name: sensor.last_reading}) 
+                    log.info(f'{sensor.name}: {sensor.last_reading}')
+
             
             # Add device ID to payload data
             payloadData['deviceID'] = deviceID
@@ -168,206 +290,6 @@ def capturePhoto(deviceID):
 
 def captureTemperature():
     payloadData.update({"water_temperature": temperatureSensor.captureTemperature(log)})
-
-# Note that all AS EZO boards support the "i" command so we can do this as a table
-# to make things a bit easier 
-
-def i2c_get_info( addr:int=0 ) -> Union[bool, str]:
-    """
-    Uses subprocess.run to call i2ctransfer with the Atlas Scientific 'i' command to the 
-    I2C address specified by addr.
-    If the command fails or there is no device at the specified address False is returned.
-    Otherwise the data-only portion of the info string is returned.    
-    """
-    try:
-       
-        # write the info command 'i' (0x69)
-        ret = subprocess.run(f'i2ctransfer -y 1 w1@{addr} 0x69',
-                             shell=True, capture_output=True)
-        
-        if ret.returncode != 0:
-            return False
-
-        ret = subprocess.run(f'i2ctransfer -y 1 r40@{addr}',
-                             shell=True, capture_output=True, encoding="utf-8")
-
-        log.info(ret)
-        
-        if ret.returncode != 0:
-            return False
-
-        log.info(ret.stdout[:4])
-
-        # Check that the first hex character is a 1 otherwise the command failed
-        if ret.stdout[:4] != '0x01':
-            log.info(ret.stdout[0])
-            return False
-
-        # TODO: trim the first 4 hex digits off, it's the return value a comma and
-        # i for the i command:
-        # 1?i,<actual response string>
-        # A hex digit in this case is 0xXX_ where _ is a whitespace
-        s = ret.stdout[5*4:]
-                        
-        s = s.replace('0x00', '')
-        s = s.replace('0x', '')
-        s = s.replace(' ', '')
-        s = s.replace('\n', '') 
-        log.info(s)
-        
-        info = binascii.unhexlify(s)
-        log.info(info)
-
-        return info
-            
-            
-    except Exception as e:
-        log.error(e.with_traceback());
-        return False
-        
-        
-def i2c_get_reading( addr:int=0, timeout:float=1.0 ) -> Union[bool, str]:
-    """
-    Uses subprocess.run to call i2ctransfer with the Atlas Scientific 'R' command to the 
-    I2C address specified by addr.
-    If the command fails or there is no device at the specified address False is returned.
-    Otherwise the data-only portion of the reading string is returned.    
-    """
-    try:
-       
-        # write the info command 'R' (0x52)
-        ret = subprocess.run(f'i2ctransfer -y 1 w1@{addr} 0x52',
-                             shell=True, capture_output=True)
-
-        log.info(ret)
-
-        if ret.returncode != 0:
-            return False
-
-        ret = subprocess.run(f'i2ctransfer -y 1 r40@{addr}',
-                             shell=True, capture_output=True)
-
-        if ret.returncode != 0:
-            return False
-        
-        log.info(ret)
-
-        # Check that the first hex character is a 1 otherwise the command failed
-        if ret.stdout[:4] != '0x01':
-            return False
-
-        # TODO: trim the first 4 hex digits off, it's the return value a comma and
-        # i for the i command:
-        # 1?i,<actual response string>
-        # A hex digit in this case is 0xXX_ where _ is a whitespace
-        s = ret.stdout[5*4:]
-                        
-        s = s.replace('0x00', '')
-        s = s.replace('0x','')
-        s = s.replace(' ','')
-        log.info(s)
-        return binascii.unhexlify(s)
-            
-            
-    except Exception as e:
-        log.error(e.with_traceback());
-        return False
-            
-
-
-# Move this to it's own driver file
-def captureTemperatureEZO():
-    """
-    If an Atlas Scientific EZO temperature sensor is present call this to 
-    get the temperature readings from the I2C bus
-    """
-    ezo_temp_addr = 0x66
-
-    # Note(AZT 20260521): I feel like we should probably probe all the sensors
-    # in some initialization code, then all we have to do is read the values
-
-    try:
-        
-        ret = i2c_get_info(ezo_temp_addr)
-        
-        if(ret == False):
-            log.error("AS EZO-RTD not present")
-            return None
-
-        log.info(f"AS RTD EZO detected: {ret}")
-        
-        
-        # else we have our info string from the device 
-        
-        # # write the info command 'i'
-        # ret = subprocess.run(f'i2ctransfer -y 1 w1@{ezo_temp_addr} 0x69', 
-        #                      shell=True, capture_output=True)
-        #
-        #
-        # if ret.returncode == 0:
-        #
-        #     ret = subprocess.run(f'i2ctransfer -y 1 r20@{ezo_temp_addr}');
-    
-        # TODO: trim the first 4 hex digits off, it's the return value a comma and
-        # i for the i command:
-        # 1?i,<actual response string>
-                                
-        # s=ret.stdout[4:].replace('0x','')
-        # s=s.replace(' ','')
-        # binascii.unhexlify(s)
-        
-        # parse the info string, make sure it's an RTD
-        
-        # Now we know that we have a temp sensor, run the 'i' command
-        # to get a reading
-        
-        # wait 600ms
-        
-        # read the result
-        
-        # else:
-        # # Error running the first comand -- Maybe no temp sensor 
-        # pass
-        
-        
-        
-        # # if ret contains an "Error" string then we failed
-        # if ret == 0:
-        #     # There's something at that address, read back the data
-        #     ret = os.system(f'i2ctransfer -y 1 r10@{ezo_temp_addr}')
-        #
-        #     if 
-        #
-        #     pass
-        # else:
-        #     # We failed, TODO: check the return value
-        #     pass
-        
-        # Check for the temperature sensor
-    #     device_folder = glob.glob(base_dir + '28*')[0]
-    #     device_file = device_folder + '/w1_slave'
-    #
-    #     lines = read_temp_raw(device_file)
-    #     while lines[0].strip()[-3:] != 'YES':
-    #         time.sleep(0.2)
-    #         lines = read_temp_raw(device_file)
-    #     equals_pos = lines[1].find('t=')
-    #     if equals_pos != -1:
-    #         temp_string = lines[1][equals_pos+2:]
-    #         temp_c = float(temp_string) / 1000.0
-    #
-    #         log.info(f"Temperature: {temp_c} Celcius")
-    #         return temp_c
-    #
-    # except IndexError:
-    #     log.info("No temperature sensor connected.")
-    #     return None
-    except Exception as e:
-        log.error(e.with_traceback())
-        
-        return None
-    # payloadData.update({"water_temperature": temperatureSensor.captureTemperature(log)})
-
 
 def captureLongLat():
     loc = gpsSensor.getLoc(log)
