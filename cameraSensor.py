@@ -6,16 +6,24 @@ from PIL import Image
 import os
 import logging
 import RPi.GPIO as GPIO
+# from builtins import True
 
 
-# Setup GPIO for LED activation
-PIN17 = 17
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(PIN17, GPIO.OUT)
-picam2 = Picamera2()
-imageDir = "images"
-picam2.configure(picam2.create_still_configuration()) #capture full resolution photo
+cameraPresent = False
 
+try:
+    # Setup GPIO for LED activation
+    PIN17 = 17
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(PIN17, GPIO.OUT)
+    picam2 = Picamera2()
+    imageDir = "images"
+    picam2.configure(picam2.create_still_configuration()) #capture full resolution photo
+    cameraPresent = True
+    
+except Exception as e:
+    # log.warning(e)
+    cameraPresent = False
 
 def setLED(state):
     try:

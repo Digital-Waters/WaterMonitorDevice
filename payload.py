@@ -4,7 +4,6 @@ import json
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from datetime import datetime
 
-
 def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
     import time
 
@@ -31,55 +30,58 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
     if temperature is not None:
         fieldsBase['water_temperature'] = str(temperature)
 
-    currDirectory = os.path.dirname(os.path.abspath(__file__))
-    filePath = os.path.join(currDirectory, payloadData["image"])
-    log.info(f"Uploading file: {filePath}")
 
-    try:
-        with open(filePath, 'rb') as f:
-            for attempt in range(1, maxRetries + 1):
-                try:
-                    log.info(f"Attempt {attempt} of {maxRetries}")
-
-                    # Rebuild fields + encoder (and rewind the file) each attempt
-                    f.seek(0)
-                    fields = dict(fieldsBase)
-                    fields['image'] = (os.path.basename(filePath), f, 'image/jpeg')
-                    m = MultipartEncoder(fields=fields, boundary=boundary)
-                    headers = {
-                        'Content-Type': m.content_type,
-                        'x-api-key': apiKey
-                    }
-
-                    response = requests.post(url, data=m, headers=headers, timeout=timeoutSeconds)
-
-                    if response.status_code == 200:
-                        log.info("Successfully uploaded payload to DB")
-                        if not fromFile:
-                            uploadSavedPayloads(log, secrets)
-                        return True
-                    else:
-                        log.error(f"Upload failed: {response.status_code} - {response.reason}")
-                        log.error(f"Response Text: {response.text}")
-                        log.error(f"Response Headers: {response.headers}")
-                        break  # avoid retry storms on 4xx/5xx
-
-                except (requests.ConnectionError, requests.Timeout) as e:
-                    log.warning(f"Network error on attempt {attempt}: {e}")
-
-                except requests.RequestException as e:
-                    log.error(f"Request exception: {e}")
-                    break
-
-                except Exception as e:
-                    log.error(f"Unexpected exception: {e}")
-                    break
-
-    except Exception as fileError:
-        log.error(f"Error opening image file: {fileError}")
-
-    if not fromFile:
-        savePayload(payloadData, log)
+    image = payloadData.get('image')
+    if image is not None:
+        currDirectory = os.path.dirname(os.path.abspath(__file__))
+        filePath = os.path.join(currDirectory, payloadData["image"])
+        log.info(f"Uploading file: {filePath}")
+    
+        try:
+            with open(filePath, 'rb') as f:
+                for attempt in range(1, maxRetries + 1):
+                    try:
+                        log.info(f"Attempt {attempt} of {maxRetries}")
+    
+                        # Rebuild fields + encoder (and rewind the file) each attempt
+                        f.seek(0)
+                        fields = dict(fieldsBase)
+                        fields['image'] = (os.path.basename(filePath), f, 'image/jpeg')
+                        m = MultipartEncoder(fields=fields, boundary=boundary)
+                        headers = {
+                            'Content-Type': m.content_type,
+                            'x-api-key': apiKey
+                        }
+    
+                        response = requests.post(url, data=m, headers=headers, timeout=timeoutSeconds)
+    
+                        if response.status_code == 200:
+                            log.info("Successfully uploaded payload to DB")
+                            if not fromFile:
+                                uploadSavedPayloads(log, secrets)
+                            return True
+                        else:
+                            log.error(f"Upload failed: {response.status_code} - {response.reason}")
+                            log.error(f"Response Text: {response.text}")
+                            log.error(f"Response Headers: {response.headers}")
+                            break  # avoid retry storms on 4xx/5xx
+    
+                    except (requests.ConnectionError, requests.Timeout) as e:
+                        log.warning(f"Network error on attempt {attempt}: {e}")
+    
+                    except requests.RequestException as e:
+                        log.error(f"Request exception: {e}")
+                        break
+    
+                    except Exception as e:
+                        log.error(f"Unexpected exception: {e}")
+                        break
+    
+        except Exception as fileError:
+            log.error(f"Error opening image file: {fileError}")
+    
+        if not fromFile:
+            savePayload(payloadData, log)
 
     return False
 
