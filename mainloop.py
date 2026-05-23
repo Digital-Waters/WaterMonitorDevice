@@ -4,6 +4,9 @@ import logging
 #import gpsSensor
 import cameraSensor
 import temperatureSensor
+import conductivitySensor
+import phSensor
+import orpSensor
 import payload
 import platform
 import os
@@ -65,7 +68,9 @@ def main():
             #captureGPSDateTime()
             capturePhoto(deviceID)
             captureTemperature()
-            #captureConductivity()
+            captureConductivity()
+            capturepH()
+            captureORP()
             #captureTerpidity()
             
             # Add device ID to payload data
@@ -160,6 +165,15 @@ def capturePhoto(deviceID):
 
 def captureTemperature():
     payloadData.update({"water_temperature": temperatureSensor.captureTemperature(log)})
+
+def captureConductivity():
+    payloadData.update({"water_conductivity": conductivitySensor.captureConductivity(log)})
+
+def capturepH():
+    payloadData.update({"water_ph": phSensor.capturepH(log)})
+
+def captureORP():
+    payloadData.update({"water_orp": orpSensor.captureORP(log)})
 
 def captureLongLat():
     loc = gpsSensor.getLoc(log)
