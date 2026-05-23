@@ -31,8 +31,43 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
     if temperature is not None:
         fieldsBase['water_temperature'] = str(temperature)
 
+    image = payloadData.get("image")
+
+    if image is None:
+        log.warning("No image available, uploading payload without image.")
+        for attempt in range(1, maxRetries + 1):
+            try:
+                log.info(f"Attempt {attempt} of {maxRetries} (no image)")
+                m = MultipartEncoder(fields=fieldsBase, boundary=boundary)
+                headers = {
+                    'Content-Type': m.content_type,
+                    'x-api-key': apiKey
+                }
+                response = requests.post(url, data=m, headers=headers, timeout=timeoutSeconds)
+                if response.status_code == 200:
+                    log.info("Successfully uploaded payload to DB")
+                    if not fromFile:
+                        uploadSavedPayloads(log, secrets)
+                    return True
+                else:
+                    log.error(f"Upload failed: {response.status_code} - {response.reason}")
+                    log.error(f"Response Text: {response.text}")
+                    log.error(f"Response Headers: {response.headers}")
+                    break
+            except (requests.ConnectionError, requests.Timeout) as e:
+                log.warning(f"Network error on attempt {attempt}: {e}")
+            except requests.RequestException as e:
+                log.error(f"Request exception: {e}")
+                break
+            except Exception as e:
+                log.error(f"Unexpected exception: {e}")
+                break
+        if not fromFile:
+            savePayload(payloadData, log)
+        return False
+
     currDirectory = os.path.dirname(os.path.abspath(__file__))
-    filePath = os.path.join(currDirectory, payloadData["image"])
+    filePath = os.path.join(currDirectory, image)
     log.info(f"Uploading file: {filePath}")
 
     try:

@@ -155,6 +155,8 @@ def capturePhoto(deviceID):
         rgba = imageToRGBA.getRgbaFromImage(imagePath, referenceImage)
         log.info(f"RGBA: {rgba}")
         payloadData.update({"water_rgba": rgba})
+    else:
+        payloadData.update({"image": None})
 
 def captureTemperature():
     payloadData.update({"water_temperature": temperatureSensor.captureTemperature(log)})
