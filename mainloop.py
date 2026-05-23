@@ -59,12 +59,9 @@ class EzoSensor:
                 # log.info(ret.stdout[0])
                 return False
     
-           
-            # TODO: trim the first 4 hex digits off, it's the return value a comma and
-            # i for the i command:
-            # 1?i,<actual response string>
-            # A hex digit in this case is 0xXX_ where _ is a whitespace
-            s = ret.stdout[5*4:]
+            # log.info(ret.stdout)
+            # remove extraneous characters to prep for unhexlify-ing starting after the status char
+            s = ret.stdout[4:]
             s = s.replace('0x00', '')
             s = s.replace('0x', '')
             s = s.replace(' ', '')
@@ -100,7 +97,9 @@ class EzoSensor:
         info = self.i2c_send_cmd_get_resp(hex(ord('i')))
         
         if info != False:
-            self.info = info
+            # info is returned raw, for the data string we need to skip the first 3 characters 
+            self.info = info[3:]
+            # log.info(self.info)
              
         return info
             
