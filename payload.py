@@ -41,6 +41,7 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
 
     if image is None:
         log.warning("No image available, uploading payload without image.")
+        uploaded = False
         for attempt in range(1, maxRetries + 1):
             try:
                 log.info(f"Attempt {attempt} of {maxRetries} (no image)")
@@ -52,9 +53,8 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
                 response = requests.post(url, data=m, headers=headers, timeout=timeoutSeconds)
                 if response.status_code == 200:
                     log.info("Successfully uploaded payload to DB")
-                    if not fromFile:
-                        uploadSavedPayloads(log, secrets)
-                    return True
+                    uploaded = True
+                    break
                 else:
                     log.error(f"Upload failed: {response.status_code} - {response.reason}")
                     log.error(f"Response Text: {response.text}")
@@ -66,8 +66,17 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
                 log.error(f"Request exception: {e}")
                 break
             except Exception as e:
-                log.error(f"Unexpected exception: {e}")
+                log.error(f"Unexpected exception during upload: {e}")
                 break
+
+        if uploaded:
+            if not fromFile:
+                try:
+                    uploadSavedPayloads(log, secrets)
+                except Exception as e:
+                    log.error(f"Error draining saved payloads: {e}")
+            return True
+
         if not fromFile:
             savePayload(payloadData, log)
         return False
@@ -76,6 +85,7 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
     filePath = os.path.join(currDirectory, image)
     log.info(f"Uploading file: {filePath}")
 
+    uploaded = False
     try:
         with open(filePath, 'rb') as f:
             for attempt in range(1, maxRetries + 1):
@@ -96,9 +106,8 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
 
                     if response.status_code == 200:
                         log.info("Successfully uploaded payload to DB")
-                        if not fromFile:
-                            uploadSavedPayloads(log, secrets)
-                        return True
+                        uploaded = True
+                        break
                     else:
                         log.error(f"Upload failed: {response.status_code} - {response.reason}")
                         log.error(f"Response Text: {response.text}")
@@ -113,15 +122,22 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
                     break
 
                 except Exception as e:
-                    log.error(f"Unexpected exception: {e}")
+                    log.error(f"Unexpected exception during upload: {e}")
                     break
 
     except Exception as fileError:
         log.error(f"Error opening image file: {fileError}")
 
+    if uploaded:
+        if not fromFile:
+            try:
+                uploadSavedPayloads(log, secrets)
+            except Exception as e:
+                log.error(f"Error draining saved payloads: {e}")
+        return True
+
     if not fromFile:
         savePayload(payloadData, log)
-
     return False
 
 
