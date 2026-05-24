@@ -31,6 +31,18 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
     if temperature is not None:
         fieldsBase['water_temperature'] = str(temperature)
 
+    phSensor = payloadData.get('sensor_ph')
+    if phSensor is not None:
+        fieldsBase['sensor_ph'] = str(phSensor)
+        
+    orpSensor = payloadData.get('sensor_orp')
+    if orpSensor is not None:
+        fieldsBase['sensor_orp'] = str(orpSensor)
+
+    conductivitySensor = payloadData.get('sensor_conductivity')
+    if conductivitySensor is not None:
+        fieldsBase['sensor_conductivity'] = str(conductivitySensor)
+
     image = payloadData.get("image")
 
     if image is None:
