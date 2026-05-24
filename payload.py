@@ -154,7 +154,7 @@ def uploadSavedPayloads(log, secrets):
     
     if os.path.exists(filename):
         with open(filename, 'r') as f:
-            logs = [json.loads(line.strip()) for line in f.readlines()]
+            logs = [json.loads(line.strip()) for line in f.readlines() if line.strip()]
 
         # Iterate over logs and try to upload each one
         for payload in logs[:]:
