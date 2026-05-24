@@ -13,35 +13,29 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
     boundary = "*****"
     timeoutSeconds = 15  # network timeout so we don't hang
 
-    deviceId = payloadData.get('deviceID', "UNKNOWN")
-    latitude = str(payloadData.get('latitude', '999'))
-    longitude = str(payloadData.get('longitude', '999'))
-    waterColor = str(payloadData.get('water_rgba', '999'))
-    dateTime = payloadData.get('capture_datetime', datetime.now().isoformat())
-
+    # Required fields — always sent
     fieldsBase = {
-        'latitude': latitude,
-        'longitude': longitude,
-        'deviceID': deviceId,
-        'capture_datetime': dateTime,
-        'water_rgba': waterColor,
+        'deviceID': payloadData.get('deviceID', 'UNKNOWN'),
+        'capture_datetime': payloadData.get('capture_datetime', datetime.now().isoformat()),
     }
 
-    temperature = payloadData.get('water_temperature')
-    if temperature is not None:
-        fieldsBase['water_temperature'] = str(temperature)
+    # Optional fields — only sent if present and non-null
+    optional_fields = [
+        'latitude',
+        'longitude',
+        'water_rgba',
+        'water_temperature',
+        'sensor_ph',
+        'sensor_orp',
+        'sensor_conductivity',
+    ]
 
-    phSensor = payloadData.get('sensor_ph')
-    if phSensor is not None:
-        fieldsBase['sensor_ph'] = str(phSensor)
-        
-    orpSensor = payloadData.get('sensor_orp')
-    if orpSensor is not None:
-        fieldsBase['sensor_orp'] = str(orpSensor)
-
-    conductivitySensor = payloadData.get('sensor_conductivity')
-    if conductivitySensor is not None:
-        fieldsBase['sensor_conductivity'] = str(conductivitySensor)
+    for field in optional_fields:
+        value = payloadData.get(field)
+        if value is not None:
+            fieldsBase[field] = str(value)
+        else:
+            log.info(f"Field '{field}' is null or not present, excluding from payload.")
 
     image = payloadData.get("image")
 
