@@ -23,9 +23,10 @@ def captureORP(log):
             return None
 
         data_string = ''.join(chr(b) for b in response[1:] if b != 0).strip()
-        orp = float(data_string)
-        log.info(f"ORP (EZO-ORP): {orp} mV")
-        return orp
+        orp_mv = float(data_string)
+        orp_v = round(orp_mv / 1000.0, 3)  # DB column is numeric(4,3) — store as volts
+        log.info(f"ORP (EZO-ORP): {orp_mv} mV ({orp_v} V)")
+        return orp_v
 
     except ImportError:
         log.warning("smbus2 not available; cannot read Atlas Scientific EZO-ORP probe.")
