@@ -21,7 +21,6 @@ TrimPercent = 0.10
 timeZone = "America/Toronto"
 payloadData = {}
 logFile = 'waterDeviceLog.txt'
-referenceImage = "referenceImage.jpg"
 apikey = ""
 
 # Function to get device ID dynamically from /proc/cpuinfo
@@ -157,7 +156,7 @@ def capturePhoto(deviceID):
     imagePath = cameraSensor.captureCameraImage(log, deviceID)
     if imagePath:
         payloadData.update({"image": imagePath})
-        rgba = imageToRGBA.getRgbaFromImage(imagePath, referenceImage)
+        rgba = imageToRGBA.getRgbaFromImage(imagePath)
         log.info(f"RGBA: {rgba}")
         payloadData.update({"water_rgba": rgba})
     else:
