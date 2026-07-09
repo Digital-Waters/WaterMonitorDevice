@@ -1,0 +1,16 @@
+# WiFi credentials for dw_startup.sh provisioning.
+#
+# Copy this file to the device's working dir and fill in real values:
+#     cp wifi.conf.example /home/rpi/dw/wifi.conf
+#     nano /home/rpi/dw/wifi.conf
+#     chmod 600 /home/rpi/dw/wifi.conf
+#
+# This file is sourced by bash, so use KEY="value" with no spaces around '='.
+# The real wifi.conf is git-ignored — never commit credentials.
+#
+# The same network is joined on both interfaces; dw_startup.sh makes the
+# external antenna (wlan1) the preferred client and the internal radio (wlan0)
+# the backup. To point at a different config path, set DW_WIFI_CONF.
+
+WIFI_SSID="YourNetworkName"
+WIFI_PSK="YourNetworkPassword"
