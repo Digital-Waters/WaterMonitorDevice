@@ -39,6 +39,20 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
 
     image = payloadData.get("image")
 
+    # A saved/backlogged payload may reference an image that has since been
+    # deleted from disk (e.g. by image cleanup). Trying to open it raises
+    # [Errno 2] and, treated as a failure, permanently blocks the backlog
+    # drain. Degrade to an imageless upload so the measurement still lands and
+    # the poison entry clears from the backlog.
+    if image is not None:
+        currDirectory = os.path.dirname(os.path.abspath(__file__))
+        filePath = os.path.join(currDirectory, image)
+        if not os.path.exists(filePath):
+            log.warning(
+                f"Image file no longer exists, uploading payload without image: {filePath}"
+            )
+            image = None
+
     if image is None:
         log.warning("No image available, uploading payload without image.")
         uploaded = False
