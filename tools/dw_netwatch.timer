@@ -1,0 +1,13 @@
+[Unit]
+Description=Run the Digital Waters connectivity watchdog every 5 minutes
+
+[Timer]
+# First check 5 min after boot, then every 5 min. AccuracySec keeps the wakeups
+# loosely aligned so several devices don't hammer the network in lockstep.
+OnBootSec=5min
+OnUnitActiveSec=5min
+AccuracySec=30s
+Unit=dw_netwatch.service
+
+[Install]
+WantedBy=timers.target

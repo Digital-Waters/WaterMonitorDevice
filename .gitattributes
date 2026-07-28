@@ -4,3 +4,9 @@
 # never starts once the file is copied onto a Pi. Forcing eol=lf here keeps the
 # working tree LF, so an scp straight from a Windows checkout stays valid.
 *.sh text eol=lf
+
+# systemd units and modprobe/dropin configs are parsed on Linux too; CRLF can
+# make a trailing '\r' part of a value (e.g. an ExecStart path), so keep them LF.
+*.service text eol=lf
+*.timer text eol=lf
+*.conf text eol=lf
