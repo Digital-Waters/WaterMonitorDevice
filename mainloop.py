@@ -1,7 +1,6 @@
 import time
 from datetime import datetime, timezone
 import logging
-#import gpsSensor
 import cameraSensor
 import temperatureSensor
 import conductivitySensor
@@ -18,7 +17,6 @@ import imageToRGBA
 interval = 5  # Set interval in seconds
 MaxFileSize = 50
 TrimPercent = 0.10
-timeZone = "America/Toronto"
 payloadData = {}
 logFile = 'waterDeviceLog.txt'
 apikey = ""
@@ -36,7 +34,7 @@ def load_device_id():
         raise RuntimeError("Failed to load device ID") from e
 
 def getConfig(): 
-    global interval, MaxFileSize, TrimPercent, sensors, secrets, timeZone
+    global interval, MaxFileSize, TrimPercent, sensors, secrets
     config = ConfigParser(interpolation=None)
 
     try:
@@ -63,7 +61,6 @@ def main():
     while True:
         try:
             # Capture sensor data
-            #captureGPSDateTime()
             capturePhoto(deviceID)
             captureTemperature()
             captureConductivity()
@@ -175,11 +172,6 @@ def capturepH():
 
 def captureORP():
     payloadData.update({"sensor_orp": orpSensor.captureORP(log)})
-
-def captureGPSDateTime():
-    dateTime = gpsSensor.getGPSTime(log, timeZone)
-    if dateTime:
-        payloadData.update({"dateTime": dateTime})
 
 def sendDataPayload():
     payload.uploadPayload(payloadData, log, secrets, fromFile=False)
