@@ -1,7 +1,3 @@
-# Device WiFi credentials — never commit (see tools/wifi.conf.example)
-wifi.conf
-tools/wifi.conf
-
 # Python bytecode cache
 __pycache__/
 *.py[cod]
