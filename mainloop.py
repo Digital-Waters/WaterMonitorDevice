@@ -1,5 +1,5 @@
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 #import gpsSensor
 import cameraSensor
@@ -63,7 +63,6 @@ def main():
     while True:
         try:
             # Capture sensor data
-            #captureLongLat()
             #captureGPSDateTime()
             capturePhoto(deviceID)
             captureTemperature()
@@ -74,7 +73,10 @@ def main():
             
             # Add device ID to payload data
             payloadData['deviceID'] = deviceID
-            payloadData['capture_datetime'] = datetime.now().isoformat()
+            # UTC with an explicit offset: v2 interprets a naive timestamp as
+            # UTC, so sending local Pi time (no offset) would store the wrong
+            # instant if the device's clock is not on UTC.
+            payloadData['capture_datetime'] = datetime.now(timezone.utc).isoformat()
             
             log.info(f"Config file apiurl: {secrets}")
     
@@ -173,11 +175,6 @@ def capturepH():
 
 def captureORP():
     payloadData.update({"sensor_orp": orpSensor.captureORP(log)})
-
-def captureLongLat():
-    loc = gpsSensor.getLoc(log)
-    if loc:
-        payloadData.update(loc)
 
 def captureGPSDateTime():
     dateTime = gpsSensor.getGPSTime(log, timeZone)

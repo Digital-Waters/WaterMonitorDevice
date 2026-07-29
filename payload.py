@@ -10,20 +10,13 @@ from datetime import datetime, timezone
 # hardware serial in `deviceCode`. All of that translation happens here so that
 # mainloop.py and the sensor modules stay untouched.
 #
-# Only these optional measurements have a matching v2 column; anything else the
-# device sends (e.g. latitude/longitude) is forwarded verbatim and preserved by
-# v2 in rawPayload rather than dropped.
+# Only these optional measurements have a matching v2 column.
 _OPTIONAL_FIELD_MAP = {
     'water_temperature':   'waterTemperature',
     'sensor_ph':           'pH',
     'sensor_orp':          'orp',
     'sensor_conductivity': 'conductivity',
 }
-
-# v2 has no capture-level latitude/longitude column (coordinates belong to the
-# deployment/location). We still forward them when present so a reading is never
-# silently lost — v2 keeps unmapped fields in rawPayload.
-_PASSTHROUGH_FIELDS = ('latitude', 'longitude')
 
 
 def _isSuccess(statusCode):
@@ -63,11 +56,6 @@ def _buildCaptureBody(payloadData, log):
     rgba = payloadData.get('water_rgba')
     if rgba is not None:
         body['waterRgba'] = str(rgba)
-
-    for field in _PASSTHROUGH_FIELDS:
-        value = payloadData.get(field)
-        if value is not None:
-            body[field] = value
 
     return body
 
