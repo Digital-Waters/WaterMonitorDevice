@@ -47,9 +47,9 @@ UNITS_TO_ENABLE=(dw_monitor.service dw_netwatch.timer)
 # Dependencies. Keep in sync with the code's imports; a requirements.txt in the
 # repo, if present, takes precedence over PIP_PKGS.
 #   picamera2 + libcamera + PIL -> cameraSensor.py   spidev -> SPI sensor board
-#   smbus2 -> Atlas EZO probes   requests/toolbelt -> payload.py   pynmea2/pytz -> gps
+#   smbus2 -> Atlas EZO probes   requests/toolbelt -> payload.py
 APT_PKGS=(python3 python3-pip git wget rfkill python3-picamera2 python3-pil python3-spidev)
-PIP_PKGS=(requests requests-toolbelt pynmea2 pytz smbus2)
+PIP_PKGS=(requests requests-toolbelt smbus2)
 
 # Arducam Pivariety camera. The distro's libcamera-apps does NOT drive this
 # camera -- it needs Arducam's own libcamera build + kernel driver. We invoke
