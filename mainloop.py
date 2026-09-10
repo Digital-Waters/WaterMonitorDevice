@@ -1,6 +1,7 @@
 import time
 from datetime import datetime, timezone
 import logging
+from logging.handlers import RotatingFileHandler
 import cameraSensor
 import temperatureSensor
 import conductivitySensor
@@ -8,15 +9,18 @@ import phSensor
 import orpSensor
 import payload
 import platform
-import os
 from configparser import ConfigParser
 import configWriter
 import imageToRGBA
 
 
 interval = 5  # Set interval in seconds
-MaxFileSize = 50
-TrimPercent = 0.10
+# Rolling-log defaults (overridable in waterMonitor.ini [GENERAL]):
+# each log file grows to LogMaxFileSizeMB, then rolls over; we keep LogFileCount
+# files total (the active file plus rolled backups), so at most
+# LogMaxFileSizeMB * LogFileCount MB on disk.
+LogMaxFileSizeMB = 5
+LogFileCount = 20
 payloadData = {}
 logFile = 'waterDeviceLog.txt'
 apikey = ""
@@ -34,14 +38,12 @@ def load_device_id():
         raise RuntimeError("Failed to load device ID") from e
 
 def getConfig(): 
-    global interval, MaxFileSize, TrimPercent, sensors, secrets
+    global interval, sensors, secrets
     config = ConfigParser(interpolation=None)
 
     try:
         config.read("waterMonitor.ini")
         interval = int(config["GENERAL"]["sleepInterval"])
-        MaxFileSize = int(config["GENERAL"]["MaxFileSize"])
-        TrimPercent = float(config["GENERAL"]["TrimPercent"])
         secrets = config["SECRETS"]
         log.info("successfully parsed the config file!")
     except:
@@ -80,8 +82,6 @@ def main():
             # Upload the payload
             sendDataPayload()
 
-            manageLogFile()
-            
         except KeyboardInterrupt:
             log.info("Shutting down...")
             break
@@ -104,9 +104,25 @@ def initlog():
     # Set the overall logging level
     log.setLevel(logging.DEBUG)
 
+    # Read rolling-log settings from the config with safe fallbacks. initlog()
+    # runs before getConfig(), so we read the ini directly here; if it is missing
+    # (fresh device) the fallbacks apply.
+    logConfig = ConfigParser(interpolation=None)
+    logConfig.read("waterMonitor.ini")
+    maxFileSizeMB = logConfig.getint("GENERAL", "LogMaxFileSizeMB", fallback=LogMaxFileSizeMB)
+    fileCount = logConfig.getint("GENERAL", "LogFileCount", fallback=LogFileCount)
+
     # Create handlers
     console_handler = logging.StreamHandler()  # Outputs to the CLI
-    file_handler = logging.FileHandler('waterDeviceLog.txt')  # Outputs to a file
+    # Rolling file handler: once the active log passes maxFileSizeMB it is rolled
+    # to waterDeviceLog.txt.1, existing backups shift up (.1 -> .2 -> ...), and
+    # the oldest beyond backupCount is deleted. Keeping (fileCount - 1) backups
+    # plus the active file gives fileCount files, capped at fileCount * maxFileSizeMB.
+    file_handler = RotatingFileHandler(
+        logFile,
+        maxBytes=maxFileSizeMB * 1024 * 1024,
+        backupCount=max(fileCount - 1, 0),
+    )  # Outputs to a rolling set of files
 
     # Set logging levels for each handler
     console_handler.setLevel(logging.INFO)
@@ -124,32 +140,6 @@ def initlog():
     log.addHandler(file_handler)
 
     return log
-
-def trimLogFile():
-    with open(logFile, 'r') as file:
-        lines = file.readlines()
-
-    # Calculate the number of lines to remove
-    numLines = len(lines)
-    linesToRemove = int(numLines * TrimPercent)
-
-    if linesToRemove > 0:
-        # Remove the oldest lines
-        remainingLines = lines[linesToRemove:]
-
-        # Write the remaining lines back to the file
-        with open(logFile, 'w') as file:
-            file.writelines(remainingLines)
-
-def manageLogFile():
-    # Check file size
-    fileSize = os.path.getsize(logFile) / (1024 * 1024)  # Convert to MB
-
-    if fileSize > MaxFileSize:
-        log.info(f"Log file exceeds {MaxFileSize} MB. Trimming the file.")
-        trimLogFile()
-    else: 
-        log.info(f"Log file size is under {MaxFileSize} MB")
 
 def capturePhoto(deviceID):
     imagePath = cameraSensor.captureCameraImage(log, deviceID)
