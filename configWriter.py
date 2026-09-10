@@ -11,8 +11,8 @@ def createConfig():
 
     config["GENERAL"] = {
         "sleepInterval": 5,
-        "MaxFileSize": 50,
-        "TrimPercent": 0.10
+        "LogMaxFileSizeMB": 5,
+        "LogFileCount": 20
     }
 
 

@@ -1,0 +1,11 @@
+[Unit]
+Description=Digital Waters connectivity watchdog (check internet, recover if down)
+# The link stack should be up before the first check; if it isn't, an early
+# failed check just increments the counter harmlessly.
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# Runs as root: it may restart networking services and reboot the device.
+ExecStart=/usr/bin/bash /home/rpi/dw/dw_netwatch.sh

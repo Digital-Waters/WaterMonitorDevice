@@ -166,72 +166,6 @@ To run the sense_Temp1.py code on a Raspberry Pi Zero 2 W, which is designed to 
      ./sense_Temp1.py
      ```
 
-# Prototyping the GPS Code on Raspberry Pi Zero 2 W
-To run the gpsSensor.py code on a Raspberry Pi Zero 2 W, which is designed to read GPS location and time data from a GT-U7 GPS module, you need to follow pre-requisite steps for both hardware and software setup:
-
-### Hardware Setup
-1. GT-U7 module: Ensure you have a GT-U7 module and the antenna connected to it.
-2. Wiring:
-    - VCC on the GPS ---> 5v (pin 2) on raspberryPI
-    - GRND on the GPS ---> GND (pin 6) on raspberryPI
-    - TXD on the GPS ---> RXD (pin 10) on raspberryPI
-
-### Software Setup
-1. Edit config.txt file: 
-    ```
-    sudo nano /boot/config.txt
-    ```
-    insert the following lines at the bottom of the file: 
-
-    ```
-    droverlay=w1-gpio
-    dtoverlay=w1-gpio
-    core_freq=250
-    enable_uart=1
-    force_turbo=1
-    ```
-2. Edit raspberryPI config settings: 
-    - in the SSH terminal:
-
-    ```
-    sudo raspi-config
-    ```
-    - Navigate to `Interfacing Options` > `Serial`, disable serial login Shell and enable serial interface.
-
-
-3. Install Required Packages:
-   - Ensure you have the necessary packages installed:
-     ```
-     sudo apt-get update
-     pip install pynmea2
-     pip install pytz 
-     ```
-
-
-4. Test Sensor:
-   - Verify the sensor is detected and sending data through the RXD pin:
-     ```
-     sudo apt install minicom
-     sudo minicom -b 9600 -o -D /dev/serial0
-     ```
-
-### Running the Script
-1. Create the Script File:
-   - Download the Python script file (`gpsSensor.py'`).
-
-2. Run the Script:
-   - Run the code in an IDE such as Thonny, Geany, etc.
-
-   				OR
-
-   - Make the script executable:
-     ```
-     chmod +x gpsSensor.py
-     ```
-   - Run the script using Python 3:
-     ```
-     ./gpsSensor.py
-     ```
 ## Payload Script for Water Monitoring Device
 
 This script (`Payload.py`) is designed to upload photos taken by water monitoring devices to a specified server. The script ensures the data consistency required for analysis by uploading photos with specific hardware and configuration settings.
@@ -337,6 +271,70 @@ sudo systemctl restart myscript.service
 ```
 sudo systemctl disable myscript.service
 ```
+
+# Network reliability
+
+Our devices keep sampling and logging even when they are offline — unsent
+payloads are buffered on the SD card and uploaded once the link returns. The
+upside is that we never lose data during a network blip. The downside is that a
+*wedged* wifi link is invisible to the device itself: it will happily run for
+days, generating data, while nobody receives its uploads.
+
+Three pieces keep the link healthy, and a fourth recovers it when it isn't.
+None of this lives in `dw_startup.sh` anymore — each is persistent config so it
+survives reboots and driver reloads:
+
+| Job | Where it lives |
+| --- | --- |
+| Join the wifi network | `/etc/wpa_supplicant/wpa_supplicant.conf` (written by the Raspberry Pi Imager when you flash the card) |
+| Keep the USB adapter awake (no power-save) | `/etc/modprobe.d/8821cu.conf` — see `tools/8821cu.conf` |
+| Use the external USB antenna only (disable the onboard radio) | `/boot/config.txt`: `dtoverlay=disable-wifi` |
+| Detect an offline device and recover it | `dw_netwatch.timer` → `dw_netwatch.sh` |
+
+> **Why not power-save via `iw`?** The old startup script ran
+> `iw dev wlan0 set power_save off`, which needs the `iw` package (not installed
+> on our image) and only lasts until the next driver reload. The modprobe option
+> in `tools/8821cu.conf` is the durable replacement.
+
+## Connectivity watchdog (`dw_netwatch`)
+
+`dw_netwatch.sh` runs every 5 minutes. It pings the public internet (1.1.1.1 /
+8.8.8.8 — deliberately **not** our own API, so a server-side outage can never
+reboot a field device). While the internet is reachable it does nothing. Once
+the device has been offline for a sustained stretch it escalates:
+
+- **~10 min offline:** restart whatever networking services are actually running
+  (`try-restart` is a no-op for inactive units, so this works whether the device
+  uses `wpa_supplicant`/`dhcpcd` or NetworkManager).
+- **~60 min offline:** reboot, as a last resort.
+
+Reboots are rate-limited by system uptime (`REBOOT_MIN_UPTIME`, default 1 hour),
+so the watchdog can never fall into a reboot loop. Because it only ever acts
+when the device is *already* offline, it cannot make a healthy device worse.
+
+### Install
+
+Copy the tools into the device working dir and the config files into place:
+
+```
+sudo cp tools/8821cu.conf /etc/modprobe.d/8821cu.conf
+cp tools/dw_netwatch.sh /home/rpi/dw/dw_netwatch.sh
+chmod +x /home/rpi/dw/dw_netwatch.sh
+sudo cp tools/dw_netwatch.service tools/dw_netwatch.timer /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now dw_netwatch.timer
+```
+
+Confirm it is scheduled and watch it run:
+
+```
+systemctl list-timers dw_netwatch.timer
+journalctl -u dw_netwatch.service -f
+```
+
+To tune the thresholds on a device without editing the script, create
+`/etc/default/dw_netwatch` and override any of the values at the top of
+`dw_netwatch.sh` (e.g. `FAIL_BEFORE_REBOOT=6`).
 
 # Prototyping SPI-based sensor interface boards 
 
