@@ -6,7 +6,7 @@ def createConfig():
     config["SECRETS"] = {
         "apiURL": "https://water-watch-58265eebffd9.herokuapp.com/upload/",
         "apiKey": "12345abcde",
-        "statusURL": "",  # device status endpoint; blank disables status reporting
+        "statusURL": "https://api.digitalwaters.org/status/",  # blank disables status reporting
         "AccountNumber": "abcde"
     }
 

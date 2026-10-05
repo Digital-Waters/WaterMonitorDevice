@@ -23,6 +23,10 @@ import requests
 # Status reporting is best effort: a failed status POST is logged and never
 # affects capture uploads or the backlog.
 
+# Used when waterMonitor.ini has no statusURL key, so deployed devices report
+# without a config edit. An explicitly blank statusURL disables reporting.
+DEFAULT_STATUS_URL = "https://api.digitalwaters.org/status/"
+
 SYNC_STATE_FILE = os.path.join("payload", "syncState.json")
 STATUS_TIMEOUT_SECONDS = 10
 
@@ -186,15 +190,18 @@ class StatusReporter:
     check-in, or start -> in_progress... -> finished around a backlog sync.
 
     lastCapture is {"captureDateTime": ..., "sensors": {...}} for the live
-    capture that triggered this cycle.
+    capture that triggered this cycle. deviceConfig is the device's current
+    settings (e.g. {"sleepIntervalSec": 300}); the server uses sleepIntervalSec
+    to decide when a silent device counts as offline.
     """
 
-    def __init__(self, session, secrets, log, deviceCode, lastCapture):
+    def __init__(self, session, secrets, log, deviceCode, lastCapture, deviceConfig=None):
         self.session = session
         self.log = log
         self.deviceCode = deviceCode
         self.lastCapture = lastCapture
-        self.url = (secrets.get("statusURL") or "").strip()
+        self.deviceConfig = deviceConfig
+        self.url = secrets.get("statusURL", DEFAULT_STATUS_URL).strip()
         self.apiKey = secrets["apiKey"]
         self.state = loadSyncState(log)
 
@@ -206,7 +213,7 @@ class StatusReporter:
         self.lastProgressTime = 0.0
 
         if not self.url:
-            log.debug("statusURL not configured; device status reporting is disabled.")
+            log.debug("statusURL is blank; device status reporting is disabled.")
 
     def realtime(self):
         """The live capture uploaded and there is no backlog."""
@@ -277,6 +284,8 @@ class StatusReporter:
         # ride on realtime/start/finished and are left off in_progress.
         if includeSnapshot:
             body["lastCapture"] = self.lastCapture
+            if self.deviceConfig:
+                body["config"] = self.deviceConfig
             body["health"] = collectHealth()
 
         try:

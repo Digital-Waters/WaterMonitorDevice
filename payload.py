@@ -184,9 +184,11 @@ def _postCapture(session, url, apiKey, body, imagePath, log, maxRetries, timeout
         return _postCapture(session, url, apiKey, body, None, log, maxRetries, timeoutSeconds)
 
 
-def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3, session=None, lastCapture=None):
-    """lastCapture is the sensor snapshot for a live capture, reported in the
-    device status (see deviceStatus). Unused for backlog replays."""
+def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3, session=None,
+                  lastCapture=None, deviceConfig=None):
+    """lastCapture (sensor snapshot) and deviceConfig (current settings) are
+    reported in the device status for a live capture (see deviceStatus).
+    Unused for backlog replays."""
     url = secrets["apiURL"]
     apiKey = secrets["apiKey"]
     timeoutSeconds = 15  # network timeout so we don't hang
@@ -212,7 +214,7 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3, session=Non
             # the whole drain rides one connection.
             if not fromFile:
                 reporter = deviceStatus.StatusReporter(
-                    session, secrets, log, body['deviceCode'], lastCapture
+                    session, secrets, log, body['deviceCode'], lastCapture, deviceConfig
                 )
                 try:
                     uploadSavedPayloads(log, secrets, session=session, reporter=reporter)

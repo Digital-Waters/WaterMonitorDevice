@@ -197,7 +197,10 @@ def sendDataPayload():
         "captureDateTime": payloadData.get('capture_datetime'),
         "sensors": dict(sensorStatus),
     }
-    payload.uploadPayload(payloadData, log, secrets, fromFile=False, lastCapture=lastCapture)
+    # Current settings, so the server knows how often to expect this device.
+    deviceConfig = {"sleepIntervalSec": interval}
+    payload.uploadPayload(payloadData, log, secrets, fromFile=False,
+                          lastCapture=lastCapture, deviceConfig=deviceConfig)
 
 if __name__ == "__main__":
     log = initlog()
