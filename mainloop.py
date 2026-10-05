@@ -174,13 +174,15 @@ def captureTemperature():
     payloadData.update({"water_temperature": value})
     recordSensorStatus("temperature", temperatureSensor.lastStatus, value)
 
+# Conductivity and pH use the water temperature captured earlier in the same
+# cycle for compensation, so captureTemperature() must run before them.
 def captureConductivity():
-    value = conductivitySensor.captureConductivity(log)
+    value = conductivitySensor.captureConductivity(log, payloadData.get("water_temperature"))
     payloadData.update({"sensor_conductivity": value})
     recordSensorStatus("conductivity", conductivitySensor.lastStatus, value)
 
 def capturepH():
-    value = phSensor.capturepH(log)
+    value = phSensor.capturepH(log, payloadData.get("water_temperature"))
     payloadData.update({"sensor_ph": value})
     recordSensorStatus("ph", phSensor.lastStatus, value)
 
