@@ -154,11 +154,13 @@ def capturePhoto(deviceID):
 def captureTemperature():
     payloadData.update({"water_temperature": temperatureSensor.captureTemperature(log)})
 
+# Conductivity and pH use the water temperature captured earlier in the same
+# cycle for compensation, so captureTemperature() must run before them.
 def captureConductivity():
-    payloadData.update({"sensor_conductivity": conductivitySensor.captureConductivity(log)})
+    payloadData.update({"sensor_conductivity": conductivitySensor.captureConductivity(log, payloadData.get("water_temperature"))})
 
 def capturepH():
-    payloadData.update({"sensor_ph": phSensor.capturepH(log)})
+    payloadData.update({"sensor_ph": phSensor.capturepH(log, payloadData.get("water_temperature"))})
 
 def captureORP():
     payloadData.update({"sensor_orp": orpSensor.captureORP(log)})
