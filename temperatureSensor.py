@@ -2,7 +2,12 @@ import os
 import glob
 import time
 
+import sensorHealth
+
 base_dir = '/sys/bus/w1/devices/'
+
+# Health of the latest read, reported in the device status (see sensorHealth).
+lastStatus = None
 
 
 def _read_temp_raw(device_file):
@@ -11,6 +16,7 @@ def _read_temp_raw(device_file):
     return lines
 
 
+# Each reader returns (temp_c or None, sensorHealth status).
 def _read_ds18b20(log):
     try:
         device_folder = glob.glob(base_dir + '28*')[0]
@@ -24,15 +30,15 @@ def _read_ds18b20(log):
         if equals_pos != -1:
             temp_c = float(lines[1][equals_pos + 2:]) / 1000.0
             log.info(f"Temperature (DS18B20): {temp_c} Celsius")
-            return temp_c
-        return None
+            return temp_c, sensorHealth.ok(source="DS18B20")
+        return None, sensorHealth.error("DS18B20 returned no temperature")
 
     except IndexError:
         log.info("No DS18B20 sensor detected.")
-        return None
+        return None, sensorHealth.absent()
     except Exception as e:
         log.info(f"DS18B20 read failed: {e}")
-        return None
+        return None, sensorHealth.error(f"DS18B20: {e}")
 
 
 def _read_atlas_rtd(log):
@@ -54,29 +60,41 @@ def _read_atlas_rtd(log):
         response_code = response[0]
         if response_code != 1:
             log.warning(f"Atlas Scientific RTD response code {response_code} — probe not ready or error.")
-            return None
+            return None, sensorHealth.error(f"EZO-RTD response code {response_code}")
 
         temp_string = ''.join(chr(b) for b in response[1:] if b != 0).strip()
         temp_c = float(temp_string)
         log.info(f"Temperature (Atlas Scientific RTD): {temp_c} Celsius")
-        return temp_c
+        return temp_c, sensorHealth.ok(source="EZO-RTD")
 
     except ImportError:
         log.warning("smbus2 not available; cannot read Atlas Scientific probe.")
-        return None
+        return None, sensorHealth.error("smbus2 not installed")
     except Exception as e:
         log.warning(f"Atlas Scientific RTD read failed: {e}")
-        return None
+        return None, sensorHealth.fromI2CException(e)
 
 
 def captureTemperature(log):
-    temp = _read_ds18b20(log)
+    global lastStatus
+
+    temp, dsStatus = _read_ds18b20(log)
     if temp is not None:
+        lastStatus = dsStatus
         return temp
 
-    temp = _read_atlas_rtd(log)
+    temp, rtdStatus = _read_atlas_rtd(log)
     if temp is not None:
+        lastStatus = rtdStatus
         return temp
 
     log.warning("No temperature probe returned a valid reading.")
+    # Report a failing probe over a missing one: an error means a probe is
+    # installed but broken, which is what a volunteer needs to know.
+    if dsStatus["status"] == sensorHealth.ERROR:
+        lastStatus = dsStatus
+    elif rtdStatus["status"] == sensorHealth.ERROR:
+        lastStatus = rtdStatus
+    else:
+        lastStatus = sensorHealth.absent()
     return None

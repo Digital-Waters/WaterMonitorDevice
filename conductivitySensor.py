@@ -1,10 +1,16 @@
 import time
 
+import sensorHealth
+
 # EZO-EC default I2C address
 ATLAS_I2C_ADDRESS = 0x64
 
+# Health of the latest read, reported in the device status (see sensorHealth).
+lastStatus = None
+
 
 def captureConductivity(log):
+    global lastStatus
     try:
         from smbus2 import SMBus, i2c_msg
 
@@ -20,17 +26,21 @@ def captureConductivity(log):
         response_code = response[0]
         if response_code != 1:
             log.warning(f"Atlas Scientific EZO-EC response code {response_code} — probe not ready or error.")
+            lastStatus = sensorHealth.error(f"response code {response_code}")
             return None
 
         # Response format: EC,TDS,SAL,SG — return EC value in uS/cm
         data_string = ''.join(chr(b) for b in response[1:] if b != 0).strip()
         ec = float(data_string.split(',')[0])
         log.info(f"Conductivity (EZO-EC): {ec} uS/cm")
+        lastStatus = sensorHealth.ok()
         return ec
 
     except ImportError:
         log.warning("smbus2 not available; cannot read Atlas Scientific EZO-EC probe.")
+        lastStatus = sensorHealth.error("smbus2 not installed")
         return None
     except Exception as e:
         log.warning(f"Atlas Scientific EZO-EC read failed: {e}")
+        lastStatus = sensorHealth.fromI2CException(e)
         return None

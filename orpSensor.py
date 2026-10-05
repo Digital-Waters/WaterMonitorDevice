@@ -1,10 +1,16 @@
 import time
 
+import sensorHealth
+
 # EZO-ORP default I2C address
 ATLAS_I2C_ADDRESS = 0x62
 
+# Health of the latest read, reported in the device status (see sensorHealth).
+lastStatus = None
+
 
 def captureORP(log):
+    global lastStatus
     try:
         from smbus2 import SMBus, i2c_msg
 
@@ -20,17 +26,21 @@ def captureORP(log):
         response_code = response[0]
         if response_code != 1:
             log.warning(f"Atlas Scientific EZO-ORP response code {response_code} — probe not ready or error.")
+            lastStatus = sensorHealth.error(f"response code {response_code}")
             return None
 
         data_string = ''.join(chr(b) for b in response[1:] if b != 0).strip()
         orp_mv = float(data_string)
         orp_v = round(orp_mv / 1000.0, 3)  # DB column is numeric(4,3) — store as volts
         log.info(f"ORP (EZO-ORP): {orp_mv} mV ({orp_v} V)")
+        lastStatus = sensorHealth.ok()
         return orp_v
 
     except ImportError:
         log.warning("smbus2 not available; cannot read Atlas Scientific EZO-ORP probe.")
+        lastStatus = sensorHealth.error("smbus2 not installed")
         return None
     except Exception as e:
         log.warning(f"Atlas Scientific EZO-ORP read failed: {e}")
+        lastStatus = sensorHealth.fromI2CException(e)
         return None

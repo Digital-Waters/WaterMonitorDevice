@@ -1,3 +1,4 @@
+import os
 import time
 from datetime import datetime, timezone
 import logging
@@ -12,6 +13,7 @@ import platform
 from configparser import ConfigParser
 import configWriter
 import imageToRGBA
+import sensorHealth
 
 
 interval = 5  # Set interval in seconds
@@ -22,6 +24,7 @@ interval = 5  # Set interval in seconds
 LogMaxFileSizeMB = 5
 LogFileCount = 20
 payloadData = {}
+sensorStatus = {}  # per-sensor health for the latest capture, see sensorHealth
 logFile = 'waterDeviceLog.txt'
 apikey = ""
 
@@ -141,6 +144,12 @@ def initlog():
 
     return log
 
+def recordSensorStatus(name, status, value=None):
+    entry = dict(status or sensorHealth.error("no status reported"))
+    if value is not None:
+        entry["value"] = value
+    sensorStatus[name] = entry
+
 def capturePhoto(deviceID):
     imagePath = cameraSensor.captureCameraImage(log, deviceID)
     if imagePath:
@@ -151,20 +160,42 @@ def capturePhoto(deviceID):
     else:
         payloadData.update({"image": None})
 
+    # captureCameraImage() can return a path even when the capture failed, so
+    # only call the camera ok if the image actually landed on disk.
+    if imagePath and os.path.exists(imagePath):
+        recordSensorStatus("camera", sensorHealth.ok())
+    elif not cameraSensor.isCameraAvailable():
+        recordSensorStatus("camera", sensorHealth.absent())
+    else:
+        recordSensorStatus("camera", sensorHealth.error("image capture failed"))
+
 def captureTemperature():
-    payloadData.update({"water_temperature": temperatureSensor.captureTemperature(log)})
+    value = temperatureSensor.captureTemperature(log)
+    payloadData.update({"water_temperature": value})
+    recordSensorStatus("temperature", temperatureSensor.lastStatus, value)
 
 def captureConductivity():
-    payloadData.update({"sensor_conductivity": conductivitySensor.captureConductivity(log)})
+    value = conductivitySensor.captureConductivity(log)
+    payloadData.update({"sensor_conductivity": value})
+    recordSensorStatus("conductivity", conductivitySensor.lastStatus, value)
 
 def capturepH():
-    payloadData.update({"sensor_ph": phSensor.capturepH(log)})
+    value = phSensor.capturepH(log)
+    payloadData.update({"sensor_ph": value})
+    recordSensorStatus("ph", phSensor.lastStatus, value)
 
 def captureORP():
-    payloadData.update({"sensor_orp": orpSensor.captureORP(log)})
+    value = orpSensor.captureORP(log)
+    payloadData.update({"sensor_orp": value})
+    recordSensorStatus("orp", orpSensor.lastStatus, value)
 
 def sendDataPayload():
-    payload.uploadPayload(payloadData, log, secrets, fromFile=False)
+    # Snapshot of this capture's sensors, reported in the device status.
+    lastCapture = {
+        "captureDateTime": payloadData.get('capture_datetime'),
+        "sensors": dict(sensorStatus),
+    }
+    payload.uploadPayload(payloadData, log, secrets, fromFile=False, lastCapture=lastCapture)
 
 if __name__ == "__main__":
     log = initlog()
