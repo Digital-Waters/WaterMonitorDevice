@@ -29,15 +29,18 @@ def captureConductivity(log, temp_c=None):
         from smbus2 import SMBus, i2c_msg
 
         with SMBus(1) as bus:
-            # Send the water temperature so the circuit reports conductivity
-            # normalized to 25 C (specific conductance). Without it the circuit
-            # assumes the water is already 25 C. Sent every cycle because the
-            # circuit does not keep it across power loss.
-            compensated = False
-            if temp_c is not None:
-                compensated = _setTemperatureCompensation(bus, i2c_msg, temp_c, log)
-            else:
-                log.warning("No water temperature available; EZO-EC reading is not temperature compensated.")
+            # Send the water temperature so the circuit reports conductivity normalized to 25 C.
+            # The circuit keeps the last value it was sent until it loses power,
+            # so with no temperature this cycle we send 25 C (no correction)
+            # rather than let it reuse an old one. Data rule: a record with a
+            # water temperature has a corrected reading; one without is unadjusted.
+            compensated = temp_c is not None
+            if not compensated:
+                log.warning("No water temperature available; EZO-EC reading is unadjusted (circuit reset to 25 C).")
+            if not _setTemperatureCompensation(bus, i2c_msg, temp_c if compensated else 25.0, log):
+                # The reading would break the data rule above, so drop it.
+                lastStatus = sensorHealth.error("temperature compensation rejected")
+                return None
 
             write = i2c_msg.write(ATLAS_I2C_ADDRESS, [ord('R')])
             bus.i2c_rdwr(write)
