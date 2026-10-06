@@ -4,7 +4,8 @@
 # What it does (idempotently -- safe to re-run to repair or upgrade a device):
 #   1. Installs system + Python dependencies.
 #   2. Installs the Arducam Pivariety camera stack (driver + libcamera).
-#   3. Applies the persistent wifi hardening (power-save off, onboard radio off).
+#   3. Applies the persistent wifi hardening (power-save off, onboard radio off),
+#      and builds the AIC8800 driver if an AIC8800-based USB adapter is present.
 #   4. Copies the device code into the working dir (/home/rpi/dw).
 #   5. Installs and enables the systemd services one consistent way.
 #
@@ -14,7 +15,8 @@
 # Usage, from a checkout of this repo on the device:
 #   sudo bash tools/install.sh
 # (Re-execs itself under sudo if you forget. Set INSTALL_CAMERA=0 to skip the
-#  camera step on a device with no camera attached.)
+#  camera step on a device with no camera attached. Set KEEP_ONBOARD_WIFI=1 to
+#  leave the onboard radio on as a fallback instead of disabling it.)
 
 set -euo pipefail
 
@@ -59,6 +61,24 @@ PIP_PKGS=(requests requests-toolbelt smbus2)
 INSTALL_CAMERA="${INSTALL_CAMERA:-1}"
 ARDUCAM_SCRIPT_URL="https://github.com/ArduCAM/Arducam-Pivariety-V4L2-Driver/releases/download/install_script/install_pivariety_pkgs.sh"
 ARDUCAM_PKGS=(libcamera libcamera_apps kernel_driver)
+
+# AIC8800 USB wifi adapters (cheap "AX300" WiFi 6 nanos, e.g. the AX5L). No
+# in-kernel driver on our images, so we build the out-of-tree DKMS one. Pinned
+# to a reviewed commit; its install.sh also adds the udev rule that ejects the
+# adapter's fake driver CD-ROM so the wifi device appears.
+# INSTALL_AIC8800=auto builds it only when such an adapter is plugged in.
+INSTALL_AIC8800="${INSTALL_AIC8800:-auto}"
+AIC8800_REPO="https://github.com/Kiborgik/aic8800dc-linux-patched.git"
+AIC8800_COMMIT="e0242ec"                       # 6.4.3.0-patched.16
+AIC8800_SRC="/usr/local/src/aic8800dc"
+# USB IDs: mass-storage (pre-eject) mode, then the wifi IDs the driver handles.
+AIC8800_USB_IDS="a69c:5721|a69c:5722|a69c:572a|a69c:88d[cde]|368b:88d[ef]|2357:0147|2604:001[34]|2c4e:0114|3625:0110"
+
+# Leave the onboard radio enabled as a fallback (default: disable it). The
+# external adapter is then pinned to the name wlanext and given a lower dhcpcd
+# route metric so it is preferred.
+KEEP_ONBOARD_WIFI="${KEEP_ONBOARD_WIFI:-0}"
+WLANEXT_METRIC=200                             # dhcpcd default for wifi is 300+
 
 # Boot config path moved in Bookworm; support both. Used by camera + wifi steps.
 BOOT_CFG="/boot/firmware/config.txt"
@@ -109,6 +129,36 @@ install_camera() {
     ensure_boot_line "dtoverlay=arducam-pivariety" "Arducam Pivariety camera"
 }
 
+install_aic8800() {
+    # Capture before grepping: `cmd | grep -q` under pipefail can report a miss
+    # when grep exits early and cmd dies of SIGPIPE.
+    local usb dkms_state
+    [ "$INSTALL_AIC8800" = "0" ] && return 0
+    usb="$(lsusb 2>/dev/null || true)"
+    if [ "$INSTALL_AIC8800" = "auto" ] && ! grep -qiE "ID ($AIC8800_USB_IDS) " <<<"$usb"; then
+        info "no AIC8800 USB adapter detected; skipping driver (INSTALL_AIC8800=1 to force)"
+        return 0
+    fi
+    # Idempotent: the DKMS build takes ~15 min on a Zero 2 W, so skip it when
+    # the module is already installed for the running kernel.
+    dkms_state="$(dkms status -m aic8800dc -k "$(uname -r)" 2>/dev/null || true)"
+    if grep -q installed <<<"$dkms_state"; then
+        info "aic8800dc driver already installed for $(uname -r); skipping"
+        return 0
+    fi
+    # Bookworm ships linux-headers-<release>; Bullseye has one meta package.
+    apt-get install -y dkms build-essential bc eject
+    apt-get install -y "linux-headers-$(uname -r)" 2>/dev/null \
+        || apt-get install -y raspberrypi-kernel-headers
+    if [ ! -d "$AIC8800_SRC/.git" ]; then
+        git clone -q "$AIC8800_REPO" "$AIC8800_SRC"
+    fi
+    git -C "$AIC8800_SRC" fetch -q origin
+    git -C "$AIC8800_SRC" checkout -q "$AIC8800_COMMIT"
+    info "building aic8800dc driver (slow on a Zero 2 W, ~15 min)"
+    ( cd "$AIC8800_SRC" && ./install.sh )
+}
+
 # --- 1. dependencies --------------------------------------------------------
 say "Installing system packages"
 export DEBIAN_FRONTEND=noninteractive
@@ -138,8 +188,32 @@ fi
 say "Applying wifi hardening"
 install -m 0644 "$SCRIPT_DIR/8821cu.conf" /etc/modprobe.d/8821cu.conf
 info "installed /etc/modprobe.d/8821cu.conf (power-save off)"
-# External USB antenna only: disable the onboard radio.
-ensure_boot_line "dtoverlay=disable-wifi" "external USB antenna only; disable onboard radio"
+install_aic8800
+if [ "$KEEP_ONBOARD_WIFI" = "1" ]; then
+    # Two radios: pin the external one's name, then prefer it by route metric.
+    info "KEEP_ONBOARD_WIFI=1: leaving the onboard radio enabled as a fallback"
+    if ! cmp -s "$SCRIPT_DIR/10-wlanext.link" /etc/systemd/network/10-wlanext.link; then
+        install -m 0644 "$SCRIPT_DIR/10-wlanext.link" /etc/systemd/network/10-wlanext.link
+        info "installed /etc/systemd/network/10-wlanext.link (USB adapter -> wlanext)"
+        REBOOT_NEEDED=1
+    fi
+    if grep -qx "interface wlanext" /etc/dhcpcd.conf 2>/dev/null; then
+        info "dhcpcd.conf already prefers wlanext"
+    elif [ -f /etc/dhcpcd.conf ]; then
+        printf '\n# Digital Waters: prefer the external USB antenna over the onboard radio.\ninterface wlanext\nmetric %s\n' \
+            "$WLANEXT_METRIC" >> /etc/dhcpcd.conf
+        info "set wlanext route metric $WLANEXT_METRIC in /etc/dhcpcd.conf"
+        REBOOT_NEEDED=1
+    else
+        info "WARNING: no /etc/dhcpcd.conf (NetworkManager device?); set the wlanext route metric by hand"
+    fi
+    if grep -qxF "dtoverlay=disable-wifi" "$BOOT_CFG"; then
+        info "WARNING: $BOOT_CFG still has dtoverlay=disable-wifi; remove it to keep the onboard radio"
+    fi
+else
+    # External USB antenna only: disable the onboard radio.
+    ensure_boot_line "dtoverlay=disable-wifi" "external USB antenna only; disable onboard radio"
+fi
 
 # --- 4. device code ---------------------------------------------------------
 say "Copying device code into $DW_DIR"
@@ -191,8 +265,8 @@ echo
 [ "$INSTALL_CAMERA" = "1" ] && [ "$CAMERA_OK" -ne 1 ] && \
     echo "   NOTE: the camera install reported problems -- re-run and watch its output."
 if [ "$REBOOT_NEEDED" -eq 1 ]; then
-    echo "   NOTE: a reboot is required for boot-config changes (camera overlay and/or"
-    echo "         disabling the onboard radio). Run: sudo reboot"
+    echo "   NOTE: a reboot is required for boot/network config changes (camera overlay,"
+    echo "         onboard radio, or wlanext naming). Run: sudo reboot"
 fi
 if grep -q 'YOUR_API_KEY_HERE' "$DW_DIR/waterMonitor.ini" 2>/dev/null; then
     echo "   NOTE: $DW_DIR/waterMonitor.ini still has placeholder credentials -- edit it."
