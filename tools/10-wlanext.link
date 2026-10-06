@@ -1,0 +1,21 @@
+# Stable name for an external USB wifi adapter: wlanext.
+#
+# Install to /etc/systemd/network/10-wlanext.link (install.sh does this when
+# KEEP_ONBOARD_WIFI=1). Takes effect when the adapter is next detected, i.e.
+# after a reboot or replug.
+#
+# Why: with the onboard radio left enabled there are two wifi interfaces, and
+# the kernel hands out wlan0/wlan1 in whichever order the drivers finish
+# probing -- it changes from boot to boot. Anything keyed on the interface name
+# (like the dhcpcd route metric that prefers the external antenna) would then
+# randomly favour the wrong radio. Matching on the USB bus path pins the
+# external adapter to one name; the onboard radio takes whichever wlanN is left.
+#
+# When the onboard radio is disabled (dtoverlay=disable-wifi, the default),
+# there is only one wifi interface and this file is not needed.
+[Match]
+Type=wlan
+Path=platform-*usb-*
+
+[Link]
+Name=wlanext
