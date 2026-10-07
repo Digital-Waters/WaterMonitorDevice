@@ -291,6 +291,31 @@ survives reboots and driver reloads:
 | Use the external USB antenna only (disable the onboard radio) | `/boot/config.txt`: `dtoverlay=disable-wifi` |
 | Detect an offline device and recover it | `dw_netwatch.timer` → `dw_netwatch.sh` |
 
+### AIC8800 "AX300" USB adapters
+
+Cheap WiFi 6 nano adapters (e.g. the AX5L) use the AIC8800DC chip, which has no
+in-kernel driver on our images. `tools/install.sh` detects one on USB and builds
+the [aic8800dc DKMS driver](https://github.com/Kiborgik/aic8800dc-linux-patched)
+(pinned commit; ~15 min on a Zero 2 W). Force it with `INSTALL_AIC8800=1`, or
+skip it with `INSTALL_AIC8800=0`. These adapters first show up as a fake driver
+CD-ROM (`lsusb`: `a69c:5721`); the driver's udev rule ejects it so the wifi
+device appears.
+
+### Keeping the onboard radio as a fallback
+
+`sudo KEEP_ONBOARD_WIFI=1 bash tools/install.sh` leaves the onboard radio on
+instead of disabling it. With two radios the kernel's `wlan0`/`wlan1` order
+changes from boot to boot, so the external adapter is pinned to the name
+`wlanext` (`tools/10-wlanext.link`) and given dhcpcd route metric 200 so it is
+preferred. To see which radio traffic is using:
+
+```
+ip route get 1.1.1.1
+```
+
+`dev wlanext` means the external antenna; `wlan0`/`wlan1` means the onboard
+radio.
+
 > **Why not power-save via `iw`?** The old startup script ran
 > `iw dev wlan0 set power_save off`, which needs the `iw` package (not installed
 > on our image) and only lasts until the next driver reload. The modprobe option
