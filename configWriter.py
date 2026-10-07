@@ -6,13 +6,14 @@ def createConfig():
     config["SECRETS"] = {
         "apiURL": "https://water-watch-58265eebffd9.herokuapp.com/upload/",
         "apiKey": "12345abcde",
+        "statusURL": "https://api.digitalwaters.org/api/v1/devices/status",  # blank disables status reporting
         "AccountNumber": "abcde"
     }
 
     config["GENERAL"] = {
         "sleepInterval": 5,
-        "MaxFileSize": 50,
-        "TrimPercent": 0.10
+        "LogMaxFileSizeMB": 5,
+        "LogFileCount": 20
     }
 
 

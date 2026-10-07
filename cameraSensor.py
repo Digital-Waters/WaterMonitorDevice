@@ -24,6 +24,10 @@ except Exception as _e:
     pass  # Camera hardware or libraries not available on this device
 
 
+def isCameraAvailable():
+    return _camera_available
+
+
 def setLED(state):
     if not _camera_available:
         return

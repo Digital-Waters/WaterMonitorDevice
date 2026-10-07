@@ -4,6 +4,8 @@ import json
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from datetime import datetime, timezone
 
+import deviceStatus
+
 
 # The device's payloadData still uses the historical snake_case keys, but the v2
 # API (POST /api/v1/captures) expects camelCase and identifies a device by its
@@ -60,6 +62,27 @@ def _buildCaptureBody(payloadData, log):
     return body
 
 
+def _imageFilePath(payloadData):
+    """Absolute path of the payload's image (which may not exist), or None."""
+    image = payloadData.get("image")
+    if image is None:
+        return None
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), image)
+
+
+def _recordBytes(payloadData):
+    """Approximate upload size of one backlog record, used for the sync ETA.
+    Images dominate, so count the image file plus the JSON body."""
+    size = len(json.dumps(payloadData))
+    imagePath = _imageFilePath(payloadData)
+    if imagePath is not None:
+        try:
+            size += os.path.getsize(imagePath)
+        except OSError:
+            pass  # image already deleted; it will upload imageless
+    return size
+
+
 def _resolveImagePath(payloadData, log):
     """Absolute path of the image to upload, or None to upload imageless.
 
@@ -68,13 +91,11 @@ def _resolveImagePath(payloadData, log):
     measurement landing and clears the poison entry from the backlog instead of
     blocking the drain forever.
     """
-    image = payloadData.get("image")
-    if image is None:
+    filePath = _imageFilePath(payloadData)
+    if filePath is None:
         log.warning("No image available, uploading capture without image.")
         return None
 
-    currDirectory = os.path.dirname(os.path.abspath(__file__))
-    filePath = os.path.join(currDirectory, image)
     if not os.path.exists(filePath):
         log.warning(
             f"Image file no longer exists, uploading capture without image: {filePath}"
@@ -118,17 +139,21 @@ def _retryLoop(doPost, log, maxRetries):
     return False
 
 
-def _postCapture(url, apiKey, body, imagePath, log, maxRetries, timeoutSeconds):
+def _postCapture(session, url, apiKey, body, imagePath, log, maxRetries, timeoutSeconds):
     """POST one capture to v2, with or without an image.
 
     Imageless -> a plain JSON body. With an image -> multipart/form-data carrying
     a `metadata` part (the JSON body) plus an `image` file part, which is the
     shape v2's POST /api/v1/captures expects.
+
+    Posts go through the shared `session` so the TCP connection and TLS handshake
+    are reused across every capture in a backlog drain instead of being rebuilt
+    per request.
     """
     if imagePath is None:
         def doPost():
             headers = {'Content-Type': 'application/json', 'x-api-key': apiKey}
-            return requests.post(
+            return session.post(
                 url, data=json.dumps(body), headers=headers, timeout=timeoutSeconds
             )
         return _retryLoop(doPost, log, maxRetries)
@@ -147,7 +172,7 @@ def _postCapture(url, apiKey, body, imagePath, log, maxRetries, timeoutSeconds):
                 }
                 m = MultipartEncoder(fields=fields)
                 headers = {'Content-Type': m.content_type, 'x-api-key': apiKey}
-                return requests.post(
+                return session.post(
                     url, data=m, headers=headers, timeout=timeoutSeconds
                 )
             return _retryLoop(doPost, log, maxRetries)
@@ -156,32 +181,80 @@ def _postCapture(url, apiKey, body, imagePath, log, maxRetries, timeoutSeconds):
         # otherwise unreadable. Fall back to an imageless upload so one bad image
         # does not permanently block this measurement and the backlog behind it.
         log.error(f"Error opening image file, uploading without image: {fileError}")
-        return _postCapture(url, apiKey, body, None, log, maxRetries, timeoutSeconds)
+        return _postCapture(session, url, apiKey, body, None, log, maxRetries, timeoutSeconds)
 
 
-def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3):
+def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3, session=None,
+                  lastCapture=None, deviceConfig=None):
+    """lastCapture (sensor snapshot) and deviceConfig (current settings) are
+    reported in the device status for a live capture (see deviceStatus).
+    Unused for backlog replays."""
     url = secrets["apiURL"]
     apiKey = secrets["apiKey"]
     timeoutSeconds = 15  # network timeout so we don't hang
 
-    body = _buildCaptureBody(payloadData, log)
-    imagePath = _resolveImagePath(payloadData, log)
+    # Reuse one HTTP connection across the live upload and the backlog drain it
+    # triggers. A caller mid-drain passes its own session (and owns closing it);
+    # a top-level call creates one here and closes it when done.
+    ownsSession = session is None
+    if ownsSession:
+        session = requests.Session()
 
-    uploaded = _postCapture(url, apiKey, body, imagePath, log, maxRetries, timeoutSeconds)
+    try:
+        body = _buildCaptureBody(payloadData, log)
+        imagePath = _resolveImagePath(payloadData, log)
 
-    if uploaded:
-        # Only a live capture drains the backlog; a backlog replay (fromFile)
-        # must not recurse into another drain.
+        uploaded = _postCapture(
+            session, url, apiKey, body, imagePath, log, maxRetries, timeoutSeconds
+        )
+
+        # Backlog replays (fromFile) report nothing themselves; the drain that
+        # replays them reports progress.
+        reporter = None
         if not fromFile:
-            try:
-                uploadSavedPayloads(log, secrets)
-            except Exception as e:
-                log.error(f"Error draining saved payloads: {e}")
-        return True
+            reporter = deviceStatus.StatusReporter(
+                session, secrets, log, body['deviceCode'], lastCapture, deviceConfig
+            )
 
-    if not fromFile:
-        savePayload(payloadData, log)
-    return False
+        if uploaded:
+            # Only a live capture drains the backlog; a backlog replay (fromFile)
+            # must not recurse into another drain. Hand the same session down so
+            # the whole drain rides one connection.
+            if not fromFile:
+                try:
+                    uploadSavedPayloads(log, secrets, session=session, reporter=reporter)
+                except Exception as e:
+                    log.error(f"Error draining saved payloads: {e}")
+            return True
+
+        if not fromFile:
+            savePayload(payloadData, log)
+            # Check in even though the upload failed: the status endpoint may
+            # still be reachable when the capture API is refusing uploads.
+            try:
+                reporter.queued(_pendingSummary(_readBacklog()))
+            except Exception as e:
+                log.error(f"Error reporting queued status: {e}")
+        return False
+    finally:
+        if ownsSession:
+            session.close()
+
+
+BACKLOG_FILE = os.path.join("payload", "payloadData.txt")
+
+
+def _readBacklog():
+    """Every queued payload, oldest first. Empty if there is no backlog."""
+    if not os.path.exists(BACKLOG_FILE):
+        return []
+    with open(BACKLOG_FILE, 'r') as f:
+        return [json.loads(line.strip()) for line in f.readlines() if line.strip()]
+
+
+def _pendingSummary(logs):
+    """[(captureDateTime, bytes)] for the device status backlog / sync ETA."""
+    return [(p.get('capture_datetime'), _recordBytes(p)) for p in logs]
 
 
 def savePayload(payload, log):
@@ -198,35 +271,72 @@ def savePayload(payload, log):
         log.error(f"Error saving payload: {e}")
 
 
-def uploadSavedPayloads(log, secrets):
+def uploadSavedPayloads(log, secrets, session=None, reporter=None):
+    """Drain the backlog. With a reporter, also send the device status: a
+    realtime check-in when nothing is queued, otherwise start / in_progress /
+    finished around the drain."""
 
     folder = "payload"
     filename = os.path.join(folder, "payloadData.txt")
 
-    if os.path.exists(filename):
+    if not os.path.exists(filename):
+        log.info("No saved payloads to upload.")
+        if reporter:
+            reporter.realtime()
+        return
+
+    # Reuse one connection for the whole drain. If a caller already opened a
+    # session, ride it (and let them close it); otherwise own one here.
+    ownsSession = session is None
+    if ownsSession:
+        session = requests.Session()
+
+    try:
         with open(filename, 'r') as f:
             logs = [json.loads(line.strip()) for line in f.readlines() if line.strip()]
 
-        # Iterate over logs and try to upload each one
-        for payload in logs[:]:
-            # Try to upload the payload
-            if uploadPayload(payload, log, secrets, fromFile=True) == True:
-                log.info(f"Payload uploaded successfully: {payload['deviceID']}")
+        if reporter:
+            if not logs:
+                reporter.realtime()
+                return
+            reporter.start(_pendingSummary(logs))
 
-                # If upload is successful, remove it from the logs
-                logs.remove(payload)
-
-                # Overwrite the file with the remaining failed payloads after each success
-                with open(filename, 'w') as f:
-                    for remaining_payload in logs:
-                        f.write(json.dumps(remaining_payload) + '\n')
+        # Drain oldest-first, stopping at the first failure (network most likely
+        # dropped again); everything from that point stays queued in order.
+        uploadedCount = 0
+        for payload in logs:
+            if uploadPayload(payload, log, secrets, fromFile=True, session=session):
+                log.info(f"Payload uploaded successfully: {payload.get('deviceID')}")
+                uploadedCount += 1
+                if reporter:
+                    reporter.recordSent()
             else:
                 break
 
-        # Check if all payloads were uploaded
-        if not logs:
+        remaining = logs[uploadedCount:]
+
+        # Rewrite the backlog exactly once, with only what is left. The previous
+        # code rewrote the entire file after every single success -> O(n^2) SD
+        # writes for a large backlog. A single final rewrite trades per-record
+        # checkpointing for speed; if power is lost mid-drain the already-sent
+        # records simply replay next time and v2 answers them idempotently
+        # (200 == already stored), so no data is lost or duplicated.
+        if uploadedCount > 0:
+            with open(filename, 'w') as f:
+                for payload in remaining:
+                    f.write(json.dumps(payload) + '\n')
+
+        if not remaining:
             log.info("All saved payloads successfully uploaded.")
         else:
-            log.error("Some payloads could not be uploaded, saved in the file.")
-    else:
-        log.info("No saved payloads to upload.")
+            log.error(
+                f"{len(remaining)} payload(s) could not be uploaded, kept in the file."
+            )
+
+        # After the backlog rewrite, so the server only hears "complete" once
+        # the queue on disk is actually empty.
+        if reporter:
+            reporter.finished(complete=not remaining)
+    finally:
+        if ownsSession:
+            session.close()
