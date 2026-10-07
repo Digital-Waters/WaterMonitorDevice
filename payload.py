@@ -208,14 +208,19 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3, session=Non
             session, url, apiKey, body, imagePath, log, maxRetries, timeoutSeconds
         )
 
+        # Backlog replays (fromFile) report nothing themselves; the drain that
+        # replays them reports progress.
+        reporter = None
+        if not fromFile:
+            reporter = deviceStatus.StatusReporter(
+                session, secrets, log, body['deviceCode'], lastCapture, deviceConfig
+            )
+
         if uploaded:
             # Only a live capture drains the backlog; a backlog replay (fromFile)
             # must not recurse into another drain. Hand the same session down so
             # the whole drain rides one connection.
             if not fromFile:
-                reporter = deviceStatus.StatusReporter(
-                    session, secrets, log, body['deviceCode'], lastCapture, deviceConfig
-                )
                 try:
                     uploadSavedPayloads(log, secrets, session=session, reporter=reporter)
                 except Exception as e:
@@ -224,10 +229,32 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3, session=Non
 
         if not fromFile:
             savePayload(payloadData, log)
+            # Check in even though the upload failed: the status endpoint may
+            # still be reachable when the capture API is refusing uploads.
+            try:
+                reporter.queued(_pendingSummary(_readBacklog()))
+            except Exception as e:
+                log.error(f"Error reporting queued status: {e}")
         return False
     finally:
         if ownsSession:
             session.close()
+
+
+BACKLOG_FILE = os.path.join("payload", "payloadData.txt")
+
+
+def _readBacklog():
+    """Every queued payload, oldest first. Empty if there is no backlog."""
+    if not os.path.exists(BACKLOG_FILE):
+        return []
+    with open(BACKLOG_FILE, 'r') as f:
+        return [json.loads(line.strip()) for line in f.readlines() if line.strip()]
+
+
+def _pendingSummary(logs):
+    """[(captureDateTime, bytes)] for the device status backlog / sync ETA."""
+    return [(p.get('capture_datetime'), _recordBytes(p)) for p in logs]
 
 
 def savePayload(payload, log):
@@ -272,7 +299,7 @@ def uploadSavedPayloads(log, secrets, session=None, reporter=None):
             if not logs:
                 reporter.realtime()
                 return
-            reporter.start([(p.get('capture_datetime'), _recordBytes(p)) for p in logs])
+            reporter.start(_pendingSummary(logs))
 
         # Drain oldest-first, stopping at the first failure (network most likely
         # dropped again); everything from that point stays queued in order.

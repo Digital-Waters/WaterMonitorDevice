@@ -8,12 +8,19 @@ from datetime import datetime, timezone
 import requests
 
 
-# Device status reporting. Every time the device sends data it also POSTs a
-# small status to the server, which keeps one row per device up to date for the
-# admin site (sync progress + ETA, last upload, which sensors are working).
+# Device status reporting. Every capture cycle the device also POSTs a small
+# status to the server (POST /api/v1/devices/status), which keeps one row per
+# device up to date for the admin site (sync progress + ETA, last upload, which
+# sensors are working).
+#
+# The status is its own call, sent whether or not the capture upload worked.
+# The capture API can refuse an upload (validation, unknown device, server
+# error) while the status endpoint still answers, and that is exactly when the
+# admin site most needs to hear from the device.
 #
 # syncStatus is one of:
 #   realtime    -> a live capture uploaded and nothing was queued (normal check-in)
+#   queued      -> the live capture failed to upload and was added to the backlog
 #   start       -> a live capture uploaded and a backlog sync is about to begin
 #   in_progress -> periodic progress while the backlog drains
 #   finished    -> the sync ended; result is "complete" or "interrupted"
@@ -25,7 +32,7 @@ import requests
 
 # Used when waterMonitor.ini has no statusURL key, so deployed devices report
 # without a config edit. An explicitly blank statusURL disables reporting.
-DEFAULT_STATUS_URL = "https://api.digitalwaters.org/status/"
+DEFAULT_STATUS_URL = "https://api.digitalwaters.org/api/v1/devices/status"
 
 SYNC_STATE_FILE = os.path.join("payload", "syncState.json")
 STATUS_TIMEOUT_SECONDS = 10
@@ -221,6 +228,12 @@ class StatusReporter:
         self.state["lastSyncAt"] = _utcNow()
         saveSyncState(self.state, self.log)
         self._send("realtime", includeSnapshot=True)
+
+    def queued(self, pending):
+        """The live capture failed to upload and was added to the backlog.
+        pending is the whole backlog, [(captureDateTime, bytes)] oldest first."""
+        self.pending = pending
+        self._send("queued", includeSnapshot=True)
 
     def start(self, pending):
         """A backlog sync is about to begin. pending is [(captureDateTime, bytes)]."""
