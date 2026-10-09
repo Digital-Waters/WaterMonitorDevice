@@ -232,7 +232,7 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3, session=Non
             # Check in even though the upload failed: the status endpoint may
             # still be reachable when the capture API is refusing uploads.
             try:
-                reporter.queued(_pendingSummary(_readBacklog()))
+                reporter.queued(_pendingSummary(_readBacklog()[0]))
             except Exception as e:
                 log.error(f"Error reporting queued status: {e}")
         return False
@@ -242,14 +242,100 @@ def uploadPayload(payloadData, log, secrets, fromFile, maxRetries=3, session=Non
 
 
 BACKLOG_FILE = os.path.join("payload", "payloadData.txt")
+# Lines that could not be parsed are moved here rather than deleted, so nothing
+# is silently lost and they can be inspected or recovered by hand.
+REJECTED_FILE = os.path.join("payload", "payloadData.rejected.txt")
 
 
-def _readBacklog():
-    """Every queued payload, oldest first. Empty if there is no backlog."""
+# The backlog is one JSON object per line, appended on a device that can lose
+# power at any moment. A cut mid-append leaves a torn line: a partial record,
+# NUL bytes where the filesystem had allocated but not yet written the block, or
+# both, and with no trailing newline the NEXT append lands on the same line. One
+# such line used to make every read of the backlog raise, so the drain failed
+# every cycle and the whole backlog was stuck until someone edited the file.
+#
+# Reading is therefore line-by-line and forgiving: NULs are stripped, a line that
+# parses is kept, a good record glued onto the end of a torn one is recovered,
+# and anything else is set aside (see REJECTED_FILE) instead of failing the read.
+
+def _parseBacklogLine(line):
+    """(record, junk) for one backlog line.
+
+    record is the payload dict, or None if nothing usable was found. junk is the
+    unusable text to set aside, or None if the whole line was clean.
+    """
+    text = line.replace('\x00', '').strip()
+    if not text:
+        return None, None
+
+    decoder = json.JSONDecoder()
+    # Try the whole line first, then each later '{' in turn: after a torn write
+    # the last complete record sits at the end of the line, behind the junk.
+    start = 0
+    while start != -1:
+        try:
+            record, end = decoder.raw_decode(text, start)
+        except ValueError:
+            pass
+        else:
+            if isinstance(record, dict) and not text[end:].strip():
+                junk = text[:start].strip() or None
+                return record, junk
+        start = text.find('{', start + 1)
+
+    return None, text
+
+
+def _readBacklog(log=None):
+    """(records, rejected): every usable queued payload, oldest first, plus the
+    text of any lines that could not be used. Never raises on bad content."""
     if not os.path.exists(BACKLOG_FILE):
-        return []
-    with open(BACKLOG_FILE, 'r') as f:
-        return [json.loads(line.strip()) for line in f.readlines() if line.strip()]
+        return [], []
+
+    records, rejected = [], []
+    # errors='replace' so stray non-UTF-8 bytes from a torn write are just more
+    # junk on that line, not a UnicodeDecodeError for the whole file.
+    with open(BACKLOG_FILE, 'r', encoding='utf-8', errors='replace') as f:
+        for lineNumber, line in enumerate(f, start=1):
+            record, junk = _parseBacklogLine(line)
+            if junk is not None:
+                rejected.append(junk)
+                if log:
+                    preview = junk if len(junk) <= 120 else junk[:120] + '...'
+                    log.warning(f"Unreadable backlog line {lineNumber} set aside: {preview!r}")
+            if record is not None:
+                records.append(record)
+    return records, rejected
+
+
+def _syncToDisk(f):
+    f.flush()
+    os.fsync(f.fileno())
+
+
+def _writeBacklog(records):
+    """Replace the backlog with `records` in one atomic step.
+
+    Written to a temp file, synced, then renamed over the original, so a power
+    cut leaves either the old backlog or the new one -- never an empty or
+    half-written file. (Rewriting in place truncates first, which used to put the
+    whole queue at risk on every drain.)
+    """
+    tmpName = BACKLOG_FILE + '.tmp'
+    with open(tmpName, 'w', encoding='utf-8') as f:
+        for record in records:
+            f.write(json.dumps(record) + '\n')
+        _syncToDisk(f)
+    os.replace(tmpName, BACKLOG_FILE)
+
+
+def _setAsideRejected(rejected, log):
+    stamp = datetime.now(timezone.utc).isoformat()
+    with open(REJECTED_FILE, 'a', encoding='utf-8') as f:
+        for junk in rejected:
+            f.write(f"{stamp}\t{junk}\n")
+        _syncToDisk(f)
+    log.warning(f"Moved {len(rejected)} unreadable backlog line(s) to {REJECTED_FILE}")
 
 
 def _pendingSummary(logs):
@@ -258,14 +344,19 @@ def _pendingSummary(logs):
 
 
 def savePayload(payload, log):
-    folder = "payload"
-    filename = os.path.join(folder, "payloadData.txt")
-
-    os.makedirs(folder, exist_ok=True)
+    os.makedirs(os.path.dirname(BACKLOG_FILE), exist_ok=True)
 
     try:
-        with open(filename, 'a') as f:
-            f.write(json.dumps(payload) + '\n')
+        with open(BACKLOG_FILE, 'a+b') as f:
+            # If the last append was torn (no trailing newline), start on a fresh
+            # line so this record isn't glued onto the broken one.
+            prefix = b''
+            if f.tell() > 0:
+                f.seek(-1, os.SEEK_END)
+                if f.read(1) != b'\n':
+                    prefix = b'\n'
+            f.write(prefix + (json.dumps(payload) + '\n').encode('utf-8'))
+            _syncToDisk(f)
         log.info("Payload data wrote to file")
     except Exception as e:
         log.error(f"Error saving payload: {e}")
@@ -276,10 +367,7 @@ def uploadSavedPayloads(log, secrets, session=None, reporter=None):
     realtime check-in when nothing is queued, otherwise start / in_progress /
     finished around the drain."""
 
-    folder = "payload"
-    filename = os.path.join(folder, "payloadData.txt")
-
-    if not os.path.exists(filename):
+    if not os.path.exists(BACKLOG_FILE):
         log.info("No saved payloads to upload.")
         if reporter:
             reporter.realtime()
@@ -292,8 +380,14 @@ def uploadSavedPayloads(log, secrets, session=None, reporter=None):
         session = requests.Session()
 
     try:
-        with open(filename, 'r') as f:
-            logs = [json.loads(line.strip()) for line in f.readlines() if line.strip()]
+        logs, rejected = _readBacklog(log)
+
+        # Set unreadable lines aside before anything else, and drop them from
+        # the backlog right away, so a torn line can never block the queue
+        # (even if the drain below uploads nothing).
+        if rejected:
+            _setAsideRejected(rejected, log)
+            _writeBacklog(logs)
 
         if reporter:
             if not logs:
@@ -322,9 +416,7 @@ def uploadSavedPayloads(log, secrets, session=None, reporter=None):
         # records simply replay next time and v2 answers them idempotently
         # (200 == already stored), so no data is lost or duplicated.
         if uploadedCount > 0:
-            with open(filename, 'w') as f:
-                for payload in remaining:
-                    f.write(json.dumps(payload) + '\n')
+            _writeBacklog(remaining)
 
         if not remaining:
             log.info("All saved payloads successfully uploaded.")
