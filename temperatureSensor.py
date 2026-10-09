@@ -16,16 +16,34 @@ def _read_temp_raw(device_file):
     return lines
 
 
+# A failed CRC is usually a one-off glitch on the 1-wire line; a probe that
+# keeps failing is broken, and retrying forever would stall the capture loop.
+DS18B20_READ_ATTEMPTS = 5
+
+
 # Each reader returns (temp_c or None, sensorHealth status).
 def _read_ds18b20(log):
-    try:
-        device_folder = glob.glob(base_dir + '28*')[0]
-        device_file = device_folder + '/w1_slave'
+    device_folders = glob.glob(base_dir + '28*')
+    if not device_folders:
+        log.info("No DS18B20 sensor detected.")
+        return None, sensorHealth.absent()
 
-        lines = _read_temp_raw(device_file)
-        while lines[0].strip()[-3:] != 'YES':
-            time.sleep(0.2)
+    try:
+        device_file = device_folders[0] + '/w1_slave'
+
+        # A probe that enumerates but can't complete a read (bad probe, weak
+        # data line) gives an empty file or a "NO" CRC line. It is installed
+        # but broken, so report it as an error rather than absent.
+        for attempt in range(DS18B20_READ_ATTEMPTS):
+            if attempt:
+                time.sleep(0.2)
             lines = _read_temp_raw(device_file)
+            if len(lines) >= 2 and lines[0].strip()[-3:] == 'YES':
+                break
+        else:
+            log.info(f"DS18B20 read failed CRC check after {DS18B20_READ_ATTEMPTS} attempts.")
+            return None, sensorHealth.error("DS18B20 read failed (no valid CRC)")
+
         equals_pos = lines[1].find('t=')
         if equals_pos != -1:
             temp_c = float(lines[1][equals_pos + 2:]) / 1000.0
@@ -33,9 +51,6 @@ def _read_ds18b20(log):
             return temp_c, sensorHealth.ok(source="DS18B20")
         return None, sensorHealth.error("DS18B20 returned no temperature")
 
-    except IndexError:
-        log.info("No DS18B20 sensor detected.")
-        return None, sensorHealth.absent()
     except Exception as e:
         log.info(f"DS18B20 read failed: {e}")
         return None, sensorHealth.error(f"DS18B20: {e}")
